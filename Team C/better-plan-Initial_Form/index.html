@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" type="text/css" href="styles.css" />
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <title>Form</title>
+</head>
+
+<body>
+  <div id='app'>
+    <form id='uploadForm' name='uploadForm' enctype='multipart/form-data'>
+
+      <input type='file' id='files'accept='image/jpeg, image/gif, image/png'  
+      name='files' @change='selectFile'><br>
+
+      <label for='text'>Text</label><br>
+      <textarea id='text' v-model='text' placeholder= '...' required></textarea>
+
+      <input type=button id='button' value=Upload @click.prevent='uploadFiles'>
+    </form>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
