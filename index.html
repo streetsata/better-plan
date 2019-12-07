@@ -13,13 +13,13 @@
 
 <body>
   <div id='app'>
-    <form id='uploadForm' name='uploadForm' enctype='multipart/form-data'>
-
-      <input type='file' id='files'accept='image/jpeg, image/gif, image/png'  
-      name='files' @change='selectFile'><br>
+    <form id='uploadForm' name='uploadForm'>
 
       <label for='text'>Text</label><br>
       <textarea id='text' v-model='text' placeholder= '...' required></textarea>
+
+      <label for='url'>Url</label><br>
+      <input id='text' v-model='url'></input>
 
       <input type=button id='button' value=Upload @click.prevent='uploadFiles'>
     </form>
