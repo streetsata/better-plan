@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap&subset=latin-ext');
+
+body {
+    font-family: Lato;
+    font-style: normal;
+    background-color: #F8F8F8;
+    color: #2C473E;
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+.header__wrap {
+    max-width: 716px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    margin-left: 7px;
+    display: flex;
+    align-items: center;
+}
+
+.logo__text {
+    margin-left: 12px;
+}
+
+.header__list {
+    display: flex;
+    min-width: 400px;
+    justify-content: space-between;
+}
+
+.header__item {
+    list-style-type: none;
+    text-align: right;
+    width: 100px;
+}
+
+.header__item:first-of-type {
+    margin-left: 0;
+}
+
+.header__link {
+    color: #2C473E;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.header__link:hover {
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.header__link:active {
+    text-decoration: none;
+}
+
+.header__item:last-of-type a {
+    font-weight: bold;
+    color: #F4896F;
+    padding: 5px 30px;
+    margin-left: 20px;
+}
+
+.header__item:last-of-type a:hover {
+    color: #F8F8F8;
+    width: 101px;
+    height: 28px;
+    background: #F4896F;
+    border-radius: 14px;
+    transition: all 0.2s;
+}
