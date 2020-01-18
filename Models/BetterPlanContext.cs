@@ -19,12 +19,10 @@ namespace BetterPlan.Models
         public async Task<JsonResult> GetJsonDbPostsAsync()
         {
             var PostsList = await Posts.ToListAsync();
-            //string res = string.Empty;
             List<object> posts = new List<object>();
             foreach (var item in PostsList)
             {
-                posts.Add(new { post_id = item.Id, text = item.Text, link = item.Link, place = item.Place, action_id = item.Action_id, icon_id = item.Icon_id, object_id = item.Object_id });
-                //res += item.Id + " ";
+                posts.Add(new {id = item.Id, post_id = item.Post_id, text = item.Text, link = item.Link, place = item.Place, action_id = item.Action_id, icon_id = item.Icon_id, object_id = item.Object_id });
             }
 
             return new JsonResult(posts);

@@ -47,7 +47,7 @@ namespace BetterPlan.Models
             {
                 return new JsonResult(new { status = "error", error_message = rezTextJson["error"]["message"].ToString() });
             }
-            _db.Posts.Add(new Post() { Id = rezTextJson["id"].ToString(), Text = post.post_text, Link = post.link, Place = post.place, Action_id = post.action_id, Icon_id = post.icon_id, Object_id = post.icon_id });
+            _db.Posts.Add(new Post() { Post_id = rezTextJson["id"].ToString(), Text = post.post_text, Link = post.link, Place = post.place, Action_id = post.action_id, Icon_id = post.icon_id, Object_id = post.icon_id });
             await _db.SaveChangesAsync();
             return new JsonResult(new { status = "OK", post_id = rezTextJson["id"].ToString() });
         }
@@ -68,7 +68,7 @@ namespace BetterPlan.Models
             {
                 return new JsonResult(new { status = "error", error_message = rezTextJson["error"]["message"].ToString() });
             }
-            _db.Remove(_db.Posts.Single(post => post.Id == deletePost.post_id));
+            _db.Remove(_db.Posts.Single(post => post.Post_id == deletePost.post_id));
             await _db.SaveChangesAsync();
             return new JsonResult(new { status = "OK" });
         }
@@ -101,7 +101,7 @@ namespace BetterPlan.Models
                 return new JsonResult(new { status = "error", error_message = rezTextJson["error"]["message"].ToString() });
             }
             //_db.Find
-            Post dbpost = _db.Posts.SingleOrDefault(post => post.Id == editPost.post_id);
+            Post dbpost = _db.Posts.SingleOrDefault(post => post.Post_id == editPost.post_id);
             dbpost.Text = editPost.edit_text;
             if(editPost.place != null) dbpost.Place = editPost.place;
             await _db.SaveChangesAsync();
