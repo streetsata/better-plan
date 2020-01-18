@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace BetterPlan.Models
             Database.EnsureCreated();
         }
 
-        public async Task<JsonResult> GetJsonDbPostsAsync()
+        public async Task<JsonResult> GetJsonDbPostsAsync(HttpResponse response)
         {
             var PostsList = await Posts.ToListAsync();
             List<object> posts = new List<object>();

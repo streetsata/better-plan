@@ -54,7 +54,8 @@ namespace BetterPlan.Controllers
         public JsonResult GetPosts()
         {
             //_logger.LogInformation("This is my log"); // logging
-            return _db.GetJsonDbPostsAsync().Result;
+            return _db.GetJsonDbPostsAsync(Response).Result;
+            
         }
 
         /// <summary>
@@ -79,6 +80,8 @@ namespace BetterPlan.Controllers
         ///         "post_id": "id"
         ///     }
         /// 
+        /// </response>
+        /// <response code="400">
         /// Error response:
         /// 
         ///     {
@@ -90,7 +93,7 @@ namespace BetterPlan.Controllers
         [Produces("application/json")]
         public JsonResult Post([FromBody] PostViewModel post)
         {
-            return _facebook.PostToFacebookAsync(post, _db).Result;
+            return _facebook.PostToFacebookAsync(Response,post, _db).Result;
         }
 
         /// <summary>
@@ -115,6 +118,8 @@ namespace BetterPlan.Controllers
         ///         "status": "OK"
         ///     }
         ///     
+        /// </response>
+        /// <response code="400">
         /// Error response:
         /// 
         ///     {
@@ -126,7 +131,7 @@ namespace BetterPlan.Controllers
         [Produces("application/json")]
         public JsonResult EditPost([FromBody] EditPostViewModel editPost)
         {
-            return _facebook.EditPostFacebookAsync(editPost, _db).Result;
+            return _facebook.EditPostFacebookAsync(Response,editPost, _db).Result;
         }
 
         /// <summary>
@@ -149,7 +154,9 @@ namespace BetterPlan.Controllers
         ///     {
         ///         "status": "OK"
         ///     }
-        ///     
+        ///  
+        /// </response>
+        /// <response code="400">
         /// Error response:
         /// 
         ///     {
@@ -161,7 +168,7 @@ namespace BetterPlan.Controllers
         [Produces("application/json")]
         public JsonResult DeletePost([FromBody] DeletePostViewModel deletePost)
         {
-            return _facebook.DeletePostFacebookAsync(deletePost, _db).Result;
+            return _facebook.DeletePostFacebookAsync(Response,deletePost, _db).Result;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BetterPlan.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System;
@@ -22,7 +23,7 @@ namespace BetterPlan.Models
             _postToPageURL = $"{_facebookAPI}{pageID}/{_pageEdgeFeed}";
         }
 
-        public async Task<JsonResult> PostToFacebookAsync(PostViewModel post, BetterPlanContext _db)
+        public async Task<JsonResult> PostToFacebookAsync(HttpResponse response,PostViewModel post, BetterPlanContext _db)
         {
             if (post.post_text == null) return new JsonResult(new { status = "error", error_message = "post_text doesn't exist" });
             var data = new Dictionary<string, string> {
@@ -45,13 +46,14 @@ namespace BetterPlan.Models
             var rezTextJson = JObject.Parse(res);
             if (rezTextJson["error"] != null)
             {
+                response.StatusCode = 400;
                 return new JsonResult(new { status = "error", error_message = rezTextJson["error"]["message"].ToString() });
             }
             _db.Posts.Add(new Post() { Post_id = rezTextJson["id"].ToString(), Text = post.post_text, Link = post.link, Place = post.place, Action_id = post.action_id, Icon_id = post.icon_id, Object_id = post.icon_id });
             await _db.SaveChangesAsync();
             return new JsonResult(new { status = "OK", post_id = rezTextJson["id"].ToString() });
         }
-        public async Task<JsonResult> DeletePostFacebookAsync(DeletePostViewModel deletePost, BetterPlanContext _db)
+        public async Task<JsonResult> DeletePostFacebookAsync(HttpResponse response, DeletePostViewModel deletePost, BetterPlanContext _db)
         {
             if (deletePost.post_id == null) return new JsonResult(new { status = "error", error_message = "post_id doesn't exist" });
 
@@ -66,6 +68,7 @@ namespace BetterPlan.Models
             var rezTextJson = JObject.Parse(res);
             if (rezTextJson["error"] != null)
             {
+                response.StatusCode = 400;
                 return new JsonResult(new { status = "error", error_message = rezTextJson["error"]["message"].ToString() });
             }
             _db.Remove(_db.Posts.Single(post => post.Post_id == deletePost.post_id));
@@ -73,7 +76,7 @@ namespace BetterPlan.Models
             return new JsonResult(new { status = "OK" });
         }
 
-        public async Task<JsonResult> EditPostFacebookAsync(EditPostViewModel editPost, BetterPlanContext _db)
+        public async Task<JsonResult> EditPostFacebookAsync(HttpResponse response, EditPostViewModel editPost, BetterPlanContext _db)
         {
             if (editPost.post_id == null) return new JsonResult(new { status = "error", error_message = "post_id doesn't exist" });
             if (editPost.edit_text == null) return new JsonResult(new { status = "error", error_message = "edit_text doesn't exist" });
@@ -98,6 +101,7 @@ namespace BetterPlan.Models
             var rezTextJson = JObject.Parse(res);
             if (rezTextJson["error"] != null)
             {
+                response.StatusCode = 400;
                 return new JsonResult(new { status = "error", error_message = rezTextJson["error"]["message"].ToString() });
             }
             //_db.Find
