@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace BetterPlan.ViewModels
 {
+    /// <summary>
+    /// Модель для удаления поста
+    /// </summary>
     public class DeletePostViewModel
     {
+        /// <summary>
+        /// ID поста на Facebook
+        /// </summary>
         [Required]
         public string post_id { get; set; }
     }

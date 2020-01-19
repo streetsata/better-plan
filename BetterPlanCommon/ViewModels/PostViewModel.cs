@@ -6,14 +6,19 @@ using System.Threading.Tasks;
 
 namespace BetterPlan.ViewModels
 {
+    /// <summary>
+    /// Модель для публикации поста
+    /// </summary>
     public class PostViewModel
     {
+        /// <summary>
+        /// Текст публикуемого поста
+        /// </summary>
         [Required]
         public string post_text { get; set; }
-        public string link { get; set; }
+        /// <summary>
+        /// ID места приклепленному к посту
+        /// </summary>
         public string place { get; set; }
-        public string action_id { get; set; }
-        public string icon_id { get; set; }
-        public string object_id { get; set; }
     }
 }

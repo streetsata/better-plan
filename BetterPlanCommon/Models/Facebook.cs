@@ -1,6 +1,7 @@
 ﻿using BetterPlan.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -30,11 +31,7 @@ namespace BetterPlan.Models
                 { "access_token", _accessToken },
                 { "message", post.post_text },
             };
-            if (post.link != null) data.Add("link", post.link);
             if (post.place != null) data.Add("place", post.place);
-            if (post.action_id != null) data.Add("og_action_type_id", post.action_id);
-            if (post.icon_id != null) data.Add("og_icon_id", post.icon_id);
-            if (post.object_id != null) data.Add("og_object_id", post.object_id);
 
             string res = string.Empty;
             using (var http = new HttpClient())
@@ -49,7 +46,7 @@ namespace BetterPlan.Models
                 response.StatusCode = 400;
                 return new JsonResult(new { status = "error", error_message = rezTextJson["error"]["message"].ToString() });
             }
-            _db.Posts.Add(new Post() { Post_id = rezTextJson["id"].ToString(), Text = post.post_text, Link = post.link, Place = post.place, Action_id = post.action_id, Icon_id = post.icon_id, Object_id = post.icon_id });
+            _db.Posts.Add(new Post() { Post_id = rezTextJson["id"].ToString(), Text = post.post_text, Place = post.place });
             await _db.SaveChangesAsync();
             return new JsonResult(new { status = "OK", post_id = rezTextJson["id"].ToString() });
         }
@@ -110,6 +107,118 @@ namespace BetterPlan.Models
             if (editPost.place != null) dbpost.Place = editPost.place;
             await _db.SaveChangesAsync();
             return new JsonResult(new { status = "OK" });
+        }
+    }
+    class BetterPlanLogic
+    {
+        // Тут у меня говнокод, не бейте, я исправлюсь :С
+
+        static Dictionary<string, string> TempUsersDb = new Dictionary<string, string>() {
+            { "895127244222164","EAAjnVI1sCkwBACLWqiwju9Dmsw06mOwqr59ry2X8sKvoLXgL6HyvF5z5TOj8szW6Rn7roWym2K6ZCLj6zHXHNZBZBMv2ZApmE6JKg2C2CEK1ZCdZBFEIjgT0gufZBUH8ZB0AXr2C0GsDQkZBP0kpFjDnoM6EgzsqOLVt5DCizPZANp3wZDZD" }
+        };
+        public static async Task<JsonResult> GetUsersAsync()
+        {
+            using (var http = new HttpClient())
+            {
+                List<object> usersObj = new List<object>();
+
+                foreach (var user in TempUsersDb)
+                {
+                    var httpResponse = await http.GetAsync($"https://graph.facebook.com/me?access_token={user.Value}");
+                    var httpContent = await httpResponse.Content.ReadAsStringAsync();
+                    var json = JObject.Parse(httpContent);
+                    usersObj.Add(new { id = json["id"].ToString(), name = json["name"].ToString() });
+                }
+                return new JsonResult(usersObj);
+
+            }
+
+        }
+
+        public static JsonResult GetUserPosts(HttpResponse response,string user_id)
+        {
+            if(!TempUsersDb.ContainsKey(user_id))
+            {
+                response.StatusCode = 400;
+                return new JsonResult(new { status = "error", error_message = "id is doesn't exists!" });
+            }
+
+
+            var posts = GetPagePostsAsync(GetPageIdAndTokenAsync(TempUsersDb[user_id]).Result.Item1, GetPageIdAndTokenAsync(TempUsersDb[user_id]).Result.Item2).Result;
+            List<object> postsObj = new List<object>();
+            foreach (var post in posts)
+            {
+                Dictionary<string, string> pairs = new Dictionary<string, string>();
+                pairs.Add("post_id", post["id"].ToString());
+                pairs.Add("text", post["message"].ToString());
+                if(post["full_picture"] != null) pairs.Add("img", post["full_picture"].ToString());
+                if (post["place"] != null) pairs.Add("place", post["place"]["id"].ToString());
+
+                postsObj.Add(pairs);
+            }
+            return new JsonResult(postsObj); 
+        }
+        public static async Task<JToken> GetPagePostsAsync(string page_id,string token)
+        {
+            using (var http = new HttpClient())
+            {
+                //string id = "100396138106408_134654548013900";
+                //string _accessToken = "EAAjnVI1sCkwBAAKxVhMZAdXKCq0fK9tLZCJkOuoXgvY8JFPkAyZCGTduwiqtIDZAJLEddXCp4rZC0gHx5QChk9nuhyy7xNT0ZCMMcmRxROWNjIGl72pVBeQVnbgjEUZCqEfjMl5qyjmcSSIZBPycNZCTPq5oJDPC0lNroFvz96SSsa8dcOR5KarrvveGxF5DkstQZD";
+
+                var httpResponse = await http.GetAsync($"https://graph.facebook.com/{page_id}/feed?access_token={token}&fields=message,place,full_picture");
+                var httpContent = await httpResponse.Content.ReadAsStringAsync();
+
+                var json = JObject.Parse(httpContent)["data"];
+
+                return json;
+            }
+        }
+        public static async Task<Tuple<string, string>> GetPageIdAndTokenAsync(string UserToken)
+        {
+            using (var http = new HttpClient())
+            {
+                string url = $"https://graph.facebook.com/me/accounts?access_token={UserToken}";
+
+                var httpResponse = await http.GetAsync(url);
+                var httpContent = await httpResponse.Content.ReadAsStringAsync();
+                var rezJson = JObject.Parse(httpContent);
+
+                
+                return new Tuple<string, string>(
+                    rezJson["data"][0]["id"].ToString(),
+                    rezJson["data"][0]["access_token"].ToString()
+                );
+            }
+        }
+        public static JsonResult UserPost(string user_id,HttpResponse Response, PostViewModel post, BetterPlanContext _db)
+        {
+            if (!TempUsersDb.ContainsKey(user_id))
+            {
+                Response.StatusCode = 400;
+                return new JsonResult(new { status = "error", error_message = "id is doesn't exists!" });
+            }
+            var page = GetPageIdAndTokenAsync(TempUsersDb[user_id]).Result;
+            return new Facebook(page.Item2, page.Item1).PostToFacebookAsync(Response, post, _db).Result;
+        }
+        public static JsonResult UserEdit(string user_id,HttpResponse Response, EditPostViewModel editPost, BetterPlanContext _db)
+        {
+            if (!TempUsersDb.ContainsKey(user_id))
+            {
+                Response.StatusCode = 400;
+                return new JsonResult(new { status = "error", error_message = "id is doesn't exists!" });
+            }
+            var page = GetPageIdAndTokenAsync(TempUsersDb[user_id]).Result;
+            return new Facebook(page.Item2, page.Item1).EditPostFacebookAsync(Response, editPost, _db).Result;
+        }
+        public static JsonResult UserDelete(string user_id,HttpResponse Response, DeletePostViewModel deletePost, BetterPlanContext _db)
+        {
+            if (!TempUsersDb.ContainsKey(user_id))
+            {
+                Response.StatusCode = 400;
+                return new JsonResult(new { status = "error", error_message = "id is doesn't exists!" });
+            }
+            var page = GetPageIdAndTokenAsync(TempUsersDb[user_id]).Result;
+            return new Facebook(page.Item2, page.Item1).DeletePostFacebookAsync(Response,deletePost,_db).Result;
         }
     }
 }
