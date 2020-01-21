@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap&subset=latin-ext');
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: Lato;
     font-style: normal;
@@ -12,10 +18,14 @@ body {
 .header__wrap {
     max-width: 1920px;
     height: 82px;
-    background-color:#F8F8F8;
+    background-color: #84A295;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.logo__text {
+    color: honeydew;
 }
 
 .logo {
@@ -28,56 +38,89 @@ body {
     margin-left: 12px;
 }
 
-.main{
+.main {
     display: flex;
 }
 
-.main__side__menue{
+.main__side__menue {
     height: 900px;
     width: 100px;
-    background-color:#F8F8F8;
+    background-color: #E5E5E5;
     margin-top: 2px;
 }
 
-.main__tabs{
+.tabs__nav {
+    display: flex;
     margin-top: 18px;
-    margin-left: 22px;
-    height: 54px;
-    min-width: 300px;
-    border-radius: 80px;
-    background-color:#F8F8F8;
-    display: flex;
+    margin-left: 15px;
+    position: relative;
+    padding-bottom: 0px;
 }
 
-.tabs__nav{
-    display: flex;
+.tabs__nav_tab {
+    height: 45px;
+    margin: 0 0.5rem 0 0;
+    background: #E5E5E5;
+    border-radius: 20px 20px 0px 0px;
+    padding: 10px 33px;
+    cursor: pointer;
+    transition: 100ms linear all;
 }
 
-.tabs__nav_tab{
-    padding:1rem;
-    margin:0 0.5rem 0 0;
-    background:#fff;
-    border-radius:0.5rem 0.5rem 0 0;
-    padding: 5px 22px;
-    box-shadow:inset 0 -1rem 0.75rem -1rem rgba(0,0,0,0.25);
-    cursor:pointer;
-    opacity:0.75;
-    transition:100ms linear all;
+.tabs__nav_tab--active {
+    background: #84A295;
 }
 
-.tabs__nav_tab--active{
-    background:greenyellow;
-    padding:1rem;
-    border-radius:0 0.5rem 0.5rem 0.5rem;
-}
-
-.addProject{
-    width: 42px;
-    margin: 6px;
+.addPage {
+    width: 32px;
+    margin: 0px;
     display: block;
     text-align: right;
 }
 
-.tabs__content{
+.main__workspace {
     display: block;
+    width: 90%;
+}
+
+.tab__content {
+    border: 3px solid #E5E5E5;
+    margin: 0px 35px 25px 5px;
+    height: 90%;
+    width: 90%;
+}
+
+.tab__content_addPost {
+    width: 967px;
+    height: 84px;
+    border: 3px dashed #787878;
+    margin: 0 auto;
+}
+
+.add_post_link {
+    text-align: center;
+    display: block;
+    text-align: center;
+    height: 100%;
+    text-decoration: none;
+}
+
+.add_post_link:hover {
+    text-decoration: none;
+}
+
+.add_post_content {
+    display: flex;
+    vertical-align: center;
+    align-items: center;
+}
+
+.add_post_text {
+    margin: auto 0;
+    margin-left: 45px;
+    font-family: Tajawal;
+    font-weight: 500;
+    font-size: 24px;
+    text-align: center;
+    color: #84A295;
 }
