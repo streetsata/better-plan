@@ -1,6 +1,6 @@
-﻿using BetterPlan.Models;
-using Contracts;
+﻿using Contracts;
 using Entities;
+using Entities.Models;
 using LoggerService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;

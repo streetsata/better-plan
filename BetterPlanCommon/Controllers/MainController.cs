@@ -1,10 +1,11 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BetterPlan.Models;
-using BetterPlan.ViewModels;
 using Contracts;
+using Entities.ViewModels;
+using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -30,7 +31,7 @@ namespace BetterPlan.Controllers
 
         }
         /// <summary>
-        /// Возвращает посты из базы данных
+        /// Возвращает доступных пользователей
         /// </summary>
         /// <returns></returns>
         /// <response code="200">
@@ -39,46 +40,67 @@ namespace BetterPlan.Controllers
         ///     {
         ///       [
         ///         {
-        ///           "post_id": "id",
-        ///           "text": "post_text",
-        ///           "link": "post_link",
-        ///           "place": "id",
-        ///           "action_id": "id",
-        ///           "icon_id": "id",
-        ///           "object_id": "id"
+        ///           "id":"user_id",
+        ///           "name": "user_name"
         ///         }
         ///       ]
         ///     }
         /// 
         /// </response>
-        [HttpGet("GET")]
+
+        [HttpGet("USERS")]
         [Produces("application/json")]
-        public JsonResult GetPosts()
+        public JsonResult GetUsers()
         {
-            _logger.LogInfo("Get all Posts");
-            return _db.GetJsonDbPostsAsync(Response).Result;
-            
+            _logger.LogDebug("Тест");
+            return BetterPlanLogic.GetUsersAsync().Result;
+        }
+        /// <summary>
+        ///     Возвращает посты пользователя
+        /// </summary>
+        /// <param name="id">ID Пользователя</param>
+        /// <returns></returns>
+        /// <response code="200">
+        /// Sample response:
+        /// 
+        ///     {
+        ///       [
+        ///         {
+        ///           "post_id":"post_id",
+        ///           "text": "post_text",
+        ///           "img": "img_link",
+        ///           "place": "place_id"
+        ///         }
+        ///       ]
+        ///     }
+        /// 
+        /// </response>
+        [HttpGet("USER/{id}/POSTS")]
+        public JsonResult GetUserPosts(string id)
+        {
+            return BetterPlanLogic.GetUserPosts(Response, id);
         }
 
         /// <summary>
-        /// Создает пост на Facebook
+        /// Публикует пост на Facebook
         /// </summary>
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST /POST
+        ///     POST /{id}/POST
         ///     {
         ///        "post_text":"text"
         ///     }
         ///
         /// </remarks>
         /// <param name="post"></param>
+        /// <param name="id">ID Пользователя</param>
         /// <returns></returns>
         /// <response code="200">
         /// Sample response:
         /// 
         ///     {
-        ///         "status": "OK"
+        ///         "status": "OK",
         ///         "post_id": "id"
         ///     }
         /// 
@@ -91,11 +113,14 @@ namespace BetterPlan.Controllers
         ///         "error_message": "msg"
         ///     }
         /// </response>
-        [HttpPost("POST")]
+        [HttpPost("USER/{id}/POST")]
         [Produces("application/json")]
-        public JsonResult Post([FromBody] PostViewModel post)
+        public JsonResult Post(string id, [FromBody] PostViewModel post) // ,
         {
-            return _facebook.PostToFacebookAsync(Response,post, _db).Result;
+            //return _facebook.PostToFacebookAsync(Response,post, _db).Result;
+            return BetterPlanLogic.UserPost(id, Response, post, _db);
+            //return new JsonResult(new { status = id });
+
         }
 
         /// <summary>
@@ -104,7 +129,7 @@ namespace BetterPlan.Controllers
         /// <remarks>
         /// Sample request:
         ///
-        ///     PUT /EDIT
+        ///     PUT /{id}/EDIT
         ///     {
         ///        "post_id":"id",
         ///        "edit_text":"text"
@@ -112,6 +137,7 @@ namespace BetterPlan.Controllers
         ///
         /// </remarks>
         /// <param name="post"></param>
+        /// <param name="id">ID Пользователя</param>
         /// <returns></returns>
         /// <response code="200">
         /// Sample response:
@@ -129,11 +155,12 @@ namespace BetterPlan.Controllers
         ///         "error_message": "msg"
         ///     }
         /// </response>
-        [HttpPut("EDIT")]
+        [HttpPut("USER/{id}/EDIT")]
         [Produces("application/json")]
-        public JsonResult EditPost([FromBody] EditPostViewModel editPost)
+        public JsonResult EditPost(string id, [FromBody] EditPostViewModel editPost)
         {
-            return _facebook.EditPostFacebookAsync(Response,editPost, _db).Result;
+            return BetterPlanLogic.UserEdit(id, Response, editPost, _db);
+
         }
 
         /// <summary>
@@ -142,13 +169,14 @@ namespace BetterPlan.Controllers
         /// <remarks>
         /// Sample request:
         ///
-        ///     DELETE /DELETE
+        ///     DELETE /{id}/DELETE
         ///     {
         ///        "post_id":"id"
         ///     }
         ///
         /// </remarks>
         /// <param name="post"></param>
+        /// <param name="id">ID Пользователя</param>
         /// <returns></returns>
         /// <response code="200">
         /// Sample response:
@@ -166,11 +194,11 @@ namespace BetterPlan.Controllers
         ///         "error_message": "msg"
         ///     }
         /// </response>
-        [HttpDelete("DELETE")]
+        [HttpDelete("USER/{id}/DELETE")]
         [Produces("application/json")]
-        public JsonResult DeletePost([FromBody] DeletePostViewModel deletePost)
+        public JsonResult DeletePost(string id, [FromBody] DeletePostViewModel deletePost)
         {
-            return _facebook.DeletePostFacebookAsync(Response,deletePost, _db).Result;
+            return BetterPlanLogic.UserDelete(id, Response, deletePost, _db);
         }
     }
 }

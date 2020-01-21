@@ -4,10 +4,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BetterPlan.ViewModels
+namespace Entities.ViewModels
 {
+    /// <summary>
+    /// Модель для удаления поста
+    /// </summary>
     public class DeletePostViewModel
     {
+        /// <summary>
+        /// ID поста на Facebook
+        /// </summary>
         [Required]
         public string post_id { get; set; }
     }
