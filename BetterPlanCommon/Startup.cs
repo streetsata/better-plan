@@ -1,21 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BetterPlan.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Swashbuckle.AspNetCore.Swagger;
-using Microsoft.OpenApi.Models;
-using System.Reflection;
 using System.IO;
+using BetterPlanCommon.Extensions;
+using Microsoft.AspNetCore.HttpOverrides;
+using NLog;
 
 namespace BetterPlan
 {
@@ -23,28 +17,25 @@ namespace BetterPlan
     {
         public Startup(IConfiguration configuration)
         {
+            LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BetterPlanContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.ConfigureCors();
+            services.ConfigureIISIntegration();
+            services.ConfigureLoggerService();
+
             services.AddControllers();
-            services.AddCors();
-            services.AddSwaggerGen(swag =>
-            {
-                swag.SwaggerDoc("v1", new OpenApiInfo { Title = "BetterPlan API", Version = "v1" });
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                swag.IncludeXmlComments(xmlPath);
-            });
+            services.ConfigureSwaggerGen();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -65,7 +56,14 @@ namespace BetterPlan
                 option.DocumentTitle = "BetterPlan Api Docs";
             });
 
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            app.UseStaticFiles();
+
+            app.UseCors("CorsPolicy");
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.All
+            });
 
             app.UseHttpsRedirection();
 

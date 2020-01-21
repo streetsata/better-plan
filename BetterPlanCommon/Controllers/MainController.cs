@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BetterPlan.Models;
 using BetterPlan.ViewModels;
+using Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -15,11 +16,12 @@ namespace BetterPlan.Controllers
     [ApiController]
     public class MainController : ControllerBase
     {
+        private readonly ILoggerManager _logger;
         private IConfiguration _fb_config;
-        private readonly ILogger<MainController> _logger;
+        //private readonly ILogger<MainController> _logger;
         private Facebook _facebook;
         private BetterPlanContext _db;
-        public MainController(IConfiguration Configuration, BetterPlanContext context, ILogger<MainController> logger)
+        public MainController(IConfiguration Configuration, BetterPlanContext context, ILoggerManager logger)
         {
             _db = context;
             _logger = logger;
@@ -53,7 +55,7 @@ namespace BetterPlan.Controllers
         [Produces("application/json")]
         public JsonResult GetPosts()
         {
-            //_logger.LogInformation("This is my log"); // logging
+            _logger.LogInfo("Get all Posts");
             return _db.GetJsonDbPostsAsync(Response).Result;
             
         }

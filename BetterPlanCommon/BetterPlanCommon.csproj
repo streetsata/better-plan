@@ -22,5 +22,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LoggerService\LoggerService.csproj" />
+  </ItemGroup>
+
 
 </Project>
