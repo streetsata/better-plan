@@ -81,12 +81,16 @@ new Vue({
       this.isModalVisible = true;
     },
 
-    publishPost(index) {
-      axios.post(`https://localhost:5001/api/v1/USER/${this.users[index].id}/POST`)
+    publishPost() {
+      let obj = JSON.stringify({ "post_text": this.text });
+      axios.post(`https://localhost:5001/api/v1/USER/${this.users[this.active].id}/POST`, obj, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
         .then(res => {
-          let objid = res.data
-          console.log(objid)
-          // console.log(this.post)
+          console.log(res)
+          this.dialog = false;
         })
         .catch(error => {
           console.log(error.res)
@@ -101,11 +105,11 @@ new Vue({
 
   mounted() {
     axios
-        .get('https://localhost:5001/api/v1/USERS')
-        .then(response => {
-            this.users = response.data
-            this.loading = true
-        })
-        .catch(error => console.log(error));
-},
+      .get('https://localhost:5001/api/v1/USERS')
+      .then(response => {
+        this.users = response.data
+        this.loading = true
+      })
+      .catch(error => console.log(error));
+  },
 });
