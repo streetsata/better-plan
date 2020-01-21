@@ -25,13 +25,10 @@ namespace BetterPlan
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BetterPlanContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.ConfigureMSSqlContext(Configuration);
             services.ConfigureCors();
             services.ConfigureIISIntegration();
             services.ConfigureLoggerService();
-
             services.AddControllers();
             services.ConfigureSwaggerGen();
         }

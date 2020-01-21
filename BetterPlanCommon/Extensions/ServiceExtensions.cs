@@ -1,6 +1,10 @@
-﻿using Contracts;
+﻿using BetterPlan.Models;
+using Contracts;
+using Entities;
 using LoggerService;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
@@ -60,6 +64,17 @@ namespace BetterPlanCommon.Extensions
         public static void ConfigureLoggerService(this IServiceCollection services)
         {
             services.AddSingleton<ILoggerManager, LoggerManager>();
+        }
+
+        /// <summary>
+        /// Configure MS Sql Context
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="config"></param>
+        public static void ConfigureMSSqlContext(this IServiceCollection services, IConfiguration config)
+        {
+            var connectionString = config["ConnectionStrings:DefaultConnection"];
+            services.AddDbContext<BetterPlanContext>(o => o.UseSqlServer(connectionString)); // поменять на RepositoryContext
         }
     }
 }
