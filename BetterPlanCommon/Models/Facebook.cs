@@ -114,7 +114,7 @@ namespace BetterPlan.Models
         // Тут у меня говнокод, не бейте, я исправлюсь :С
 
         static Dictionary<string, string> TempUsersDb = new Dictionary<string, string>() {
-            { "895127244222164","EAAjnVI1sCkwBACLWqiwju9Dmsw06mOwqr59ry2X8sKvoLXgL6HyvF5z5TOj8szW6Rn7roWym2K6ZCLj6zHXHNZBZBMv2ZApmE6JKg2C2CEK1ZCdZBFEIjgT0gufZBUH8ZB0AXr2C0GsDQkZBP0kpFjDnoM6EgzsqOLVt5DCizPZANp3wZDZD" }
+            { "100559284835939","EAAHD5fytWZAABAGe8mGPsXkL4mZB8fi5BZB0G2ZCCvRvTcZBvA3eTA5CvjpXkOA1ZAZCZC0ZCB7sfk6SV9KZAMN2jLXwpR67oqZAXtL07RZC0HgoZBlz5eBQbD5im1P9dGGbWE2Ds6pTZCVEyqCSgSZCvTZA3IWuSV4HvzAquYLejh93YEhE50CtIB4OcQeI" }
         };
         public static async Task<JsonResult> GetUsersAsync()
         {
@@ -149,8 +149,9 @@ namespace BetterPlan.Models
             foreach (var post in posts)
             {
                 Dictionary<string, string> pairs = new Dictionary<string, string>();
+
                 pairs.Add("post_id", post["id"].ToString());
-                pairs.Add("text", post["message"].ToString());
+                if (post["message"] != null) pairs.Add("text", post["message"].ToString());
                 if(post["full_picture"] != null) pairs.Add("img", post["full_picture"].ToString());
                 if (post["place"] != null) pairs.Add("place", post["place"]["id"].ToString());
 
