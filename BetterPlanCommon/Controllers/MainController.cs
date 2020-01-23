@@ -52,8 +52,18 @@ namespace BetterPlan.Controllers
         [Produces("application/json")]
         public JsonResult GetUsers()
         {
-            _logger.LogDebug("Тест");
-            return BetterPlanLogic.GetUsersAsync().Result;
+            _logger.LogInfo("GET /api/v1/USERS");
+            try
+            {
+                return BetterPlanLogic.GetUsersAsync().Result;
+
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = 500;
+                _logger.LogError(e.Message);
+                return new JsonResult(new { status = "error", error_message = "Server error!" });
+            }
         }
         /// <summary>
         ///     Возвращает посты пользователя
@@ -78,7 +88,17 @@ namespace BetterPlan.Controllers
         [HttpGet("USER/{id}/POSTS")]
         public JsonResult GetUserPosts(string id)
         {
-            return BetterPlanLogic.GetUserPosts(Response, id);
+            _logger.LogInfo($"GET /api/v1/USER/{id}/POSTS");
+            try
+            {
+                return BetterPlanLogic.GetUserPosts(Response, id);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = 500;
+                _logger.LogError(e.Message);
+                return new JsonResult(new { status = "error", error_message = "Server error!" });
+            }
         }
 
         /// <summary>
@@ -117,10 +137,17 @@ namespace BetterPlan.Controllers
         [Produces("application/json")]
         public JsonResult Post(string id, [FromBody] PostViewModel post) // ,
         {
-            //return _facebook.PostToFacebookAsync(Response,post, _db).Result;
-            return BetterPlanLogic.UserPost(id, Response, post, _db);
-            //return new JsonResult(new { status = id });
-
+            _logger.LogInfo($"POST /api/v1/USER/{id}/POST [Body]: post_text: '{post.post_text}'");
+            try
+            {
+                return BetterPlanLogic.UserPost(id, Response, post, _db);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = 500;
+                _logger.LogError(e.Message);
+                return new JsonResult(new { status = "error", error_message = "Server error!" });
+            }
         }
 
         /// <summary>
@@ -159,7 +186,17 @@ namespace BetterPlan.Controllers
         [Produces("application/json")]
         public JsonResult EditPost(string id, [FromBody] EditPostViewModel editPost)
         {
-            return BetterPlanLogic.UserEdit(id, Response, editPost, _db);
+            _logger.LogInfo($"PUT /api/v1/USER/{id}/EDIT [Body]: post_id: '{editPost.post_id}', edit_text: '{editPost.edit_text}'");
+            try
+            {
+                return BetterPlanLogic.UserEdit(id, Response, editPost, _db);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = 500;
+                _logger.LogError(e.Message);
+                return new JsonResult(new { status = "error", error_message = "Server error!" });
+            }
 
         }
 
@@ -198,7 +235,17 @@ namespace BetterPlan.Controllers
         [Produces("application/json")]
         public JsonResult DeletePost(string id, [FromBody] DeletePostViewModel deletePost)
         {
-            return BetterPlanLogic.UserDelete(id, Response, deletePost, _db);
+            _logger.LogInfo($"PUT /api/v1/USER/{id}/EDIT [Body]: post_id: '{deletePost.post_id}'");
+            try
+            {
+                return BetterPlanLogic.UserDelete(id, Response, deletePost, _db);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = 500;
+                _logger.LogError(e.Message);
+                return new JsonResult(new { status = "error", error_message = "Server error!" });
+            }
         }
     }
 }

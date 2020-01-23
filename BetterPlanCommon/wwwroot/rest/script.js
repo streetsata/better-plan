@@ -46,15 +46,17 @@ new Vue({
     users: [],
     posts: [],
     dialog: false,
+    loading: false,
     active: 0,
     items: [
       'Content for tab 1!',
       'Content for tab 2!',
       'Content for tab 3!'
     ],
-    isModalVisible: false,
     tab: null,
-    text: 'lorem',
+    text: '',
+    postText: '',
+    // indicateProgressbar: 'ma-2'
   },
   computed: {
     content() {
@@ -73,15 +75,10 @@ new Vue({
         .catch(error => {
           console.log(error.res)
         });
-      //   FB.getLoginStatus(function(response) {
-      //     statusChangeCallback(response);
-      // });
     },
-    showModal() {
-      this.isModalVisible = true;
-    },
-
+    
     publishPost() {
+      this.dialog = false;
       let obj = JSON.stringify({ "post_text": this.text });
       axios.post(`https://localhost:5001/api/v1/USER/${this.users[this.active].id}/POST`, obj, {
         headers: {
@@ -90,12 +87,51 @@ new Vue({
       })
         .then(res => {
           console.log(res)
-          this.dialog = false;
+          this.activate(this.active)
         })
         .catch(error => {
           console.log(error.res)
         });
-    }
+    },
+
+    editPost(postId) {
+      console.log(postId);
+      this.dialog = false;
+      let obj = JSON.stringify({"post_id":postId, "edit_text": this.text });
+      axios.put(`https://localhost:5001/api/v1/USER/${this.users[this.active].id}/EDIT`, obj, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(error => {
+          console.log(error.res)
+        });
+        
+    },
+
+    deletePost() {
+      // this.dialog = false;
+      let obj = JSON.stringify({ "post_id": postId });
+      axios.delete(`https://localhost:5001/api/v1/USER/${this.users[this.active].id}/DELETE`, obj, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(error => {
+          console.log(error.res)
+        });
+    },
+
+    // indicateProgressbar(){
+    //   debugger
+    //   this.loading !== false ? "ma-2":"d-none"
+    // }
   },
   watch: {
     length(val) {
@@ -109,6 +145,7 @@ new Vue({
       .then(response => {
         this.users = response.data
         this.loading = true
+        this.activate(0)
       })
       .catch(error => console.log(error));
   },
