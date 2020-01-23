@@ -43,8 +43,6 @@ new Vue({
   vuetify: new Vuetify(),
 
   data: {
-    users: [],
-    posts: [],
     dialog: false,
     active: 0,
     items: [
@@ -53,8 +51,6 @@ new Vue({
       'Content for tab 3!'
     ],
     isModalVisible: false,
-    tab: null,
-    text: 'lorem',
   },
   computed: {
     content() {
@@ -64,11 +60,9 @@ new Vue({
   methods: {
     activate(index) {
       this.active = index;
-      axios.get(`https://localhost:5001/api/v1/USER/${this.users[index].id}/POSTS`)
+      axios.get('https://api.coindesk.com/v1/bpi/currentprice.json')
         .then(res => {
-          this.posts = res.data
           console.log(res)
-          console.log(this.posts)
         })
         .catch(error => {
           console.log(error.res)
@@ -80,36 +74,10 @@ new Vue({
     showModal() {
       this.isModalVisible = true;
     },
-
-    publishPost() {
-      let obj = JSON.stringify({ "post_text": this.text });
-      axios.post(`https://localhost:5001/api/v1/USER/${this.users[this.active].id}/POST`, obj, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(res => {
-          console.log(res)
-          this.dialog = false;
-        })
-        .catch(error => {
-          console.log(error.res)
-        });
-    }
   },
   watch: {
     length(val) {
       this.tab = val - 1
     },
-  },
-
-  mounted() {
-    axios
-      .get('https://localhost:5001/api/v1/USERS')
-      .then(response => {
-        this.users = response.data
-        this.loading = true
-      })
-      .catch(error => console.log(error));
   },
 });

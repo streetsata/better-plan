@@ -1,9 +1,11 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BetterPlan.Models;
-using BetterPlan.ViewModels;
+using Contracts;
+using Entities.ViewModels;
+using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -15,16 +17,18 @@ namespace BetterPlan.Controllers
     [ApiController]
     public class MainController : ControllerBase
     {
+        private readonly ILoggerManager _logger;
         private IConfiguration _fb_config;
-        private readonly ILogger<MainController> _logger;
+        //private readonly ILogger<MainController> _logger;
         private Facebook _facebook;
         private BetterPlanContext _db;
-        public MainController(IConfiguration Configuration, BetterPlanContext context, ILogger<MainController> logger)
+        public MainController(IConfiguration Configuration, BetterPlanContext context, ILoggerManager logger)
         {
             _db = context;
             _logger = logger;
             _fb_config = Configuration.GetSection("FacebookConfig");
             _facebook = new Facebook(_fb_config.GetSection("AccessToken").Value, _fb_config.GetSection("PageId").Value);
+
         }
         /// <summary>
         /// Возвращает доступных пользователей
@@ -43,13 +47,12 @@ namespace BetterPlan.Controllers
         ///     }
         /// 
         /// </response>
-        
+
         [HttpGet("USERS")]
         [Produces("application/json")]
         public JsonResult GetUsers()
         {
-            //_logger.LogInformation("This is my log"); // logging
-            //return _db.GetJsonDbPostsAsync(Response).Result;
+            _logger.LogDebug("Тест");
             return BetterPlanLogic.GetUsersAsync().Result;
         }
         /// <summary>
@@ -75,11 +78,7 @@ namespace BetterPlan.Controllers
         [HttpGet("USER/{id}/POSTS")]
         public JsonResult GetUserPosts(string id)
         {
-            //_logger.LogInformation("This is my log"); // logging
-            //return _db.GetJsonDbPostsAsync(Response).Result;
             return BetterPlanLogic.GetUserPosts(Response, id);
-
-            //return new JsonResult(new { status = id });
         }
 
         /// <summary>
@@ -116,10 +115,10 @@ namespace BetterPlan.Controllers
         /// </response>
         [HttpPost("USER/{id}/POST")]
         [Produces("application/json")]
-        public JsonResult Post(string id,[FromBody] PostViewModel post) // ,
+        public JsonResult Post(string id, [FromBody] PostViewModel post) // ,
         {
             //return _facebook.PostToFacebookAsync(Response,post, _db).Result;
-            return BetterPlanLogic.UserPost(id,Response, post, _db);
+            return BetterPlanLogic.UserPost(id, Response, post, _db);
             //return new JsonResult(new { status = id });
 
         }
@@ -158,9 +157,9 @@ namespace BetterPlan.Controllers
         /// </response>
         [HttpPut("USER/{id}/EDIT")]
         [Produces("application/json")]
-        public JsonResult EditPost(string id,[FromBody] EditPostViewModel editPost)
+        public JsonResult EditPost(string id, [FromBody] EditPostViewModel editPost)
         {
-            return BetterPlanLogic.UserEdit(id,Response, editPost, _db);
+            return BetterPlanLogic.UserEdit(id, Response, editPost, _db);
 
         }
 
@@ -197,9 +196,9 @@ namespace BetterPlan.Controllers
         /// </response>
         [HttpDelete("USER/{id}/DELETE")]
         [Produces("application/json")]
-        public JsonResult DeletePost(string id,[FromBody] DeletePostViewModel deletePost)
+        public JsonResult DeletePost(string id, [FromBody] DeletePostViewModel deletePost)
         {
-            return BetterPlanLogic.UserDelete(id,Response, deletePost, _db);
+            return BetterPlanLogic.UserDelete(id, Response, deletePost, _db);
         }
     }
 }
