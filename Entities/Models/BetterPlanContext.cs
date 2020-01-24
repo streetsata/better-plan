@@ -16,17 +16,5 @@ namespace Entities.Models
         {
             Database.EnsureCreated();
         }
-
-        public async Task<JsonResult> GetJsonDbPostsAsync(HttpResponse response)
-        {
-            var PostsList = await Posts.ToListAsync();
-            List<object> posts = new List<object>();
-            foreach (var item in PostsList)
-            {
-                posts.Add(new { id = item.Id, post_id = item.Post_id, text = item.Text, place = item.Place });
-            }
-
-            return new JsonResult(posts);
-        }
     }
 }

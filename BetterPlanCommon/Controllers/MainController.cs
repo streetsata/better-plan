@@ -18,17 +18,14 @@ namespace BetterPlan.Controllers
     public class MainController : ControllerBase
     {
         private readonly ILoggerManager _logger;
-        private IConfiguration _fb_config;
-        //private readonly ILogger<MainController> _logger;
-        private Facebook _facebook;
+        private BetterPlanAPI _bpApi;
         private BetterPlanContext _db;
+        
         public MainController(IConfiguration Configuration, BetterPlanContext context, ILoggerManager logger)
         {
             _db = context;
             _logger = logger;
-            _fb_config = Configuration.GetSection("FacebookConfig");
-            _facebook = new Facebook(_fb_config.GetSection("AccessToken").Value, _fb_config.GetSection("PageId").Value);
-
+            _bpApi = new BetterPlanAPI(Response, context);
         }
         /// <summary>
         /// Возвращает доступных пользователей
@@ -55,7 +52,7 @@ namespace BetterPlan.Controllers
             _logger.LogInfo("GET /api/v1/USERS");
             try
             {
-                return BetterPlanLogic.GetUsersAsync().Result;
+                return _bpApi.GetUsers();
 
             }
             catch (Exception e)
@@ -85,13 +82,13 @@ namespace BetterPlan.Controllers
         ///     }
         /// 
         /// </response>
-        [HttpGet("USER/{id}/POSTS")]
-        public JsonResult GetUserPosts(string id)
+        [HttpGet("USER/{userId}/POSTS")]
+        public JsonResult GetUserPosts(string userId)
         {
-            _logger.LogInfo($"GET /api/v1/USER/{id}/POSTS");
+            _logger.LogInfo($"GET /api/v1/USER/{userId}/POSTS");
             try
             {
-                return BetterPlanLogic.GetUserPosts(Response, id);
+                return _bpApi.GetUserPosts(userId);
             }
             catch (Exception e)
             {
@@ -133,14 +130,14 @@ namespace BetterPlan.Controllers
         ///         "error_message": "msg"
         ///     }
         /// </response>
-        [HttpPost("USER/{id}/POST")]
+        [HttpPost("USER/{userId}/POST")]
         [Produces("application/json")]
-        public JsonResult Post(string id, [FromBody] PostViewModel post) // ,
+        public JsonResult Post(string userId, [FromBody] PostViewModel post) 
         {
-            _logger.LogInfo($"POST /api/v1/USER/{id}/POST [Body]: post_text: '{post.post_text}'");
+            _logger.LogInfo($"POST /api/v1/USER/{userId}/POST [Body]: post_text: '{post.post_text}'");
             try
             {
-                return BetterPlanLogic.UserPost(id, Response, post, _db);
+                return _bpApi.UserPost(userId, post);
             }
             catch (Exception e)
             {
@@ -164,7 +161,7 @@ namespace BetterPlan.Controllers
         ///
         /// </remarks>
         /// <param name="post"></param>
-        /// <param name="id">ID Пользователя</param>
+        /// <param name="userId">ID Пользователя</param>
         /// <returns></returns>
         /// <response code="200">
         /// Sample response:
@@ -182,14 +179,14 @@ namespace BetterPlan.Controllers
         ///         "error_message": "msg"
         ///     }
         /// </response>
-        [HttpPut("USER/{id}/EDIT")]
+        [HttpPut("USER/{userId}/EDIT")]
         [Produces("application/json")]
-        public JsonResult EditPost(string id, [FromBody] EditPostViewModel editPost)
+        public JsonResult EditPost(string userId, [FromBody] EditPostViewModel editPost)
         {
-            _logger.LogInfo($"PUT /api/v1/USER/{id}/EDIT [Body]: post_id: '{editPost.post_id}', edit_text: '{editPost.edit_text}'");
+            _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{editPost.post_id}', edit_text: '{editPost.edit_text}'");
             try
             {
-                return BetterPlanLogic.UserEdit(id, Response, editPost, _db);
+                return _bpApi.UserEdit(userId, editPost);
             }
             catch (Exception e)
             {
@@ -213,7 +210,7 @@ namespace BetterPlan.Controllers
         ///
         /// </remarks>
         /// <param name="post"></param>
-        /// <param name="id">ID Пользователя</param>
+        /// <param name="userId">ID Пользователя</param>
         /// <returns></returns>
         /// <response code="200">
         /// Sample response:
@@ -231,14 +228,14 @@ namespace BetterPlan.Controllers
         ///         "error_message": "msg"
         ///     }
         /// </response>
-        [HttpDelete("USER/{id}/DELETE")]
+        [HttpDelete("USER/{userId}/DELETE")]
         [Produces("application/json")]
-        public JsonResult DeletePost(string id, [FromBody] DeletePostViewModel deletePost)
+        public JsonResult DeletePost(string userId, [FromBody] DeletePostViewModel deletePost)
         {
-            _logger.LogInfo($"PUT /api/v1/USER/{id}/EDIT [Body]: post_id: '{deletePost.post_id}'");
+            _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{deletePost.post_id}'");
             try
             {
-                return BetterPlanLogic.UserDelete(id, Response, deletePost, _db);
+                return _bpApi.UserDelete(userId, deletePost);
             }
             catch (Exception e)
             {
