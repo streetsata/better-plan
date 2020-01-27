@@ -9,9 +9,8 @@ namespace Entities.Models
     public class Post
     {
         [Key]
-        public int Id { get; set; }
-        public string Post_id { get; set; }
+        public int PostId { get; set; }
+        public string FacebookPostId { get; set; }
         public string Text { get; set; }
-        public string Place { get; set; }
     }
 }
