@@ -124,10 +124,10 @@ namespace Entities.Models
 
                 foreach (var user in TempUsersDb)
                 {
-                    var httpResponse = await http.GetAsync($"https://graph.facebook.com/me?access_token={user.Value}");
+                    var httpResponse = await http.GetAsync("https://graph.facebook.com/me?access_token="+ user.Value +"&fields=name,id,picture{url}");
                     var httpContent = await httpResponse.Content.ReadAsStringAsync();
                     var json = JObject.Parse(httpContent);
-                    usersObj.Add(new { id = json["id"].ToString(), name = json["name"].ToString() });
+                    usersObj.Add(new { id = json["id"].ToString(), name = json["name"].ToString(), img = json["picture"]["data"]["url"].ToString() });
                 }
                 return new JsonResult(usersObj);
 

@@ -38,9 +38,9 @@
     height: 50%;
   }
 
-  /* .tab-navigation {
-   
-  } */
+  .v-navigation-drawer--open {
+    width: 60px;
+  }
   .pos{
     position: absolute;
     z-index: 10;
@@ -66,7 +66,7 @@
 <body>
 <div id="app">
       <v-app >
-        <v-toolbar app >
+        <v-toolbar  >
           <v-toolbar-title>
             <!-- <img src="rest/img/logo.svg" alt="Better Plan" class="logo__img"> -->
             <logo-betterplan id='logo'></logo-betterplan>
@@ -75,8 +75,8 @@
           <v-spacer></v-spacer>
           <!-- <div class="user_ava"> -->
             <v-list-item-avatar class="user_ava">
-            <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
-            <!-- <v-img src="https://graph.facebook.com/895127244222164/picture"></v-img>  avatar -->
+            <!-- <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img> -->
+            <v-img src="https://graph.facebook.com/895127244222164/picture"></v-img>
           </v-list-item-avatar>
           <!-- </div> -->
           <v-btn icon href="#">
@@ -120,28 +120,25 @@
           
 <!--END: navigation -->
               <v-row no-gutters class="justify-center">
-              <v-col cols="10">
+              <v-col scroll cols="10">
                 <v-card>
                   
                 <v-card class="tab-navigation">
                 <v-tabs
                   v-modal="tab"
                   background-color="gray accent-4"
+                  slider-color="transparent"
                   left
                 >
-                  <v-tabs-slider></v-tabs-slider>
-                  <v-tab href="#tab-1" v-for="(item, index) in users" @click="activate(index)">
+                  <!-- <v-tabs-slider></v-tabs-slider> -->
+                  
+                  <v-tab href="#tab" 
+                    v-for="(item, index) in users" 
+                    :key="index"
+                    @click="activate(index)">
                     {{ item.name }}
                   </v-tab>
-                  <!-- <v-tab href="#tab-2">
-                    Masterskaya @2.58 af
-                    {{index + 1}}
-                  </v-tab>
-                  <v-tab href="#tab-3">
-                    Masterskaya @2.58 af
-                    {{index + 1}}
-                  </v-tab> -->
-          
+                  
                 </v-tabs>
                 <v-tab class="fixed-tab">
                   <img src="./rest/img/addProject.svg" alt="">
@@ -153,9 +150,9 @@
                   <v-dialog v-model="dialog" persistent max-width="600px">
                     <template v-slot:activator="{ on }">
                       <v-col  class="dashed-fild">
-                        <!-- <v-btn v-on="on"> -->
-                          <v-icon v-on="on" > add </v-icon>
-                        <!-- </v-btn>                 -->
+                        <v-btn text v-on="on">
+                          <v-icon > add </v-icon>
+                        </v-btn>                
                         Add
                       </v-col>   
                     </template>
@@ -210,7 +207,7 @@
                 <v-tabs-item
                   v-for="i in posts"
                   :key="i"
-                  :value="'tab-' + i"
+                  :value="'tab-'+ i"
                   v-model="tab"
                   v-if="typeof i['text'] !== 'undefined'"
                 >
@@ -220,7 +217,8 @@
                     <div class="" class="justify-center">
                       <v-list-item>
                           <v-list-item-avatar>
-                              <img src="https://randomuser.me/api/portraits/women/85.jpg" alt="ava">
+                              <!-- <img src="https://randomuser.me/api/portraits/women/85.jpg" alt="ava"> -->
+                              <v-img :src="users[active].img"></v-img>
                           </v-list-item-avatar>
                           <v-list-item-content class="mt-2">
                               <v-list-item-title class="questrial subtitle"> {{ users[active].name }}</v-list-item-title>    
@@ -228,11 +226,11 @@
                           <v-list-item-action>
 <!-- Edit modal window -->
 <v-row>
-                            <template>
-                            <v-dialog max-width="500px">
+                            <!-- <template> -->
+                            <v-dialog v-modal="dialog" max-width="500px">
                               <template v-slot:activator="{ on }">
-                                <v-btn  text >
-                                  <v-icon v-on="on"> edit </v-icon>
+                                <v-btn  text v-on="on">
+                                  <v-icon > edit </v-icon>
                                 </v-btn>
                               </template>
 
@@ -260,10 +258,10 @@
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
-                            </template>
+                            <!-- </template> -->
 <!--END: Edit modal window -->
-                          <v-btn text >
-                          <v-icon v-on="on" > delete </v-icon>
+                          <v-btn text @click="deletePost(i.post_id)">
+                            <v-icon v-on="on" > delete </v-icon>
                           </v-btn>
                         </v-row>
                           </v-list-item-action>
@@ -273,8 +271,8 @@
                       :src="i.img" aspect-ratio="2.7">
                     </v-img>
                   
-                  <v-card-text>
-                      <div class="questrial body1 mb-4" v-model='Posttext'>
+                  <v-card-text v-model='postText'>
+                      <div class="questrial body1 mb-4" >
                         {{ i.text }} 
                       </div>
                       <v-divider></v-divider>
@@ -283,12 +281,12 @@
                           <v-flex class="text-right">
                               <v-layout wrap justify-end>
                                   <div class="questrial mr-3 font-weight-bold ">
-                                  4 Comments 
+                                  0 Comments 
                                   <v-icon  @click="" small>keyboard_arrow_down</v-icon>
                                   <v-icon v-if="false" @click="" small>keyboard_arrow_up</v-icon> 
                               </div> 
                               <div class="questrial ml-2 font-weight-bold mr-2">
-                                  1 Share
+                                  0 Share
                               </div>
                           </v-layout>
                           </v-flex>
@@ -314,6 +312,10 @@
       </v-app>
     </div>
     <script src="rest/script.js"></script>
+    <script>
+    console.log('THIS IS  index TEXT?')
+    // console.log(activate())
+    </script>
 </body>
 
 </html>
