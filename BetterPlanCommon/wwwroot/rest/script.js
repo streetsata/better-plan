@@ -32,9 +32,14 @@ Vue.component('add-post', {
   `
 });
 
+const router = new VueRouter({
+  mode: 'history'
+  // routes: routes
+});
+
 new Vue({
   el: '#app',
-  // router: router,
+  router: router,
   vuetify: new Vuetify(),
 
   data: {
@@ -100,7 +105,6 @@ new Vue({
       })
         .then(res => {
           console.log(res)
-          this.activate(this.active)
         })
         .catch(error => {
           console.log(error.res)
@@ -108,21 +112,16 @@ new Vue({
         
     },
 
-    deletePost(postId) {
-      // debugger
-      // let obj = JSON.stringify({ "post_id": postId });
-      console.log(postId, this.users[this.active].name);
-      axios.delete(`https://localhost:5001/api/v1/USER/${this.users[this.active].id}/DELETE`, {
+    deletePost() {
+      // this.dialog = false;
+      let obj = JSON.stringify({ "post_id": postId });
+      axios.delete(`https://localhost:5001/api/v1/USER/${this.users[this.active].id}/DELETE`, obj, {
         headers: {
           'Content-Type': 'application/json'
-        },
-        data:{
-          "post_id": postId
         }
       })
         .then(res => {
           console.log(res)
-          this.activate(this.active)
         })
         .catch(error => {
           console.log(error.res)
