@@ -25,7 +25,7 @@ namespace BetterPlan.Controllers
         {
             _db = context;
             _logger = logger;
-            _bpApi = new BetterPlanAPI(Response, context);
+            _bpApi = new BetterPlanAPI(Response, context,logger);
         }
         /// <summary>
         /// Возвращает доступных пользователей
@@ -65,7 +65,7 @@ namespace BetterPlan.Controllers
         /// <summary>
         ///     Возвращает посты пользователя
         /// </summary>
-        /// <param name="id">ID Пользователя</param>
+        /// <param name="userId">ID Пользователя</param>
         /// <returns></returns>
         /// <response code="200">
         /// Sample response:
@@ -111,7 +111,7 @@ namespace BetterPlan.Controllers
         ///
         /// </remarks>
         /// <param name="post"></param>
-        /// <param name="id">ID Пользователя</param>
+        /// <param name="userId">ID Пользователя</param>
         /// <returns></returns>
         /// <response code="200">
         /// Sample response:
@@ -160,7 +160,7 @@ namespace BetterPlan.Controllers
         ///     }
         ///
         /// </remarks>
-        /// <param name="post"></param>
+        /// <param name="editPost"></param>
         /// <param name="userId">ID Пользователя</param>
         /// <returns></returns>
         /// <response code="200">
@@ -209,7 +209,7 @@ namespace BetterPlan.Controllers
         ///     }
         ///
         /// </remarks>
-        /// <param name="post"></param>
+        /// <param name="deletePost"></param>
         /// <param name="userId">ID Пользователя</param>
         /// <returns></returns>
         /// <response code="200">

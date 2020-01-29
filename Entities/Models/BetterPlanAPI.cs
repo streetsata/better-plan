@@ -1,4 +1,5 @@
-﻿using Entities.ViewModels;
+﻿using Contracts;
+using Entities.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -13,12 +14,14 @@ namespace Entities.Models
     public class BetterPlanAPI
     {
         private HttpResponse _response;
-        private BetterPlanContext _db;  
+        private BetterPlanContext _db;
+        private ILoggerManager _logger;
 
-        public BetterPlanAPI(HttpResponse response, BetterPlanContext context)
+        public BetterPlanAPI(HttpResponse response, BetterPlanContext context, ILoggerManager logger)
         {
             _response = response;
             _db = context;
+            _logger = logger;
         }
 
         /// <summary>
