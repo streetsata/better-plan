@@ -1,3 +1,1 @@
-# Better Plan
-
-Planning and organizing content for Instagram / Facebook SMM
+Branch for frontend webpack project
