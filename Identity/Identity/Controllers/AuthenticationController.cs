@@ -39,8 +39,6 @@ namespace Identity.Controllers
         {
             if (ModelState.IsValid)
             {
-                //await roleManager.CreateAsync(new IdentityRole("Admin"));
-                //await roleManager.CreateAsync(new IdentityRole("User"));
                 //IdentityUser user = await userManager.FindByNameAsync("test");
                 //await userManager.DeleteAsync(user);
 
@@ -53,10 +51,10 @@ namespace Identity.Controllers
 
                 if (identityRez.Succeeded)
                 {
-                    //user = await userManager.FindByNameAsync(user.UserName);
                     await userManager.AddToRoleAsync(user, "User");
                     return new JsonResult(new { answer = true });
                 }
+                return new JsonResult(new { identityRez });
             }
             return new JsonResult(new { mes = "Error" });
         }
@@ -90,7 +88,7 @@ namespace Identity.Controllers
         [Route("LogOut")]
         public void LogOut()
         {
-
+            userManager.UpdateSecurityStampAsync(user);
         }
 
         //[HttpGet]

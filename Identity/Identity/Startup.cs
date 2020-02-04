@@ -1,5 +1,4 @@
 using System;
-using Identity.Interfaces;
 using Identity.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,12 +40,7 @@ namespace Identity
                 o.Password.RequiredLength = 4;
             });
 
-            //const string signingSecurityKey = "0d5b3235a8b403c3dab9c3f4f65c07fcalskd234n1k41230";
-            //var signingKey = new SigningSymmetricKey(signingSecurityKey);
-            //services.AddSingleton<IJwtSigningEncodingKey>(signingKey);
-
             const string jwtSchemeName = "JwtBearer";
-            //var signingDecodingKey = (IJwtSigningDecodingKey)signingKey;
             services
                 .AddAuthentication(options =>
                 {
@@ -76,6 +70,7 @@ namespace Identity
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,6 +87,16 @@ namespace Identity
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin();
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+
+            });
 
             app.UseRouting();
 
