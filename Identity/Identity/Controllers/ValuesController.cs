@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Entities.AuthorizeAttribute;
 
 namespace Identity.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
+   // [ClaimRequirement("Permission", "Look")]// custom attribute
     public class ValuesController : ControllerBase
     {
         private readonly UserContext userContext;

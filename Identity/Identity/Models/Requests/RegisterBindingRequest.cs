@@ -1,6 +1,6 @@
-﻿namespace Identity.Models
+﻿namespace Identity.Models.Requests
 {
-    public class RegisterBindingModel
+    public class RegisterBindingRequest
     {
         public string Name { get; set; }
         public string Email { get; set; }

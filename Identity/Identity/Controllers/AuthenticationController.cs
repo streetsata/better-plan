@@ -1,7 +1,9 @@
 ﻿using Identity.Infrastructure;
 using Identity.Models;
+using Identity.Models.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -35,7 +37,7 @@ namespace Identity.Controllers
         // Registration users
         [HttpPost]
         [Route("registration")]
-        public async Task<IActionResult> PostRegistration([FromBody] RegisterBindingModel userData)
+        public async Task<IActionResult> PostRegistration([FromBody] RegisterBindingRequest userData)
         {
             if (ModelState.IsValid)
             {
@@ -71,12 +73,30 @@ namespace Identity.Controllers
                 if (signInRez.Succeeded)
                 {
                     user = await userManager.FindByNameAsync(authRequest.Name);
-                    var role = await roleManager.FindByIdAsync(_context.UserRoles.FirstOrDefault(q => q.UserId == user.Id).RoleId);
+                    var userRoles = await userManager.GetRolesAsync(user);
+                    var userPermissions = await userManager.GetClaimsAsync(user);// get UserClaims(Permissions)
+
+                    IList<IdentityRole> roles = new List<IdentityRole>();
+                    foreach (var item in userRoles)
+                    {
+                        roles.Add(await roleManager.FindByNameAsync(item));
+                    }
+
+                    IList<Claim> rolePermissions = new List<Claim>();
+                    foreach (var item in roles)
+                    {
+                        var claims = await roleManager.GetClaimsAsync(item);
+                        foreach (var claim in claims)
+                        {
+                            rolePermissions.Add(claim); // get RoleClaims(Permissions)
+                        }
+                    }
+                    var permissoins = userPermissions.Union(rolePermissions).ToList();// all permissions (role + user)
 
                     await userManager.RemoveAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
                     var refresh_jwtToken = await userManager.GenerateUserTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
                     await userManager.SetAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken", refresh_jwtToken);
-                    string access_jwtToken = TokenFactory.GenerateAccessToken(user, role);
+                    string access_jwtToken = TokenFactory.GenerateAccessToken(user, permissoins);
 
                     return new JsonResult(new { access_jwtToken, refresh_jwtToken });
                 }
@@ -91,44 +111,63 @@ namespace Identity.Controllers
             userManager.UpdateSecurityStampAsync(user);
         }
 
-        //[HttpGet]
-        //[Route("refreshUserTokens")]
-        //public async Task<IActionResult> RefreshUserTokens([FromBody] string Token)
-        //{
-        //    var tokenValidationParameters = new TokenValidationParameters
-        //    {
-        //        ValidateAudience = false,
-        //        ValidateIssuer = false,
-        //        ValidateIssuerSigningKey = true,
-        //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("dfshadkkywegufygeugreyugfuwidgf5")),
-        //        ValidateLifetime = false
-        //    };
+        [HttpGet("refreshUserToken")]
+        public async Task<IActionResult> RefreshUserToken([FromBody] RefreshUserTokenRequest request)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                ValidateLifetime = false
+            };
 
-        //    var tokenHandler = new JwtSecurityTokenHandler();
-        //    var principal = tokenHandler.ValidateToken(Token, tokenValidationParameters, out var securityToken);
-        //    if ((securityToken is JwtSecurityToken jwtSecurityToken) && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-        //    {
-        //        return BadRequest("Invallid token");
-        //    }
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var principal = tokenHandler.ValidateToken(request.Token, tokenValidationParameters, out var securityToken);
+            if ((securityToken is JwtSecurityToken jwtSecurityToken) && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return BadRequest("Invallid token");
+            }
 
-        //    var userName = principal.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    var user = await userManager.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+            var userName = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await userManager.Users.FirstOrDefaultAsync(u => (u.UserName == userName));
+            var refToken = await userManager.GetAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
 
-        //    if (user == null)
-        //    {
-        //        return BadRequest("Invallid token");
-        //    }
+            if (refToken != request.RefreshToken)
+            {
+                return BadRequest("Invallid token");
+            }
 
-        //    user.RefreshToken = GenerateRefreshToken();
-        //    await userManager.UpdateAsync(user);
+            //user.RefreshToken = GenerateRefreshToken();
+            //await _userManager.UpdateAsync(user);
+            await userManager.RemoveAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
+            var refresh_jwtToken = await userManager.GenerateUserTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
+            await userManager.SetAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken", refresh_jwtToken);
 
-        //    var userRoles = await userManager.GetRolesAsync(user);
-        //    var result = new AuthSuccessResponse
-        //    {
-        //        Token = GenerateUserToken(user.Email, userRoles),
-        //        RefreshToken = user.RefreshToken
-        //    };
-        //    return Ok(result);
-        //}
+            var userRoles = await userManager.GetRolesAsync(user);
+            var userPermissions = await userManager.GetClaimsAsync(user);// get UserClaims(Permissions)
+
+            IList<IdentityRole> roles = new List<IdentityRole>();
+            foreach (var item in userRoles)
+            {
+                roles.Add(await roleManager.FindByNameAsync(item));
+            }
+
+            IList<Claim> rolePermissions = new List<Claim>();
+            foreach (var item in roles)
+            {
+                var claims = await roleManager.GetClaimsAsync(item);
+                foreach (var claim in claims)
+                {
+                    rolePermissions.Add(claim); // get RoleClaims(Permissions)
+                }
+            }
+            var permissoins = userPermissions.Union(rolePermissions).ToList();// all permissions (role + user)
+
+            string access_jwtToken = TokenFactory.GenerateAccessToken(user, permissoins);
+
+            return new JsonResult(new { access_jwtToken, refresh_jwtToken });
+        }
     }
 }

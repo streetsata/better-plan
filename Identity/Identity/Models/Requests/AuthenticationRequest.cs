@@ -1,4 +1,4 @@
-﻿namespace Identity.Models
+﻿namespace Identity.Models.Requests
 {
     public class AuthenticationRequest
     {
