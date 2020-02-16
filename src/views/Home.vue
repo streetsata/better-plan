@@ -1,53 +1,17 @@
 <template>
   <v-app>
-    <v-toolbar app>
-      <v-toolbar-title>
-        <!-- <img src="rest/img/logo.svg" alt="Better Plan" class="logo__img"> -->
-        <logo-betterplan id="logo"></logo-betterplan>
-      </v-toolbar-title>
-
-      <v-spacer></v-spacer>
-      <!-- <div class="user_ava"> -->
-      <v-list-item-avatar class="user_ava">
-        <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
-        <!-- <v-img src="https://graph.facebook.com/895127244222164/picture"></v-img>  avatar -->
-      </v-list-item-avatar>
-      <!-- </div> -->
-      <v-btn icon href="#">
-        <v-icon>add_alert</v-icon>
-      </v-btn>
-    </v-toolbar>
+    <tool-bar></tool-bar>
     <v-content>
       <v-container>
         <v-row>
-          <v-navigation-drawer class="pos" expand-on-hover permanent>
-            <v-list nav dense>
-              <v-list-item link>
-                <v-list-item-icon>
-                  <v-icon>stars</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>Instagram</v-list-item-title>
-              </v-list-item>
-              <v-list-item link>
-                <v-list-item-icon>
-                  <v-icon>poll</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>Facebook</v-list-item-title>
-              </v-list-item>
-              <v-list-item link>
-                <v-list-item-icon>
-                  <v-icon>dashboard</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>Moodboard</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-navigation-drawer>
+          <side-menue></side-menue>
 
-          <!--END: navigation -->
           <v-row no-gutters class="justify-center">
             <v-col cols="10">
               <v-card>
                 <v-card class="tab-navigation">
+                  
+                  <!-- Tabs with users  -->
                   <v-tabs background-color="gray accent-4" left>
                     <v-tabs-slider></v-tabs-slider>
                     <v-tab
@@ -56,15 +20,8 @@
                       @click="activate(index)"
                       :key="index"
                     >{{ item.name }}</v-tab>
-                    <!-- <v-tab href="#tab-2">
-                    Masterskaya @2.58 af
-                    {{index + 1}}
-                  </v-tab>
-                  <v-tab href="#tab-3">
-                    Masterskaya @2.58 af
-                    {{index + 1}}
-                    </v-tab>-->
                   </v-tabs>
+
                   <v-tab class="fixed-tab">
                     <img src="../assets/img/addProject.svg" alt />
                   </v-tab>
@@ -74,9 +31,7 @@
                     <v-dialog v-model="dialog" persistent max-width="600px">
                       <template v-slot:activator="{ on }">
                         <v-col class="dashed-fild">
-                          <!-- <v-btn v-on="on"> -->
                           <v-icon v-on="on">add</v-icon>
-                          <!-- </v-btn>                 -->
                           Add
                         </v-col>
                       </template>
@@ -115,22 +70,12 @@
                     </v-dialog>
                     <!--END: Add Post modal window -->
                   </v-row>
-                  <!-- Progress bar -->
-                  <v-row justify="center" align="center">
-                    <!-- class="d-none" Скрывает прогрессбар ma-2 показывает-->
-                    <v-progress-circular
-                      class="d-none"
-                      :indeterminate="false"
-                      rotate="0"
-                      size="32"
-                      value="0"
-                      width="4"
-                      color="blue"
-                    ></v-progress-circular>
-                  </v-row>
-                  <!-- END: Progress bar -->
-                  <!-- <v-tabs-item v-model="tab"> -->
-                  <v-tabs-item v-for="i in posts" :key="i" :value="'tab-' + i" v-model="tab">
+                  <v-tabs-item 
+                    v-for="i in posts" 
+                    :key="i" 
+                    :value="'tab-' + i" 
+                    v-model="tab"
+                    >
                     <v-tabs-item v-if="typeof i['text'] !== 'undefined'">
                       <v-col cols="6">
                         <v-card rounded>
@@ -236,11 +181,13 @@
 </template>
 
 <script>
-import LogoBetterPlan from "../components/LogoBetterPlan.vue";
+import SideMenue from "../components/SideMenue.vue";
+import ToolBar from "../components/ToolBar.vue";
 
 export default {
   components: {
-    "logo-betterplan": LogoBetterPlan
+    "side-menue": SideMenue,
+    "tool-bar": ToolBar
   },
   data: () => {
     return {
@@ -253,7 +200,6 @@ export default {
       tab: null,
       text: "",
       postText: ""
-      // indicateProgressbar: 'ma-2'
     };
   },
   computed: {
@@ -269,7 +215,6 @@ export default {
         .then(res => {
           this.posts = res.data;
           console.log(res);
-          console.log(this.posts);
         })
         .catch(error => {
           console.log(error.res);
@@ -306,6 +251,7 @@ export default {
         })
         .then(res => {
           console.log(res);
+          this.activate(this.active)
         })
         .catch(error => {
           console.log(error.res);
@@ -323,16 +269,12 @@ export default {
         })
         .then(res => {
           console.log(res);
+          this.activate(this.active)
         })
         .catch(error => {
           console.log(error.res);
         });
     }
-
-    // indicateProgressbar(){
-    //   debugger
-    //   this.loading !== false ? "ma-2":"d-none"
-    // }
   },
   watch: {
     length(val) {
@@ -345,7 +287,6 @@ export default {
       .get("USERS")
       .then(response => {
         this.users = response.data;
-        this.loading = true;
         this.activate(0);
       })
       .catch(error => console.log(error));
@@ -354,10 +295,6 @@ export default {
 </script>
 
 <style>
-.user_ava .v-image {
-  border-radius: 50px;
-  border: 3px solid rgb(61, 117, 61);
-}
 .container {
   height: 90vh;
   max-width: 100vw;
@@ -366,15 +303,11 @@ export default {
   height: 50%;
 }
 
-/* .tab-navigation {
-   
-  } */
 .pos {
   position: absolute;
   z-index: 10;
 }
 .dashed-fild {
-  /* background-color: teal; */
   width: 100%;
   margin-left: 15px;
   width: 98%;
