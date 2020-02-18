@@ -23,12 +23,21 @@ namespace Identity.Controllers
         private enum Roles
         {
             Admin,
-            User
+            Manager,
+            Visual,
+            Targetologist,
+            Copywriter,
+            RegisteredUser
         }
         private enum Permissoins
         {
-            Look,
-            Change
+            Work_With_Publications,
+            Work_With_AdvertisingCompany,
+            Work_With_Scheduler,
+            Posting,
+            Work_With_Drafts,
+            Work_With_Project,
+            Work_With_Team
         }
 
         public RoleController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, UserContext context)
@@ -49,7 +58,7 @@ namespace Identity.Controllers
         public async Task<IActionResult> Edit([FromBody] EditUserRolesRequest model)
         {
             // никогда не убирать роль User
-            model.roles.Add("User");
+            model.roles.Add("RegisteredUser");
             bool check = true;
             foreach (var item in model.roles)
             {
@@ -77,9 +86,15 @@ namespace Identity.Controllers
 
                     return new JsonResult(200);
                 }
+                else
+                {
+                    return new JsonResult(new { result = "User was not found" });
+                }
             }
-
-            return NotFound();
+            else
+            {
+                return new JsonResult(new { result = "Invalid role" });
+            }
         }
 
         [HttpPut("editUserPermissions")]
@@ -126,15 +141,25 @@ namespace Identity.Controllers
 
                     return new JsonResult(200);
                 }
-
-                return NotFound();
+                return new JsonResult(new { result = "User was not found" });
             }
             else
-                return BadRequest("Invallid permission");
+                return new JsonResult(new { result = "Invalid permission" });
         }
 
+
+
+
+
+
+
+
+
+
+        
+
         //[HttpPost("addPermissionForRole")]
-        //public async Task<IActionResult> AddPermissionForRole([FromBody] AddPermissionsRequest model)
+        //public async Task<IActionResult> AddPermissionForRole([FromBody] EditUserPermissionsRequest model)
         //{
         //    bool check = true;
         //    foreach (var item in model.claims)
