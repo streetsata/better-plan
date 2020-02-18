@@ -53,7 +53,6 @@ namespace BetterPlan.Controllers
             try
             {
                 return _bpApi.GetUsers();
-
             }
             catch (Exception e)
             {

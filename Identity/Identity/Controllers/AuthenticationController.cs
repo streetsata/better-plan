@@ -19,16 +19,14 @@ namespace Identity.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly UserContext _context;
         private readonly UserManager<IdentityUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<IdentityUser> signInManager;
         private IdentityResult identityRez;
         private IdentityUser user;
 
-        public AuthenticationController(UserContext context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager)
+        public AuthenticationController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager)
         {
-            _context = context;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
