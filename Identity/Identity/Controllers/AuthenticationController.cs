@@ -98,8 +98,9 @@ namespace Identity.Controllers
                     var refresh_jwtToken = await userManager.GenerateUserTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
                     await userManager.SetAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken", refresh_jwtToken);
                     string access_jwtToken = TokenFactory.GenerateAccessToken(user, permissoins);
+                    var creation = DateTime.Now;
 
-                    return new JsonResult(new { access_jwtToken, refresh_jwtToken });
+                    return new JsonResult(new { access_jwtToken, refresh_jwtToken, creation });
                 }
             }
             return new JsonResult(new {result = "Invalid Data" });
@@ -169,8 +170,9 @@ namespace Identity.Controllers
         //    var permissoins = userPermissions.Union(rolePermissions).ToList();// all permissions (role + user)
 
         //    string access_jwtToken = TokenFactory.GenerateAccessToken(user, permissoins);
+        //    var creation = DateTime.Now;
 
-        //    return new JsonResult(new { access_jwtToken, refresh_jwtToken });
+        //    return new JsonResult(new { access_jwtToken, refresh_jwtToken, creation });
         //}
 
 
@@ -210,8 +212,9 @@ namespace Identity.Controllers
                 var permissoins = userPermissions.Union(rolePermissions).ToList();// all permissions (role + user)
 
                 string access_jwtToken = TokenFactory.GenerateAccessToken(user, permissoins);
+                var creation = DateTime.Now;
 
-                return new JsonResult(new { access_jwtToken, refresh_jwtToken });
+                return new JsonResult(new { access_jwtToken, refresh_jwtToken, creation });
             }
             else
             {
