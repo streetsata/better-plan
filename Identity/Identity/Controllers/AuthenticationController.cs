@@ -26,13 +26,15 @@ namespace Identity.Controllers
         private readonly SignInManager<IdentityUser> signInManager;
         private IdentityResult identityRez;
         private IdentityUser user;
+        private ILoggerManager log;
 
-        public AuthenticationController(UserContext context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager)
+        public AuthenticationController(UserContext context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager, ILoggerManager log)
         {
             this._context = context;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
+            this.log = log;
         }
 
         // Registration users
@@ -50,6 +52,7 @@ namespace Identity.Controllers
                     UserName = userData.Email,
                     Email = userData.Email
                 };
+                log.LogInfo($"New user {user.UserName} registration.");
                 identityRez = await userManager.CreateAsync(user, userData.Password);
 
                 if (identityRez.Succeeded)
@@ -57,13 +60,15 @@ namespace Identity.Controllers
                     await userManager.AddToRoleAsync(user, "RegisteredUser");
                     return new JsonResult(new { answer = true });
                 }
+                log.LogError(identityRez.Errors.ToString());
                 return new JsonResult(new { identityRez });
             }
+            log.LogError("Registration - ModelState is not valid.");
             return new JsonResult(new { mes = "Error" });
         }
 
         //Login users and geting tokens
-        [HttpPost]
+        [HttpGet]
         [Route("token")]
         public async Task<JsonResult> GetToken(AuthenticationRequest authRequest)
         {
@@ -98,11 +103,11 @@ namespace Identity.Controllers
                     var refresh_jwtToken = await userManager.GenerateUserTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
                     await userManager.SetAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken", refresh_jwtToken);
                     string access_jwtToken = TokenFactory.GenerateAccessToken(user, permissoins);
-                    var creation = DateTime.Now;
-
-                    return new JsonResult(new { access_jwtToken, refresh_jwtToken, creation });
+                    log.LogInfo($"User {user.UserName} login successfully.");
+                    return new JsonResult(new { access_jwtToken, refresh_jwtToken });
                 }
             }
+            log.LogError("Login - ModelState is not valid.");
             return new JsonResult(new {result = "Invalid Data" });
         }
 
@@ -170,9 +175,8 @@ namespace Identity.Controllers
         //    var permissoins = userPermissions.Union(rolePermissions).ToList();// all permissions (role + user)
 
         //    string access_jwtToken = TokenFactory.GenerateAccessToken(user, permissoins);
-        //    var creation = DateTime.Now;
 
-        //    return new JsonResult(new { access_jwtToken, refresh_jwtToken, creation });
+        //    return new JsonResult(new { access_jwtToken, refresh_jwtToken });
         //}
 
 
@@ -212,12 +216,12 @@ namespace Identity.Controllers
                 var permissoins = userPermissions.Union(rolePermissions).ToList();// all permissions (role + user)
 
                 string access_jwtToken = TokenFactory.GenerateAccessToken(user, permissoins);
-                var creation = DateTime.Now;
 
-                return new JsonResult(new { access_jwtToken, refresh_jwtToken, creation });
+                return new JsonResult(new { access_jwtToken, refresh_jwtToken });
             }
             else
             {
+                log.LogError($"Invalid refresh token");
                 return new JsonResult(new { result = "Invalid refresh token" });
             }
         }

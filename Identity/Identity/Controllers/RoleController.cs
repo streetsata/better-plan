@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Contracts;
 using Identity.Models;
 using Identity.Models.Requests;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Controllers
 {
@@ -20,6 +19,7 @@ namespace Identity.Controllers
         UserManager<IdentityUser> _userManager;
         UserContext _context;
         IdentityUser user;
+        private ILoggerManager log;
         private enum Roles
         {
             Admin,
@@ -40,8 +40,9 @@ namespace Identity.Controllers
             Work_With_Team
         }
 
-        public RoleController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, UserContext context)
+        public RoleController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, UserContext context, ILoggerManager log)
         {
+            this.log = log;
             _roleManager = roleManager;
             _userManager = userManager;
             _context = context;
@@ -84,15 +85,18 @@ namespace Identity.Controllers
 
                     await _userManager.RemoveFromRolesAsync(user, removedRoles);
 
+                    log.LogInfo($"Change rol for user {user.UserName}");
                     return new JsonResult(200);
                 }
                 else
                 {
+                    log.LogError("User was not found");
                     return new JsonResult(new { result = "User was not found" });
                 }
             }
             else
             {
+                log.LogError("Invalid role");
                 return new JsonResult(new { result = "Invalid role" });
             }
         }
@@ -141,10 +145,14 @@ namespace Identity.Controllers
 
                     return new JsonResult(200);
                 }
+                log.LogError("User was not found");
                 return new JsonResult(new { result = "User was not found" });
             }
             else
+            {
+                log.LogError("Invalid permission");
                 return new JsonResult(new { result = "Invalid permission" });
+            }
         }
 
 
