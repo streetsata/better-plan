@@ -113,9 +113,10 @@ namespace Identity.Controllers
 
         [HttpGet]
         [Route("LogOut")]
-        public void LogOut()
+        public async void LogOut(string userName)
         {
-            userManager.UpdateSecurityStampAsync(user);
+            user = await userManager.FindByNameAsync(userName);
+            await userManager.UpdateSecurityStampAsync(user);
         }
 
 

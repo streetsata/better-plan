@@ -1,5 +1,8 @@
 using System;
+using System.IO;
+using Contracts;
 using Identity.Models;
+using LoggerService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NLog;
 
 namespace Identity
 {
@@ -16,11 +20,11 @@ namespace Identity
     {
         public Startup(IConfiguration configuration)
         {
+            LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
-
        
     
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -41,6 +45,8 @@ namespace Identity
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 4;
             });
+
+            services.AddSingleton<ILoggerManager, LoggerManager>();
 
             const string jwtSchemeName = "JwtBearer";
             services
