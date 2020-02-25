@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace BetterPlan.Controllers
 {
@@ -52,13 +53,19 @@ namespace BetterPlan.Controllers
             _logger.LogInfo("GET /api/v1/USERS");
             try
             {
-                return _bpApi.GetUsers();
+                //_logger.LogWarn("TEST WARM");
+                //throw new Exception();
+                var result = _bpApi.GetUsers();
+                var res = result.Value;
+                _logger.LogInfo($"GET JsonResult: {res}");
+                return result;
+
             }
             catch (Exception e)
             {
                 Response.StatusCode = 500;
                 _logger.LogError(e.Message);
-                return new JsonResult(new { status = "error", error_message = "Server error!" });
+                return new JsonResult(new { status = "error", error_message = e.Message });
             }
         }
         /// <summary>
@@ -87,13 +94,17 @@ namespace BetterPlan.Controllers
             _logger.LogInfo($"GET /api/v1/USER/{userId}/POSTS");
             try
             {
-                return _bpApi.GetUserPosts(userId);
+                //проверить
+                var result = _bpApi.GetUserPosts(userId);
+                var res = result.Value;
+                _logger.LogInfo($"GET JsonResult: {res}");
+                return result;
             }
             catch (Exception e)
             {
                 Response.StatusCode = 500;
                 _logger.LogError(e.Message);
-                return new JsonResult(new { status = "error", error_message = "Server error!" });
+                return new JsonResult(new { status = "error", error_message = e.Message });
             }
         }
 
@@ -131,18 +142,74 @@ namespace BetterPlan.Controllers
         /// </response>
         [HttpPost("USER/{userId}/POST")]
         [Produces("application/json")]
-        public JsonResult Post(string userId, [FromBody] PostViewModel post) 
+        public async Task<JsonResult> Post(string userId, [FromBody] PostViewModel post) 
         {
-            _logger.LogInfo($"POST /api/v1/USER/{userId}/POST [Body]: post_text: '{post.post_text}'");
+            _logger.LogInfo($"POST /api/v1/USER/{userId}/POST [Body] {post}");
             try
             {
-                return _bpApi.UserPost(userId, post);
+
+                var result = await _bpApi.UserPost(userId, post);
+                var res = result.Value;
+                _logger.LogInfo($"Post /api/v1/USER/{userId}/POST result {res}");
+                return result;
             }
             catch (Exception e)
             {
                 Response.StatusCode = 500;
                 _logger.LogError(e.Message);
-                return new JsonResult(new { status = "error", error_message = "Server error!" });
+                return new JsonResult(new { status = "error", error_message = e.Message });
+            }
+        }
+
+        /// <summary>
+        /// Публикует пост на Facebook c images
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /{id}/POST
+        ///     {
+        ///        "post_text":"text"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="post"></param>
+        /// <param name="userId">ID Пользователя</param>
+        /// <returns></returns>
+        /// <response code="200">
+        /// Sample response:
+        /// 
+        ///     {
+        ///         "status": "OK",
+        ///         "post_id": "id"
+        ///     }
+        /// 
+        /// </response>
+        /// <response code="400">
+        /// Error response:
+        /// 
+        ///     {
+        ///         "status": "error",
+        ///         "error_message": "msg"
+        ///     }
+        /// </response>
+        [HttpPost("USER/{userId}/POSTIMAGE")]
+        public async Task<JsonResult> PostFromImages(string userId, PostViewModel post)
+        {
+            _logger.LogInfo($"POST /api/v1/USER/{userId}/POSTIMAGE {post}");
+            try
+            {
+
+                var result = await _bpApi.UserPostFromImages(userId, post);
+                var res = result.Value;
+                _logger.LogInfo($"Post /api/v1/USER/{userId}/POSTIMAGE result {res}");
+                return result;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = 500;
+                _logger.LogError(e.Message);
+                return new JsonResult(new { status = "error", error_message = e.Message });
             }
         }
 
@@ -180,18 +247,21 @@ namespace BetterPlan.Controllers
         /// </response>
         [HttpPut("USER/{userId}/EDIT")]
         [Produces("application/json")]
-        public JsonResult EditPost(string userId, [FromBody] EditPostViewModel editPost)
+        public async Task<JsonResult> EditPost(string userId, [FromBody] EditPostViewModel editPost)
         {
-            _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{editPost.post_id}', edit_text: '{editPost.edit_text}'");
+            _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{editPost.post_id}'");
             try
             {
-                return _bpApi.UserEdit(userId, editPost);
+                var result = await _bpApi.UserEdit(userId, editPost);
+                var res = result.Value;
+                _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{editPost.post_id}', result {res}");
+                return result;
             }
             catch (Exception e)
             {
                 Response.StatusCode = 500;
                 _logger.LogError(e.Message);
-                return new JsonResult(new { status = "error", error_message = "Server error!" });
+                return new JsonResult(new { status = "error", error_message = e.Message });
             }
 
         }
@@ -229,18 +299,21 @@ namespace BetterPlan.Controllers
         /// </response>
         [HttpDelete("USER/{userId}/DELETE")]
         [Produces("application/json")]
-        public JsonResult DeletePost(string userId, [FromBody] DeletePostViewModel deletePost)
+        public async Task<JsonResult> DeletePost(string userId, [FromBody] DeletePostViewModel deletePost)
         {
             _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{deletePost.post_id}'");
             try
             {
-                return _bpApi.UserDelete(userId, deletePost);
+                var result = await _bpApi.UserDelete(userId, deletePost);
+                var res = result.Value;
+                _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{deletePost.post_id}' result {res}");
+                return result;
             }
             catch (Exception e)
             {
                 Response.StatusCode = 500;
                 _logger.LogError(e.Message);
-                return new JsonResult(new { status = "error", error_message = "Server error!" });
+                return new JsonResult(new { status = "error", error_message = e.Message});
             }
         }
     }

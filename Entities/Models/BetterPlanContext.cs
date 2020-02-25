@@ -14,7 +14,7 @@ namespace Entities.Models
         public BetterPlanContext(DbContextOptions<BetterPlanContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
     }
 }
