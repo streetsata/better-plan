@@ -37,7 +37,8 @@ namespace Identity.Controllers
             Posting,
             Work_With_Drafts,
             Work_With_Project,
-            Work_With_Team
+            Work_With_Team,
+            Registered_User_Work
         }
 
         public RoleController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, UserContext context, ILoggerManager log)
@@ -164,43 +165,43 @@ namespace Identity.Controllers
 
 
 
-        
 
-        //[HttpPost("addPermissionForRole")]
-        //public async Task<IActionResult> AddPermissionForRole([FromBody] EditUserPermissionsRequest model)
-        //{
-        //    bool check = true;
-        //    foreach (var item in model.claims)
-        //    {
-        //        if (!Enum.IsDefined(typeof(Permissoins), item))
-        //        {
-        //            check = false;
-        //        }
-        //    }
-        //    if (check)
-        //    {
-        //        // получаем роль
-        //        var role = await _roleManager.FindByIdAsync(model.id);
-        //        if (role != null)
-        //        {
-        //            var claims = new List<Claim>();
-        //            for (int i = 0; i < model.claims.Count; i++)
-        //            {
-        //                claims.Add(new Claim(type: "Permission", model.claims[i]));
-        //            }
 
-        //            foreach (var item in claims)
-        //            {
-        //                await _roleManager.AddClaimAsync(role, item);
-        //            }
+        [HttpPost("addPermissionForRole")]
+        public async Task<IActionResult> AddPermissionForRole([FromBody] EditUserPermissionsRequest model)
+        {
+            bool check = true;
+            foreach (var item in model.claims)
+            {
+                if (!Enum.IsDefined(typeof(Permissoins), item))
+                {
+                    check = false;
+                }
+            }
+            if (check)
+            {
+                // получаем роль
+                var role = await _roleManager.FindByIdAsync(model.id);
+                if (role != null)
+                {
+                    var claims = new List<Claim>();
+                    for (int i = 0; i < model.claims.Count; i++)
+                    {
+                        claims.Add(new Claim(type: "Permission", model.claims[i]));
+                    }
 
-        //            return new JsonResult(200);
-        //        }
+                    foreach (var item in claims)
+                    {
+                        await _roleManager.AddClaimAsync(role, item);
+                    }
 
-        //        return NotFound();
-        //    }
-        //    else
-        //        return BadRequest("Invallid permission");
-        //}
+                    return new JsonResult(200);
+                }
+
+                return NotFound();
+            }
+            else
+                return BadRequest("Invallid permission");
+        }
     }
 }
