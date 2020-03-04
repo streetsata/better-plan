@@ -1,193 +1,36 @@
 <template>
-  <v-app>
-    <tool-bar></tool-bar>
-    <v-content>
-      <v-container>
-        <v-row>
-          <side-menue></side-menue>
+  <div class="home-container">
+      <!-- <tool-bar></tool-bar> -->
+        <ToolBar />
+        <SideMenu />
 
-          <v-row no-gutters class="justify-center">
-            <v-col cols="10">
-              <v-card>
-                <v-card class="tab-navigation">
-                  
-                  <!-- Tabs with users  -->
-                  <v-tabs background-color="gray accent-4" left>
-                    <v-tabs-slider></v-tabs-slider>
-                    <v-tab
-                      href="#tab-1"
-                      v-for="(item, index) in users"
-                      @click="activate(index)"
-                      :key="index"
-                    >{{ item.name }}</v-tab>
-                  </v-tabs>
-
-                  <v-tab class="fixed-tab">
-                    <img src="../assets/img/addProject.svg" alt />
-                  </v-tab>
-
-                  <v-row>
-                    <!-- Add Post modal window -->
-                    <v-dialog v-model="dialog" persistent max-width="600px">
-                      <template v-slot:activator="{ on }">
-                        <v-col class="dashed-fild">
-                          <v-icon v-on="on">add</v-icon>
-                          Add
-                        </v-col>
-                      </template>
-
-                      <v-card>
-                        <v-card-title>
-                          <span class="headline">User Post</span>
-                        </v-card-title>
-                        <v-card-text>
-                          <v-container class="dialog-container">
-                            <v-row>
-                              <v-col cols="12">
-                                <!-- ДОБАВЛЕНИЕ ФОТО
-                                <v-file-input  :rules="rules" accept="image/png, image/jpeg, image/bmp"
-                                    placeholder="Pick an avatar"
-                                    prepend-icon="mdi-camera"   label="Avatar"
-                                ></v-file-input>-->
-                                <v-textarea
-                                  v-model="text"
-                                  label="Message"
-                                  counter
-                                  maxlength="120"
-                                  full-width
-                                  single-line
-                                ></v-textarea>
-                              </v-col>
-                            </v-row>
-                          </v-container>
-                        </v-card-text>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                          <v-btn color="blue darken-1" text @click="publishPost">Save</v-btn>
-                        </v-card-actions>
-                      </v-card>
-                    </v-dialog>
-                    <!--END: Add Post modal window -->
-                  </v-row>
-                  <v-tabs-item 
-                    v-for="i in posts" 
-                    :key="i" 
-                    :value="'tab-' + i" 
-                    v-model="tab"
-                    >
-                    <v-tabs-item v-if="typeof i['text'] !== 'undefined'">
-                      <v-col cols="6">
-                        <v-card rounded>
-                          <div class="justify-center">
-                            <v-list-item>
-                              <v-list-item-avatar>
-                                <img
-                                  src="https://randomuser.me/api/portraits/women/85.jpg"
-                                  alt="ava"
-                                />
-                              </v-list-item-avatar>
-                              <v-list-item-content class="mt-2">
-                                <v-list-item-title
-                                  class="questrial subtitle"
-                                >{{ users[active].name }}</v-list-item-title>
-                              </v-list-item-content>
-                              <v-list-item-action>
-                                <!-- Edit modal window -->
-                                <v-row>
-                                  <template>
-                                    <v-dialog max-width="500px">
-                                      <template v-slot:activator="{ on }">
-                                        <v-btn text>
-                                          <v-icon v-on="on">edit</v-icon>
-                                        </v-btn>
-                                      </template>
-
-                                      <v-card>
-                                        <v-card-title>
-                                          <span class="headline">Edit Post</span>
-                                        </v-card-title>
-                                        <v-card-text>
-                                          <v-container class="dialog-container">
-                                            <v-row>
-                                              <v-col cols="12">
-                                                <v-textarea
-                                                  v-model="text"
-                                                  label="edit text"
-                                                  counter
-                                                  maxlength="120"
-                                                  full-width
-                                                  single-line
-                                                >{{ i.text }}</v-textarea>
-                                              </v-col>
-                                            </v-row>
-                                          </v-container>
-                                        </v-card-text>
-                                        <v-card-actions>
-                                          <v-spacer></v-spacer>
-                                          <v-btn
-                                            color="blue darken-1"
-                                            text
-                                            @click="dialog = false"
-                                          >Close</v-btn>
-                                          <v-btn
-                                            color="blue darken-1"
-                                            text
-                                            @click="editPost(i.post_id)"
-                                          >Save</v-btn>
-                                        </v-card-actions>
-                                      </v-card>
-                                    </v-dialog>
-                                  </template>
-                                  <!--END: Edit modal window -->
-                                  <v-btn text>
-                                    <v-icon v-on="on">delete</v-icon>
-                                  </v-btn>
-                                </v-row>
-                              </v-list-item-action>
-                            </v-list-item>
-                          </div>
-                          <v-img class="grey lighten-2" :src="i.img" aspect-ratio="2.7"></v-img>
-
-                          <v-card-text>
-                            <div class="questrial body1 mb-4">{{ i.text }}</div>
-                            <v-divider></v-divider>
-
-                            <v-layout class="py-4">
-                              <v-flex class="text-right">
-                                <v-layout wrap justify-end>
-                                  <div class="questrial mr-3 font-weight-bold">
-                                    4 Comments
-                                    <v-icon small>keyboard_arrow_down</v-icon>
-                                    <v-icon v-if="false" small>keyboard_arrow_up</v-icon>
-                                  </div>
-                                  <div class="questrial ml-2 font-weight-bold mr-2">1 Share</div>
-                                </v-layout>
-                              </v-flex>
-                            </v-layout>
-                          </v-card-text>
-                        </v-card>
-                      </v-col>
-                    </v-tabs-item>
-                  </v-tabs-item>
-                </v-card>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-row>
-      </v-container>
-    </v-content>
-  </v-app>
+        <div class="content-wrapper">
+            <UserTabs />
+            <div class="content">
+              <ProfileInfo />
+              <Posts />
+              <CreatePost />
+            </div>
+        </div>
+  </div>
 </template>
 
 <script>
-import SideMenue from "../components/SideMenue.vue";
+import SideMenu from "../components/SideMenu.vue";
 import ToolBar from "../components/ToolBar.vue";
+import UserTabs from "../components/HomeComponents/UserTabs"
+import Posts from "../components/HomeComponents/Posts"
+import ProfileInfo from "../components/HomeComponents/ProfileInfo"
+import CreatePost from "../components/HomeComponents/CreatePost"
 
 export default {
   components: {
-    "side-menue": SideMenue,
-    "tool-bar": ToolBar
+    SideMenu,
+    ToolBar,
+    UserTabs,
+    Posts,
+    ProfileInfo,
+    CreatePost
   },
   data: () => {
     return {
@@ -209,6 +52,7 @@ export default {
   },
   methods: {
     activate(index) {
+      console.log(index)
       this.active = index;
       this.$api
         .get(`USER/${this.users[index].id}/POSTS`)
@@ -295,18 +139,49 @@ export default {
 </script>
 
 <style>
-.container {
-  height: 90vh;
-  max-width: 100vw;
+
+html,body,#app{
+    width: 100%;
+    height: 100%;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    /* overflow: hidden; */
 }
+
+.home-container {
+  height: 100%;
+  width: 100%;
+}
+
+.content-wrapper{
+    height: 100%;
+    width: 100%;
+    padding-top: 64px;
+    padding-left: 56px;
+}
+
+.content{
+  padding-top:10px;
+  height: 90%;
+  display: flex;
+  flex-direction: row;
+  /* justify-content:space-around; */
+  /* background: green; */
+}
+
 .dialog-container {
   height: 50%;
 }
 
-.pos {
+/* .pos {
   position: absolute;
   z-index: 10;
+} */
+
+.side-menu{
+    position: fixed;
+    top: 64px;
 }
+
 .dashed-fild {
   width: 100%;
   margin-left: 15px;
@@ -314,6 +189,10 @@ export default {
   margin-right: 15px;
   border: 2px dashed lightgrey;
   background-color: rgb(241, 238, 238);
+}
+.tabs{
+  display: flex;
+  flex-direction: row;
 }
 .fixed-tab {
   position: absolute;

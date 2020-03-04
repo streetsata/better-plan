@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app>
+  <v-app-bar app flat="true">
     <v-toolbar-title>
       <logo-betterplan id="logo"></logo-betterplan>
     </v-toolbar-title>
