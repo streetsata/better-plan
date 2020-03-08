@@ -40,6 +40,8 @@ namespace BetterPlan.Controllers
         ///         {
         ///           "id":"user_id",
         ///           "name": "user_name"
+        ///           "picture": "url"(string)
+        ///           "cover": "url"(string)
         ///         }
         ///       ]
         ///     }
