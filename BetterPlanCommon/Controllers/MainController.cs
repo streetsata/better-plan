@@ -94,7 +94,7 @@ namespace BetterPlan.Controllers
             _logger.LogInfo($"GET /api/v1/USER/{userId}/POSTS");
             try
             {
-                //проверить
+                // will be checked
                 var result = _bpApi.GetUserPosts(userId);
                 var res = result.Value;
                 _logger.LogInfo($"GET JsonResult: {res}");
