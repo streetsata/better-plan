@@ -52,7 +52,7 @@ namespace Entities.Models.auxiliary_models
             public Paging paging { get; set; }
         }
 
-        public static string GetJSON(JObject post, string id)
+        public static Dictionary<string, string> GetJSON(JObject post, string id)
         {
             var UserRootObject = JsonConvert.DeserializeObject<RootObject>(post.ToString());
 
@@ -69,14 +69,24 @@ namespace Entities.Models.auxiliary_models
             {
                 pairs.Add("picture", user.picture.data.url);
             }
+            else
+            {
+                pairs.Add("picture", String.Empty);
+
+            }
 
             if (user.cover != null)
             {
                 pairs.Add("cover", user.cover.source);
             }
+            else
+            {
+                pairs.Add("cover", String.Empty);
 
-           
-            return JsonConvert.SerializeObject(pairs, Formatting.None);
+            }
+
+            return pairs;
+            //return JsonConvert.SerializeObject(pairs, Formatting.None);
 
         }
     }

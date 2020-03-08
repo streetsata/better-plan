@@ -58,7 +58,7 @@ namespace Entities.Models
         /// <returns>
         /// Возвращает кортеж который состоит из 1. id 2. имени пользователя
         /// </returns>
-        public static async Task<string> GetUserAsync(string UserToken)
+        public static async Task<JsonResult> GetUserAsync(string UserToken)
         {
             using (var http = new HttpClient())
             {
@@ -68,7 +68,9 @@ namespace Entities.Models
                 var httpContent = await httpResponse.Content.ReadAsStringAsync();
                 var Json = JObject.Parse(httpContent);
 
-                return InfoUser.GetJSON(Json, id);
+                var res = InfoUser.GetJSON(Json, id);
+
+                return new JsonResult(new { Id = res["id"], name = res["name"], picture = res["picture"], cover = res["cover"] });
             }
         }
 

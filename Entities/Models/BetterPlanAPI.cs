@@ -34,11 +34,11 @@ namespace Entities.Models
         /// <returns></returns>
         public JsonResult GetUsers()
         {
-            List<String> usersObj = new List<String>();
+            List<Object> usersObj = new List<Object>();
             foreach (var user in TempUsersDb)
             {
                 var result = FacebookAPI.GetUserAsync(user.Value).Result;
-                usersObj.Add(result);
+                usersObj.Add(result.Value);
             }
 
             return new JsonResult(usersObj);
@@ -65,9 +65,6 @@ namespace Entities.Models
             List<object> postsObj = new List<object>();
             foreach (var post in posts)
             {
-
-
-
                 postsObj.Add(Info.GetJSONImage(post));
             }
 
