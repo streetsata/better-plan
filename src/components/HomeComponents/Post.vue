@@ -2,7 +2,7 @@
     <div class="post">
         <div class="post-title">
             <div class="user-data">
-                <img src="/images/avatar.png" alt="avatar">
+                <img :src="avatar" alt="avatar">
                 <div class="info">
                     <span class="name">{{ name }}</span>
                     <span class="date">26 июля 2017 г.</span>
@@ -13,12 +13,13 @@
         <div class="post-text">
             {{text}}
         </div>
+        <img class="post-image" v-if="img" :src="img" alt="img">
     </div>
 </template>
 
 <script>
 export default {
-    props:['name','text']
+    props:['name','text','avatar','img']
 }
 </script>
 
@@ -29,7 +30,7 @@ export default {
 .post{
     margin-bottom:20px;
     width: 545px;
-    height: 300px;
+    min-height: 150px;
     border-radius: 4px;
     background-color: white;
 }
@@ -48,6 +49,7 @@ export default {
 .user-data img{
     width: 55px;
     height: 55px;
+    border-radius: 50%;
     /* margin: 12px; */
 }
 
@@ -83,5 +85,10 @@ export default {
     color: #2B2B2B;
     font-weight: 600;
     padding: 12px;
+    word-wrap: break-word;
+}
+.post .post-image{
+    width: 545px;
+    margin-bottom: 20px;
 }
 </style>
