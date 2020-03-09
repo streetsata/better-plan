@@ -45,7 +45,6 @@ namespace Identity
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 4;
             });
-
             services.AddSingleton<ILoggerManager, LoggerManager>();
 
             const string jwtSchemeName = "JwtBearer";

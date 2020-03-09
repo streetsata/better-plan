@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Contracts;
+using Identity.Contracts;
 using Identity.Models;
 using Identity.Models.Requests;
 using Microsoft.AspNetCore.Identity;
