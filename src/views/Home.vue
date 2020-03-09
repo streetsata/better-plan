@@ -1,15 +1,19 @@
 <template>
   <div class="home-container">
       <!-- <tool-bar></tool-bar> -->
+        <Modal @close="closeModal" :show="showModal" />
+
         <ToolBar />
         <SideMenu />
-
-        <div class="content-wrapper">
-            <UserTabs />
+        <div v-if="active === null" class="content-wrapper">
+            <Loader />
+        </div>
+        <div v-else class="content-wrapper">
+            <UserTabs :users="users" :active="active" @select="select" />
             <div class="content">
-              <ProfileInfo />
-              <Posts />
-              <CreatePost />
+              <ProfileInfo :user="users[active]" />
+              <Posts :user="users[active]" :posts="posts" />
+              <CreatePost @create="createPost" />
             </div>
         </div>
   </div>
@@ -17,11 +21,14 @@
 
 <script>
 import SideMenu from "../components/SideMenu.vue";
+import Loader from "../components/Loader.vue";
 import ToolBar from "../components/ToolBar.vue";
 import UserTabs from "../components/HomeComponents/UserTabs"
 import Posts from "../components/HomeComponents/Posts"
 import ProfileInfo from "../components/HomeComponents/ProfileInfo"
 import CreatePost from "../components/HomeComponents/CreatePost"
+import Modal from "../components/HomeComponents/Modal"
+
 
 export default {
   components: {
@@ -30,16 +37,20 @@ export default {
     UserTabs,
     Posts,
     ProfileInfo,
-    CreatePost
+    CreatePost,
+    Modal,
+    Loader
   },
   data: () => {
     return {
+      showModal:false,
       users: [],
-      posts: [],
+      active: null,
+      posts: null,
+      
       dialog: false,
       loading: false,
-      active: 0,
-      items: ["Content for tab 1!", "Content for tab 2!", "Content for tab 3!"],
+
       tab: null,
       text: "",
       postText: ""
@@ -51,6 +62,30 @@ export default {
     }
   },
   methods: {
+    select(index){
+      // console.log("XUI 2")
+      this.active = index;
+      this.posts = null
+      this.$api
+        .get(`USER/${this.users[index].id}/POSTS`)
+        .then(res => {
+          // this.posts = res.data;
+          this.posts = res.data
+          console.log(res)
+        })
+        .catch(error => {
+          console.log(error.res)
+        });
+      // console.log(this.posts)
+    },
+    createPost(){
+      // console.log('показать')
+      // console.log(this.showModal)
+      this.showModal = true;
+    },
+    closeModal(){
+      this.showModal = false;
+    },
     activate(index) {
       console.log(index)
       this.active = index;
@@ -130,8 +165,9 @@ export default {
     this.$api
       .get("USERS")
       .then(response => {
-        this.users = response.data;
-        this.activate(0);
+        this.users = response.data
+        this.select(0)
+
       })
       .catch(error => console.log(error));
   }

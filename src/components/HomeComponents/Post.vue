@@ -4,17 +4,23 @@
             <div class="user-data">
                 <img src="/images/avatar.png" alt="avatar">
                 <div class="info">
-                    <span class="name">Natalie Chelovek</span>
+                    <span class="name">{{ name }}</span>
                     <span class="date">26 июля 2017 г.</span>
                 </div>
             </div>
             <img class="edit" src="/images/edit.svg" alt="edit">
         </div>
         <div class="post-text">
-                Ну, что посмотрел и я это гуано от «журналистов-расследователей».<br><br>Вернее, не гуано, а обычную жалкую халтуру.<br><br>Кроме манипулятивно скомпилированных нарезок из старых и новых интервью, подлавливании на словах, езды к другу другу под заупокойную музыку и унылых световых эффектов - ничего.…Ещё
+            {{text}}
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    props:['name','text']
+}
+</script>
 
 <style scoped>
 .edit{

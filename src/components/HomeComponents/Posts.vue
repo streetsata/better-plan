@@ -1,20 +1,30 @@
 <template>
-    <div class="posts-container">
+    <div v-if="!posts" class="posts-container">
+        <Loader />
+    </div>
+    <div v-else class="posts-container">
+        <Post v-for="(post,index) in posts" :key="index" :text="post.text" :name="user.name" />
+        <!-- <Post />
         <Post />
         <Post />
         <Post />
         <Post />
-        <Post />
-        <Post />
+        <Post /> -->
     </div>
 </template>
 
 <script>
 import Post from './Post'
+import Loader from '../Loader'
 
 export default {
+    props:['user','posts'],
     components:{
-        Post
+        Post,
+        Loader
+    },
+    mounted(){
+        console.log(this.posts)
     }
 }
 </script>

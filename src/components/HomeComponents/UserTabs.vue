@@ -13,8 +13,7 @@
     <div>
         <div class="tabs-container">
             <div class="tabs-wrapper">
-                <div class="tab">Masterskaya @2.58 af</div>
-                <div class="tab selected">Masterskaya @2.58 af</div>
+                <div v-for="(user,index) in users" :key="user.id" class="tab" :class="index == active ? ' selected': ''" @click="$emit('select',index)">{{ user.name }}</div>
             </div>
             <img class="add-button" src="../../assets/img/addProject.svg" alt="add" />
         </div>
@@ -25,7 +24,7 @@
 
 <script>
 export default {
-    props:['users']
+    props:['users','active']
 }
 </script>
 

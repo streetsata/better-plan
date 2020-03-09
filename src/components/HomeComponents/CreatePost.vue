@@ -1,7 +1,7 @@
 <template>
     <div class="actions-container">
         <div class="add-post-container">
-            <div class="create-post">
+            <div v-on:click="$emit('create')" class="create-post">
                 <span>Добавить пост</span><img src="/images/plus.svg" alt="plus">
             </div>
             <div class="controls">

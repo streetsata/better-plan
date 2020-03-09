@@ -1,10 +1,10 @@
 <template>
     <div class="profile-container">
         <div class="wrapper">
-            <img class="header-img" src="/images/header.png" alt="background">
+            <img class="header-img" :src="cover" alt="background">
             <div class="user-info">
-                <img src="/images/avatar.png" alt="avatar">
-                <span>Natalie Chelovek</span>
+                <img width="105px" height="105px" :src="user.picture" alt="avatar">
+                <span>{{ user.name }}</span>
             </div>
             <div class="profile-info">
                 <div class="short-info">
@@ -27,6 +27,18 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    props:['user'],
+    computed:{
+        cover(){
+            if(!this.user.cover) return '/images/coverDefault.jpg'
+            return this.user.cover
+        }
+    }
+}
+</script>
 
 <style scoped>
 .profile-container{
@@ -65,6 +77,8 @@
     line-height: 34px;
     color: white;
     margin-left: 19px;
+    /* box-shadow: black; */
+    text-shadow: 3px 5px 10px black;
 }
 .profile-info{
     display: flex;
