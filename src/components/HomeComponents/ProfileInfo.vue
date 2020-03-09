@@ -3,7 +3,7 @@
         <div class="wrapper">
             <img class="header-img" :src="cover" alt="background">
             <div class="user-info">
-                <img width="105px" height="105px" :src="user.picture" alt="avatar">
+                <img width="105px" max-height="105px" :src="user.picture" alt="avatar">
                 <span>{{ user.name }}</span>
             </div>
             <div class="profile-info">
@@ -54,7 +54,7 @@ export default {
 
 .header-img{
     width: 46.25rem;
-    height: 17.1875rem;
+    max-height: 17.1875rem;
     border-radius: 4px;
 }
 .user-info{

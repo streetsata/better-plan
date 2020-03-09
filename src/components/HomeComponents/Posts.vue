@@ -3,7 +3,7 @@
         <Loader />
     </div>
     <div v-else class="posts-container">
-        <Post 
+        <!-- <Post 
             :name="'Name'"
             :avatar="'/images/avatar.png'"
             :img="'/images/original-15yg.jpg'"
@@ -13,8 +13,8 @@
             :name="'Name'"
             :avatar="'/images/avatar.png'"
             :text="'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'"
-        />
-        <Post v-for="(post,index) in posts" :key="index" :text="post.text" :name="user.name" :avatar="user.picture" />
+        /> -->
+        <Post v-for="(post,index) in posts" :key="index" :text="post.text" :name="user.name" :avatar="user.picture" :img="post.img" />
     </div>
 </template>
 
