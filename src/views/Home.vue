@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
       <!-- <tool-bar></tool-bar> -->
-        <Modal @close="closeModal" :show="showModal" />
+        <Modal @close="closeModal" :show="showModal" :user="users[active]" />
 
         <ToolBar />
         <SideMenu />

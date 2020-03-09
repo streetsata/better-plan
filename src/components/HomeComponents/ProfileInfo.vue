@@ -54,8 +54,9 @@ export default {
 
 .header-img{
     width: 46.25rem;
-    max-height: 17.1875rem;
+    height: 17.1875rem;
     border-radius: 4px;
+    object-fit: cover;
 }
 .user-info{
     position: relative;
