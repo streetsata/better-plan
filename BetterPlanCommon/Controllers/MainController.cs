@@ -417,12 +417,12 @@ namespace BetterPlan.Controllers
         [Produces("application/json")]
         public async Task<JsonResult> EditPost(string userId, [FromBody] EditPostViewModel editPost)
         {
-            _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{editPost.post_id}'");
+            _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{editPost.FacebookPostId}'");
             try
             {
                 var result = await _bpApi.UserEdit(userId, editPost);
                 var res = result.Value;
-                _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{editPost.post_id}', result {res}");
+                _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{editPost.FacebookPostId}', result {res}");
                 return result;
             }
             catch (Exception e)
@@ -435,14 +435,14 @@ namespace BetterPlan.Controllers
         }
 
         /// <summary>
-        /// Удаляет пост на Facebook
+        /// Удаляет пост на Facebook по FacebookPostId
         /// </summary>
         /// <remarks>
         /// Sample request:
         ///
         ///     DELETE /{id}/DELETE
         ///     {
-        ///        "post_id":"id"
+        ///        "FacebookPostId":"id"
         ///     }
         ///
         /// </remarks>
@@ -469,12 +469,12 @@ namespace BetterPlan.Controllers
         [Produces("application/json")]
         public async Task<JsonResult> DeletePost(string userId, [FromBody] DeletePostViewModel deletePost)
         {
-            _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{deletePost.post_id}'");
+            _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{deletePost.FacebookPostId}'");
             try
             {
                 var result = await _bpApi.UserDelete(userId, deletePost);
                 var res = result.Value;
-                _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{deletePost.post_id}' result {res}");
+                _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{deletePost.FacebookPostId}' result {res}");
                 return result;
             }
             catch (Exception e)

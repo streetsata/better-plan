@@ -273,7 +273,7 @@ namespace Entities.Models
         //}
 
         /// <summary>
-        /// Изменяет публикацию пользователя по id
+        /// Изменяет публикацию пользователя по FacebookPostId
         /// </summary>
         /// <param name="user_id"></param>
         /// <param name="editPost"></param>
@@ -286,7 +286,7 @@ namespace Entities.Models
                 return new JsonResult(new { status = "error", error_message = "Полученный id не существует!" });
             }
 
-            if (editPost.post_id == null)
+            if (editPost.FacebookPostId == null)
             {
                 _response.StatusCode = 400;
                 return new JsonResult(new { status = "error", error_message = "Поле post_id обязательно!" });
@@ -303,9 +303,9 @@ namespace Entities.Models
 
             if (result.Item1 == 200)
             {
-                var model = await _db.Posts.FirstOrDefaultAsync(post => post.FacebookPostId == editPost.post_id);
+                var model = await _db.Posts.FirstOrDefaultAsync(post => post.FacebookPostId == editPost.FacebookPostId);
 
-                if (editPost.post_id != null)
+                if (editPost.FacebookPostId != null)
                 {
                     model.Text = editPost.edit_text;
                 }
@@ -315,21 +315,26 @@ namespace Entities.Models
                     model.Place = editPost.place;
                 }
 
-                model.UpdateDateTime = DateTime.UtcNow;
-                await _db.SaveChangesAsync();
+                model.UpdateDateTime = DateTime.Now;
 
-                _response.StatusCode = result.Item1;
-                return new JsonResult(new { status = "OK", post_id = result.Item2 });
+                if (await _db.SaveChangesAsync() > 0)
+                {
+                    return new JsonResult(new { status = "OK", PostId = model.PostId });
+                }
+                else
+                {
+                    return new JsonResult(new { status = "error", error_message = result.Item2 });
+                }
+
             }
             else
             {
-                _response.StatusCode = result.Item1;
                 return new JsonResult(new { status = "error", error_message = result.Item2 });
             }
         }
 
         /// <summary>
-        /// Удаляет публикацию по id
+        /// Удаляет публикацию по FacebookPostId
         /// </summary>
         /// <param name="user_id"></param>
         /// <param name="deletePost"></param>
@@ -342,7 +347,7 @@ namespace Entities.Models
                 return new JsonResult(new { status = "error", error_message = "Полученный id не существует!" });
             }
 
-            if (deletePost.post_id == null)
+            if (deletePost.FacebookPostId == null)
             {
                 return new JsonResult(new { status = "error", error_message = "Поле post_id обязательно!" });
             }
@@ -353,18 +358,22 @@ namespace Entities.Models
             if (result.Item1 == 200)
             {
 
-                var model = await _db.Posts.FirstOrDefaultAsync(post => post.FacebookPostId == deletePost.post_id);
+                var model = await _db.Posts.FirstOrDefaultAsync(post => post.FacebookPostId == deletePost.FacebookPostId);
 
                 model.IsDelete = true;
-                model.DeleteDateTime = DateTime.UtcNow;
-                await _db.SaveChangesAsync();
-
-                _response.StatusCode = result.Item1;
-                return new JsonResult(new { status = "OK" });
+                model.DeleteDateTime = DateTime.Now;
+                
+                if (await _db.SaveChangesAsync() > 0)
+                {
+                    return new JsonResult(new { status = "OK" });
+                }
+                else
+                {
+                    return new JsonResult(new { status = "error", error_message = result.Item2 });
+                }
             }
             else
             {
-                _response.StatusCode = result.Item1;
                 return new JsonResult(new { status = "error", error_message = result.Item2 });
             }
         }
@@ -374,8 +383,8 @@ namespace Entities.Models
 
         private static Dictionary<string, string> TempUsersDb = new Dictionary<string, string>() {
             { "100559284835939","EAAHD5fytWZAABADfTdcE8ZCp2d323x0YYgcaNMAfVGbNjtnCtKN9Ay9yBDBfnM2MkhzT5UQZBC0eDZBizgJEZCBgXZAxNXDFgAK1TN2ZCwPD6iLMpP6X8gSkQoN6YcFG39oZBgHz6U6OeOcOB41oLGNXQYVXJVeh4nfjhRCnuEde8CwQF83UYFee" },
-            { "895127244222164","EAAjnVI1sCkwBADWHQOeCunZCMMezGDc2Xit0rb4ZCM86gnOe78qMUtjwqkDel73hJPwilAZANenNKPufhXRFEbydLEplhSwIuRORFe4HICwflMQqVEyFR49c9VsgZCVsYFivZCmNYEOdCuXJ7auyVFZCN4eVBwqP2hFi8EvkfI7QZDZD" }/*,
-            {"2404663569642984","EAAiLB13fdegBADC55a6uXEweSZC35BVGlZAEC10tyZBAZAbv623Wq08crwDU3VQvhjgxov7ZBEKXTiPcMBJ6eGeVibzTAOYcrmLroGk1SxyYqvUHyuVvjo1CILn3769YlTPmZAmpS1KF9KWA0v30zq5IjpWZAo5V3nXmlgaZAMpCoZC7PrFXM5el8QWeuZC1df85CNuLhxxVBb4gZDZD" }*/
+            { "895127244222164","EAAjnVI1sCkwBADWHQOeCunZCMMezGDc2Xit0rb4ZCM86gnOe78qMUtjwqkDel73hJPwilAZANenNKPufhXRFEbydLEplhSwIuRORFe4HICwflMQqVEyFR49c9VsgZCVsYFivZCmNYEOdCuXJ7auyVFZCN4eVBwqP2hFi8EvkfI7QZDZD" },/*,
+            {"2404663569642984","EAAiLB13fdegBALTQtH18dGlJ13ccl0tB8L9iXrQf5rOi9ZBzflcyRv7aYaPY7AO2aUKMWEyrAjKHdeSSHy9ZCZCdPx6jKqE9xJNfYHYDvZBd5gjIrvkp9mjmzPgnFd0ZAFTd2PhNpu5vf2rsyK9CUku2zM46vipxb7a61eBaNNPbcFCpCH3nx8APRf4Iy7fWhJmVjvtdrWgZDZD" }*/
         };
 
 

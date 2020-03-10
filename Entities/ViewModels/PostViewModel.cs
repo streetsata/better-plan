@@ -12,7 +12,13 @@ using Newtonsoft.Json.Linq;
 
 namespace Entities.ViewModels
 {
-
+    /// <summary>
+    /// Status поста
+    ///     0 - Save,
+    ///     1 - Published,
+    ///     2 - Waiting,
+    ///     3 - Error
+    /// </summary>
     public enum Status
     {
         Save,

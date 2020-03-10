@@ -15,6 +15,6 @@ namespace Entities.ViewModels
         /// ID поста на Facebook
         /// </summary>
         [Required]
-        public string post_id { get; set; }
+        public string FacebookPostId { get; set; }
     }
 }

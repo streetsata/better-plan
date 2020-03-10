@@ -242,7 +242,7 @@ namespace Entities.Models
                 }
 
 
-                var httpResponse = await http.PostAsync($"{_facebookAPI}{editPost.post_id}", new FormUrlEncodedContent(data));
+                var httpResponse = await http.PostAsync($"{_facebookAPI}{editPost.FacebookPostId}", new FormUrlEncodedContent(data));
                 var httpContent = await httpResponse.Content.ReadAsStringAsync();
 
                 var Json = JObject.Parse(httpContent);
@@ -267,7 +267,7 @@ namespace Entities.Models
         {
             using (var http = new HttpClient())
             {
-                var httpResponse = await http.DeleteAsync($"{_facebookAPI}{deletePost.post_id}?access_token={_pageAccessToken}");
+                var httpResponse = await http.DeleteAsync($"{_facebookAPI}{deletePost.FacebookPostId}?access_token={_pageAccessToken}");
                 var httpContent = await httpResponse.Content.ReadAsStringAsync();
 
                 var Json = JObject.Parse(httpContent);
