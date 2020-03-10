@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using System.Linq;
 
 namespace Entities.Models
 {
@@ -20,6 +21,9 @@ namespace Entities.Models
         private ILoggerManager _logger;
         private Post _post;
 
+        public delegate Task<Tuple<int, string>> MyDel(PostViewModel model);
+
+        private event MyDel MyEvent;
         public BetterPlanAPI(HttpResponse response, BetterPlanContext context, ILoggerManager logger)
         {
             _response = response;
@@ -29,12 +33,97 @@ namespace Entities.Models
         }
 
         /// <summary>
+        /// Публикует отложенный пост 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async void PublishPostDelay(PostViewModel model)
+        {
+
+            using (var context = new BetterPlanContext())
+            {
+
+                DateTime now = DateTime.Now;
+                PostViewModel postViewModel = model;
+                await Task.Delay( model.WhenCreateDateTime.GetValueOrDefault() - now);
+
+                Post resDB = await context.Posts.FirstOrDefaultAsync(id => id.PostId == postViewModel.PostId);
+                if (resDB.status == Status.Waiting && resDB.WhenCreateDateTime == postViewModel.WhenCreateDateTime && resDB.isPosting == true)
+                {
+                    var result = await MyEvent.Invoke(model);
+
+                    if (result.Item1 == 200)
+                    {
+                        resDB.CreateDateTime = DateTime.UtcNow;
+                        resDB.FacebookPostId = result.Item2;
+                        resDB.status = Status.Published;
+                    }
+                    else
+                    {
+                        resDB.status = Status.Error;
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Сохраняет пост на DВ
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<Tuple<Int32, Int32>> SavePost(string userId, PostViewModel model)
+        {
+            if (model.PostId == null)
+            {
+                Post postDB = new Post(userId, model);
+
+                try
+                {
+                    var res = _db.Posts.Add(postDB);
+
+                    if (await _db.SaveChangesAsync() > 0)
+                    {
+                        //переделать не нравится
+                        Post post = await _db.Posts.FirstOrDefaultAsync(e => e.Text == postDB.Text);
+
+                        return new Tuple<Int32, Int32>(200, post.PostId);
+                    }
+                    else
+                    {
+                        return new Tuple<Int32, Int32>(400, -1);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    throw;
+                }
+            }
+            else
+            {
+                Post resDB = await _db.Posts.FirstOrDefaultAsync(id => id.PostId == model.PostId);
+                resDB.Copy(model);
+                if (await _db.SaveChangesAsync() > 0)
+                {
+                    return new Tuple<Int32, Int32>(200, model.PostId.Value);
+                }
+                else
+                {
+                    return new Tuple<Int32, Int32>(400, -1);
+                }
+            }
+        }
+
+        /// <summary>
         /// Получает всех пользуватель из "импровизированной" (временно) базы данных 
         /// </summary>
         /// <returns></returns>
         public JsonResult GetUsers()
         {
-            List<Object> usersObj = new List<Object>();
+            List<object> usersObj = new List<object>();
             foreach (var user in TempUsersDb)
             {
                 var result = FacebookAPI.GetUserAsync(user.Value).Result;
@@ -57,6 +146,18 @@ namespace Entities.Models
                 return new JsonResult(new { status = "error", error_message = "Полученный id не существует!" });
             }
 
+            var res = _db.Posts.Where(e => e.UserId == userId).ToListAsync().Result.OrderByDescending(e => e.PostId).ToList();
+
+            List<PostViewModelGetPost> list = new List<PostViewModelGetPost>();
+            for (int i = 0; i < res.Count(); i++)
+            {
+                list.Add(new PostViewModelGetPost(res[i], false));
+            }
+
+
+            return new JsonResult(/*list.OrderByDescending(e => e.PostId.Value)*/list);
+
+            /*
 
             JToken posts = FacebookAPI.GetPagePostsAsync(TempUsersDb[userId]).Result;
             string str = posts.ToString();
@@ -65,10 +166,14 @@ namespace Entities.Models
             List<object> postsObj = new List<object>();
             foreach (var post in posts)
             {
+
+
+
                 postsObj.Add(Info.GetJSONImage(post));
             }
 
-            return new JsonResult(postsObj);
+            */
+            //return new JsonResult(postsObj);
         }
 
         /// <summary>
@@ -85,68 +190,87 @@ namespace Entities.Models
                 return new JsonResult(new { status = "error", error_message = "Полученный id не существует!" });
             }
 
-
             var page = FacebookAPI.GetPageIdAndTokenAsync(TempUsersDb[userId]).Result;
-            var result = new FacebookAPI(page.Item2, page.Item1).PostToFacebookAsync(post).Result;
+            //PostViewModel postView = post;
 
-            if (result.Item1 == 200)
+            if (post.PostId == null)
             {
-                _post = new Post(userId, post);
-                _post.CreateDateTime = DateTime.UtcNow;
-                _post.FacebookPostId = result.Item2;
-                _db.Posts.Add(_post);
-                await _db.SaveChangesAsync();
-
-
-                _response.StatusCode = result.Item1;
-                return new JsonResult(new { status = "OK", post_id = result.Item2 });
+                var res = SavePost(userId, post).Result;
+                post.PostId = res.Item2;
             }
             else
             {
-                _response.StatusCode = result.Item1;
-                return new JsonResult(new { status = "error", error_message = result.Item2 });
-            }
-        }
-
-        /// <summary>
-        /// Публикует пост на бизнес странице пользователя
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="post"></param>
-        /// <returns></returns>
-        public async Task<JsonResult> UserPostFromImages(string userId, PostViewModel post)
-        {
-            if (!TempUsersDb.ContainsKey(userId))
-            {
-                _response.StatusCode = 400;
-                return new JsonResult(new { status = "error", error_message = "Полученный id не существует!" });
-            }
-
-            var page = FacebookAPI.GetPageIdAndTokenAsync(TempUsersDb[userId]).Result;
-            string JSON = String.Empty;
-            //string JSON = await ImgJSON(post);
-            var result = new FacebookAPI(page.Item2, page.Item1).PostFromImagesToFacebookAsync(post, JSON).Result;
-
-            if (result.Item1 == 200)
-            {
-                _post = new Post(userId, post);
-                _post.CreateDateTime = DateTime.UtcNow;
-                _post.FacebookPostId = result.Item2;
-                //_post.ImagesListJSON = JSON;
-                _db.Posts.Add(_post);
+                _post = await _db.Posts.FirstOrDefaultAsync(id => id.PostId == post.PostId);
+                _post.Copy(post);
                 await _db.SaveChangesAsync();
+            }
 
+            Tuple<Int32, String> result;
+            FacebookAPI facebookApi = new FacebookAPI(page.Item2, page.Item1);
 
-                _response.StatusCode = result.Item1;
-                return new JsonResult(new { status = "OK", post_id = result.Item2 });
+            if (post.isWaiting == false)
+            {
+                result = new FacebookAPI(page.Item2, page.Item1).PostToFacebookAsync(post).Result;//??? 
+
+                if (result.Item1 == 200)
+                {
+                    _post = _db.Posts.FirstOrDefaultAsync(id => id.PostId == post.PostId).Result;
+                    _post.CreateDateTime = DateTime.Now;
+                    _post.FacebookPostId = result.Item2;
+                    _post.status = Status.Published;
+                    await _db.SaveChangesAsync();
+                    return new JsonResult(new { status = "OK", post_id = result.Item2 });
+                }
+                return new JsonResult(new { status = "error", error_message = result.Item2 });
             }
             else
             {
-                //сделать метод для удаления файлов с диска
-                _response.StatusCode = result.Item1;
-                return new JsonResult(new { status = "error", error_message = result.Item2 });
+                this.MyEvent += facebookApi.PostToFacebookAsync;
+                PublishPostDelay(post);
+                return new JsonResult(new { status = "Wait", post_id = "" });
             }
+
         }
+
+        ///// <summary>
+        ///// Публикует пост на бизнес странице пользователя
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <param name="post"></param>
+        ///// <returns></returns>
+        //public async Task<JsonResult> UserPostFromImages(string userId, PostViewModel post)
+        //{
+        //    if (!TempUsersDb.ContainsKey(userId))
+        //    {
+        //        _response.StatusCode = 400;
+        //        return new JsonResult(new { status = "error", error_message = "Полученный id не существует!" });
+        //    }
+
+        //    var page = FacebookAPI.GetPageIdAndTokenAsync(TempUsersDb[userId]).Result;
+        //    string JSON = String.Empty;
+        //    //string JSON = await ImgJSON(post);
+        //    var result = new FacebookAPI(page.Item2, page.Item1).PostFromImagesToFacebookAsync(post, JSON).Result;
+
+        //    if (result.Item1 == 200)
+        //    {
+        //        _post = new Post(userId, post);
+        //        _post.CreateDateTime = DateTime.UtcNow;
+        //        _post.FacebookPostId = result.Item2;
+        //        //_post.ImagesListJSON = JSON;
+        //        _db.Posts.Add(_post);
+        //        await _db.SaveChangesAsync();
+
+
+        //        _response.StatusCode = result.Item1;
+        //        return new JsonResult(new { status = "OK", post_id = result.Item2 });
+        //    }
+        //    else
+        //    {
+        //        //сделать метод для удаления файлов с диска
+        //        _response.StatusCode = result.Item1;
+        //        return new JsonResult(new { status = "error", error_message = result.Item2 });
+        //    }
+        //}
 
         /// <summary>
         /// Изменяет публикацию пользователя по id
@@ -250,8 +374,8 @@ namespace Entities.Models
 
         private static Dictionary<string, string> TempUsersDb = new Dictionary<string, string>() {
             { "100559284835939","EAAHD5fytWZAABADfTdcE8ZCp2d323x0YYgcaNMAfVGbNjtnCtKN9Ay9yBDBfnM2MkhzT5UQZBC0eDZBizgJEZCBgXZAxNXDFgAK1TN2ZCwPD6iLMpP6X8gSkQoN6YcFG39oZBgHz6U6OeOcOB41oLGNXQYVXJVeh4nfjhRCnuEde8CwQF83UYFee" },
-            { "895127244222164","EAAjnVI1sCkwBADWHQOeCunZCMMezGDc2Xit0rb4ZCM86gnOe78qMUtjwqkDel73hJPwilAZANenNKPufhXRFEbydLEplhSwIuRORFe4HICwflMQqVEyFR49c9VsgZCVsYFivZCmNYEOdCuXJ7auyVFZCN4eVBwqP2hFi8EvkfI7QZDZD" }/*,
-            {"2404663569642984","EAAiLB13fdegBAF75p4EwZBP4Nx0CKRjWdqVxvzYC03ful7XayQrEymHGO6s9ZCnZCqDyQRiFyK1rJbZBggd0VB0Ha7VZCopSFebTfCAHuZCHjgFKZCnsHVeBQwjKMYjZC0vmu6r3YU5dHCPzcT9MnP07jtZB0oTqkFrXZBCpYyukdGCRqG4Uu0CRayK6lcrlzd780ZD" }*/
+            { "895127244222164","EAAjnVI1sCkwBADWHQOeCunZCMMezGDc2Xit0rb4ZCM86gnOe78qMUtjwqkDel73hJPwilAZANenNKPufhXRFEbydLEplhSwIuRORFe4HICwflMQqVEyFR49c9VsgZCVsYFivZCmNYEOdCuXJ7auyVFZCN4eVBwqP2hFi8EvkfI7QZDZD" },
+            {"2404663569642984","EAAiLB13fdegBADC55a6uXEweSZC35BVGlZAEC10tyZBAZAbv623Wq08crwDU3VQvhjgxov7ZBEKXTiPcMBJ6eGeVibzTAOYcrmLroGk1SxyYqvUHyuVvjo1CILn3769YlTPmZAmpS1KF9KWA0v30zq5IjpWZAo5V3nXmlgaZAMpCoZC7PrFXM5el8QWeuZC1df85CNuLhxxVBb4gZDZD" }
         };
 
 

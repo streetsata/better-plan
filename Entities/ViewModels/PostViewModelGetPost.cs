@@ -13,18 +13,11 @@ using Newtonsoft.Json.Linq;
 namespace Entities.ViewModels
 {
 
-    public enum Status
-    {
-        Save,
-        Published,
-        Waiting,
-        Error
-    }
 
     /// <summary>
     /// Модель для публикации поста
     /// </summary>
-    public class PostViewModel
+    public class PostViewModelGetPost
     {
         /// <summary>
         /// ID поста в БД
@@ -41,6 +34,11 @@ namespace Entities.ViewModels
         /// </summary>
         public String place { get; set; }
 
+        /// <summary>
+        /// Id поста в facebook
+        /// </summary>
+        public string FacebookPostId { get; set; }
+
         ///// <summary>
         ///// действие к посту
         ///// </summary>
@@ -56,10 +54,6 @@ namespace Entities.ViewModels
         ///// </summary>
         //public String icon { get; set; }
 
-        /// <summary>
-        /// List картинок
-        /// </summary>
-        public List<IFormFile> ImagesListIFormFile { get; set; }
 
         /// <summary>
         /// List картинок(array bte)
@@ -103,20 +97,19 @@ namespace Entities.ViewModels
         /// </summary>
         public Status status { get; set; }
 
-        public PostViewModel()
+        public PostViewModelGetPost()
         {
 
         }
 
-        public PostViewModel(Post post, Boolean isPosing)
+        public PostViewModelGetPost(Post post, Boolean isPosing)
         {
+            this.PostId = post.PostId;
+            this.FacebookPostId = post.FacebookPostId;
             this.post_text = post.Text;
             this.place = post.Place;
-            if (post.ImagesListJSON != null && isPosing)
-            {
-                this.ImagesListIFormFile = GetIFormFileImages(post.ImagesListJSON);
-            }
-            else if (post.ImagesListJSON != null && !isPosing)
+
+            if (post.ImagesListJSON != null && !isPosing)
             {
                 this.ImagesURLList = JsonConvert.DeserializeObject<List<Object>>(post.ImagesListJSON);
             }
@@ -127,22 +120,9 @@ namespace Entities.ViewModels
             this.UpdateDateTime = post.UpdateDateTime;
             this.DeleteDateTime = post.DeleteDateTime;
             this.WhenCreateDateTime = post.WhenCreateDateTime;
+            this.status = post.status;
 
         }
 
-        private List<IFormFile> GetIFormFileImages(string imagesListJSON)
-        {
-            var list = JsonConvert.DeserializeObject<List<String>>(imagesListJSON);
-            List<IFormFile> formFiles = new List<IFormFile>();
-            foreach (var url in list)
-            {
-                using (var stream = File.OpenRead(url))
-                {
-                    formFiles.Add(new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name)));
-                }
-            }
-
-            return formFiles;
-        }
     }
 }

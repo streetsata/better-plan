@@ -19,15 +19,18 @@ namespace Entities.Models
     {
         private static readonly string _facebookAPI = "https://graph.facebook.com/";
         private static readonly string _pageEdgeFeed = "feed";
+        private static readonly string _pageEdgePhotos = "photos";
         private static readonly string _getUserURL = $"{_facebookAPI}/me";
 
         private readonly string _pageAccessToken;
         private readonly string _feedPageURL;
+        private readonly string _photosPageURL;
 
         public FacebookAPI(string accessToken, string pageID)
         {
             _pageAccessToken = accessToken;
             _feedPageURL = $"{_facebookAPI}{pageID}/{_pageEdgeFeed}";
+            _photosPageURL = $"{_facebookAPI}{pageID}/{_pageEdgePhotos}";
         }
 
         /// <summary>
@@ -131,6 +134,7 @@ namespace Entities.Models
         /// </returns>
         public async Task<Tuple<int, string>> PostToFacebookAsync(PostViewModel post)
         {
+
             using (var http = new HttpClient())
             {
                 var data = new Dictionary<string, string> {
@@ -142,68 +146,35 @@ namespace Entities.Models
                     data.Add("message", post.post_text);
                 }
 
-                if (post.action != null && post.objectAction != null)
+                //if (post.action != null && post.objectAction != null)
+                //{
+                //    data.Add("og_action_type_id", post.action);
+                //    data.Add("og_object_id", post.objectAction);
+                //    if (post.icon != null)
+                //    {
+                //        data.Add("og_icon_id", post.icon);
+                //    }
+                //}
+
+                if (post.ImagesListIFormFile != null)
                 {
-                    data.Add("og_action_type_id", post.action);
-                    data.Add("og_object_id", post.objectAction);
-                    if (post.icon != null)
-                    {
-                        data.Add("og_icon_id", post.icon);
-                    }
-                }
-
-                var httpResponse = await http.PostAsync(_feedPageURL, new FormUrlEncodedContent(data));
-                var httpContent = await httpResponse.Content.ReadAsStringAsync();
-
-                var Json = JObject.Parse(httpContent);
-                if (Json["error"] != null)
-                {
-                    return new Tuple<int, string>(400, Json["error"]["message"].ToString());
-                }
-
-                return new Tuple<int, string>(200, Json["id"].ToString());
-            }
-        }
-
-
-        /// <summary>
-        /// Постит на FaceBook текст с картинками и 
-        /// </summary>
-        /// <param name="post"></param>
-        /// <returns>
-        /// Возвращает кортеж 1. Результат выполнения 2. Сообщение ошибки или id
-        /// </returns>
-        public async Task<Tuple<int, string>> PostFromImagesToFacebookAsync(PostViewModel post, String ListJSON)
-        {
-            using (var http = new HttpClient())
-            {
-                var data = new Dictionary<string, string> {
-                    { "access_token", _pageAccessToken }
-                };
-
-                if (post.post_text != null)
-                {
-                    data.Add("message", post.post_text);
-                }
-
-                if (post.ImagesListJSON != null)
-                {
-                    RestClient client = new RestClient(_feedPageURL);
+                    RestClient client = new RestClient(_photosPageURL);
                     RestRequest request;
                     List<string> idList = new List<string>();
 
-                    for (int i = 0; i < post.ImagesListJSON.Count; i++)
+                    for (int i = 0; i < post.ImagesListIFormFile.Count; i++)
                     {
-                        if (post.ImagesListJSON[i].Length > 0)
+                        if (post.ImagesListIFormFile[i].Length > 0)
                         {
                             using (var ms = new MemoryStream())
                             {
-                                post.ImagesListJSON[i].CopyTo(ms);
+                                post.ImagesListIFormFile[i].CopyTo(ms);
                                 byte[] bytes = ms.ToArray();
                                 // act on the Base64 data
                                 request = new RestRequest(Method.POST);
-                                request.AddFileBytes($"{post.ImagesListJSON[i].Name}+{i}", bytes, post.ImagesListJSON[i].FileName, "multipart/form-data");
+                                request.AddFileBytes($"{post.ImagesListIFormFile[i].Name}+{i}", bytes, post.ImagesListIFormFile[i].FileName, "multipart/form-data");
                                 request.AddParameter("published", false);
+                                request.AddParameter("access_token", _pageAccessToken);
                                 var resp = client.Post(request);
                                 var rezImageJson = JObject.Parse(resp.Content);
                                 string postID = rezImageJson["id"].Value<string>();
@@ -230,17 +201,6 @@ namespace Entities.Models
                     //data.Add("attached_media", ListJSON);
                 }
 
-                if (post.action != null && post.objectAction != null)
-                {
-                    data.Add("og_action_type_id", post.action);
-                    data.Add("og_object_id", post.objectAction);
-                    if (post.icon != null)
-                    {
-                        data.Add("og_icon_id", post.icon);
-                    }
-                }
-
-
                 var httpResponse = await http.PostAsync(_feedPageURL, new FormUrlEncodedContent(data));
                 var httpContent = await httpResponse.Content.ReadAsStringAsync();
 
@@ -253,6 +213,7 @@ namespace Entities.Models
                 return new Tuple<int, string>(200, Json["id"].ToString());
             }
         }
+
 
 
         /// <summary>
