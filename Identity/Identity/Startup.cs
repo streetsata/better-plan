@@ -73,6 +73,15 @@ namespace Identity
                     };
                 });
 
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                //signin-google                
+                options.ClientId = Configuration["Authentication:Google:ClientId"];
+                options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                //options.ClientId = "268412017041-vv0dkb8et47dq5o5l5pns5ob7vaguqao.apps.googleusercontent.com";
+                //options.ClientSecret = "o1NoSHozFUQTXSNj2ZOc5hOS";
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
