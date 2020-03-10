@@ -2,6 +2,7 @@
 using Identity.Models;
 using Identity.Models.Requests;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Web.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Contracts;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Identity.Controllers
 {
@@ -119,68 +121,6 @@ namespace Identity.Controllers
             await userManager.UpdateSecurityStampAsync(user);
         }
 
-
-        // + проверяет валидность UserToken
-
-        //[HttpPost("refreshUserToken")]
-        //public async Task<IActionResult> RefreshUserToken([FromBody] RefreshUserTokenRequest request)
-        //{
-        //    var tokenValidationParameters = new TokenValidationParameters
-        //    {
-        //        ValidateAudience = false,
-        //        ValidateIssuer = false,
-        //        ValidateIssuerSigningKey = true,
-        //        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-        //        ValidateLifetime = false
-        //    };
-
-        //    var tokenHandler = new JwtSecurityTokenHandler();
-        //    var principal = tokenHandler.ValidateToken(request.Token, tokenValidationParameters, out var securityToken);
-        //    if ((securityToken is JwtSecurityToken jwtSecurityToken) && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-        //    {
-        //        return new JsonResult(new { result = "Invalid user token" });
-        //    }
-
-        //    var userName = principal.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    var user = await userManager.Users.FirstOrDefaultAsync(u => (u.UserName == userName));
-        //    var refToken = await userManager.GetAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
-
-        //    if (refToken != request.RefreshToken)
-        //    {
-        //        return new JsonResult(new { result = "Invalid refresh token" });
-        //    }
-
-        //    // new refresh token
-        //    await userManager.RemoveAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
-        //    var refresh_jwtToken = await userManager.GenerateUserTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
-        //    await userManager.SetAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken", refresh_jwtToken);
-
-        //    var userRoles = await userManager.GetRolesAsync(user);
-        //    var userPermissions = await userManager.GetClaimsAsync(user);// get UserClaims(Permissions)
-
-        //    IList<IdentityRole> roles = new List<IdentityRole>();
-        //    foreach (var item in userRoles)
-        //    {
-        //        roles.Add(await roleManager.FindByNameAsync(item));
-        //    }
-
-        //    IList<Claim> rolePermissions = new List<Claim>();
-        //    foreach (var item in roles)
-        //    {
-        //        var claims = await roleManager.GetClaimsAsync(item);
-        //        foreach (var claim in claims)
-        //        {
-        //            rolePermissions.Add(claim); // get RoleClaims(Permissions)
-        //        }
-        //    }
-        //    var permissoins = userPermissions.Union(rolePermissions).ToList();// all permissions (role + user)
-
-        //    string access_jwtToken = TokenFactory.GenerateAccessToken(user, permissoins);
-
-        //    return new JsonResult(new { access_jwtToken, refresh_jwtToken });
-        //}
-
-
         // не проверяет на валидность userToken, принимает только RefreshToken и возвращвет пару "userToken + RefreshToken"
         [HttpPost("refreshUserToken")]
         public async Task<IActionResult> RefreshUserToken([FromBody] string RefreshToken)
@@ -225,6 +165,51 @@ namespace Identity.Controllers
                 log.LogError($"Invalid refresh token");
                 return new JsonResult(new { result = "Invalid refresh token" });
             }
+        }
+
+
+        [HttpPost("forgotPassword")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    return new JsonResult(new { result = "Invalid email." });
+                }
+
+                var code = await userManager.GeneratePasswordResetTokenAsync(user);
+                var url = Url.Action("ResetPassword", "Account", new { userId = user.Id, token = code }, protocol: HttpContext.Request.Scheme);
+                EmailService emailService = new EmailService();
+                await emailService.SendEmailAsync(model.Email, "Reset Password",
+                    $"Follow the link: <a href='{url}'>link</a>");
+                return new JsonResult(new { result = url });
+            }
+            return new JsonResult(new { result = "Invalid email." });
+        }
+
+
+        [HttpPost("resetPassword")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
+        {
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return new JsonResult(new { result = "Invalid user." });
+            }
+            var result = await userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return new JsonResult(new { result = "Password was changed." });
+            }
+            string errors = null;
+            foreach (var error in result.Errors)
+            {
+                errors += error.Description;
+            }
+            return new JsonResult(new { result = errors });
         }
     }
 }
