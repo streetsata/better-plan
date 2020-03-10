@@ -70,7 +70,7 @@ namespace Identity.Controllers
         }
 
         //Login users and geting tokens
-        [HttpPost]
+        [HttpGet]
         [Route("token")]
         public async Task<JsonResult> GetToken(AuthenticationRequest authRequest)
         {
