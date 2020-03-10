@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Entities.Models.auxiliary_models;
 using RestSharp;
 
 namespace Entities.Models
@@ -30,13 +31,13 @@ namespace Entities.Models
         }
 
         /// <summary>
-        /// Получает инфу о пользователе по его токену
+        /// Получает ID о пользователе по его токену
         /// </summary>
         /// <param name="UserToken"></param>
         /// <returns>
         /// Возвращает кортеж который состоит из 1. id 2. имени пользователя
         /// </returns>
-        public static async Task<Tuple<string, string>> GetUserAsync(string UserToken)
+        private static async Task<string> GetUserAsyncID(string UserToken)
         {
             using (var http = new HttpClient())
             {
@@ -45,10 +46,34 @@ namespace Entities.Models
                 var httpContent = await httpResponse.Content.ReadAsStringAsync();
                 var Json = JObject.Parse(httpContent);
 
-                var result = new Tuple<string, string>(Json["id"].ToString(), Json["name"].ToString());
+                var result = Json["id"].ToString();
                 return result;
             }
         }
+
+        /// <summary>
+        /// Получает инфу о пользователе по его токену
+        /// </summary>
+        /// <param name="UserToken"></param>
+        /// <returns>
+        /// Возвращает кортеж который состоит из 1. id 2. имени пользователя
+        /// </returns>
+        public static async Task<JsonResult> GetUserAsync(string UserToken)
+        {
+            using (var http = new HttpClient())
+            {
+                string id = await GetUserAsyncID(UserToken);
+
+                var httpResponse = await http.GetAsync($"{_getUserURL}/accounts?access_token={UserToken}&fields=picture{{url}},cover,name");
+                var httpContent = await httpResponse.Content.ReadAsStringAsync();
+                var Json = JObject.Parse(httpContent);
+
+                var res = InfoUser.GetJSON(Json, id);
+
+                return new JsonResult(new { Id = res["id"], name = res["name"], picture = res["picture"], cover = res["cover"] });
+            }
+        }
+
 
         /// <summary>
         /// Возвращает посты бизнес аккаунта пользователя по его токену

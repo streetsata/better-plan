@@ -34,11 +34,11 @@ namespace Entities.Models
         /// <returns></returns>
         public JsonResult GetUsers()
         {
-            List<object> usersObj = new List<object>();
+            List<Object> usersObj = new List<Object>();
             foreach (var user in TempUsersDb)
             {
                 var result = FacebookAPI.GetUserAsync(user.Value).Result;
-                usersObj.Add(new { id = result.Item1, name = result.Item2 });
+                usersObj.Add(result.Value);
             }
 
             return new JsonResult(usersObj);
@@ -65,9 +65,6 @@ namespace Entities.Models
             List<object> postsObj = new List<object>();
             foreach (var post in posts)
             {
-
-
-
                 postsObj.Add(Info.GetJSONImage(post));
             }
 
@@ -253,8 +250,8 @@ namespace Entities.Models
 
         private static Dictionary<string, string> TempUsersDb = new Dictionary<string, string>() {
             { "100559284835939","EAAHD5fytWZAABADfTdcE8ZCp2d323x0YYgcaNMAfVGbNjtnCtKN9Ay9yBDBfnM2MkhzT5UQZBC0eDZBizgJEZCBgXZAxNXDFgAK1TN2ZCwPD6iLMpP6X8gSkQoN6YcFG39oZBgHz6U6OeOcOB41oLGNXQYVXJVeh4nfjhRCnuEde8CwQF83UYFee" },
-            { "895127244222164","EAAjnVI1sCkwBADWHQOeCunZCMMezGDc2Xit0rb4ZCM86gnOe78qMUtjwqkDel73hJPwilAZANenNKPufhXRFEbydLEplhSwIuRORFe4HICwflMQqVEyFR49c9VsgZCVsYFivZCmNYEOdCuXJ7auyVFZCN4eVBwqP2hFi8EvkfI7QZDZD" },
-            {"2404663569642984","EAAiLB13fdegBAF75p4EwZBP4Nx0CKRjWdqVxvzYC03ful7XayQrEymHGO6s9ZCnZCqDyQRiFyK1rJbZBggd0VB0Ha7VZCopSFebTfCAHuZCHjgFKZCnsHVeBQwjKMYjZC0vmu6r3YU5dHCPzcT9MnP07jtZB0oTqkFrXZBCpYyukdGCRqG4Uu0CRayK6lcrlzd780ZD" }
+            { "895127244222164","EAAjnVI1sCkwBADWHQOeCunZCMMezGDc2Xit0rb4ZCM86gnOe78qMUtjwqkDel73hJPwilAZANenNKPufhXRFEbydLEplhSwIuRORFe4HICwflMQqVEyFR49c9VsgZCVsYFivZCmNYEOdCuXJ7auyVFZCN4eVBwqP2hFi8EvkfI7QZDZD" }/*,
+            {"2404663569642984","EAAiLB13fdegBAF75p4EwZBP4Nx0CKRjWdqVxvzYC03ful7XayQrEymHGO6s9ZCnZCqDyQRiFyK1rJbZBggd0VB0Ha7VZCopSFebTfCAHuZCHjgFKZCnsHVeBQwjKMYjZC0vmu6r3YU5dHCPzcT9MnP07jtZB0oTqkFrXZBCpYyukdGCRqG4Uu0CRayK6lcrlzd780ZD" }*/
         };
 
 
