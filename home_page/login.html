@@ -4,29 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign-in</title>
+    <title>Login</title>
     <link href="https://fonts.googleapis.com/css?family=Lato:300,600,900&display=swap" rel="stylesheet">
     <link href="styles/modal.css" rel="stylesheet">
 </head>
 
 <body>
-    <div id="id01" class="modal">
+    <div id="id01" class="modal login">
         <form class="modal-content" action="/action_page.html">
-            <div class="imgcontainer">
-                <img src="images/modal-img.png" alt="modal image" class="modal-img">
-            </div>
-
-            <div class="container">
+            <div class="container cont-log">
+                
                 <div class="close">
                     <a href="#" class="close-cross">+</a>
                 </div>
 
                 <div class="register">
                     <div class="registration-heading">
-                        <p>Зарегистрироваться <span class="green-text">или <a href="#">Войти</a></span></p>
+                        <p>Войти <span class="green-text">или <a href="#">Зарегистрироваться</a></span></p>
                     </div>
                     <div class="input-container">
-                        <input type="text" placeholder="E-mail" name="email" required>
+                        <input type="text" placeholder="E-mail или login" name="email" required>
                         <div>
                             <label for="psw">Password</label>
                             <div class="psw-container">
@@ -36,24 +33,14 @@
                             </div>
                         </div>
 
-                        <div>
-                            <label for="psw-repeat">Password again</label>
-                            <div class="psw-container">
-                                <img src="images/ion_eye.png" id="eye" alt="hide password"
-                                    onclick="showConfirmPassword(); changeImage();">
-                                <input type="password" id="confpsw" placeholder="Repeat password" name="psw-repeat"
-                                    required>
-                            </div>
-                        </div>
-
                         <input type="checkbox" class="checkbox" id="checkbox" />
                         <label for="checkbox">Не выходить из аккаунта</label>
 
                         <button type="submit" class="arrow-link submit">Далее<div class="arrow"></div></button>
                     </div>
 
-                    <div class="modal-social">
-                        <p>Регистрация через соцсети</p>
+                    <div class="modal-social soc-log">
+                        <p>Вход через соцсети</p>
                         <div class="social-icons">
                             <a href="#" class="fb btn">
                                 <img src="images/facebook.png">
@@ -66,7 +53,15 @@
                             </a>
                         </div>
                     </div>
+
+                    <div class="forgot-password">
+                        <a href="#">Забыли пароль?</a>
+                    </div>
                 </div>
+            </div>
+
+            <div class="imgcontainer">
+                <img src="images/login-img.png" alt="login image" class="login-img">
             </div>
         </form>
     </div>
@@ -87,16 +82,7 @@
             else
                 confpsw.type = "password"
         }
-
-        // function changeImage() {
-        //     var eye = document.getElementById('eye')
-        //     if (eye.src=="images/ion_eye.png")
-        //         eye.src = "images/ion_eye-off.png";
-        //     else
-        //         eye.src = "images/ion_eye.png"
-        // }
     </script>
-
 </body>
 
 </html>

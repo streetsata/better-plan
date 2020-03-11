@@ -16,6 +16,10 @@
     background-color: rgba(0,0,0,0.4); */
 }
 
+.login { /*Style for login.html*/
+    height: 355px;
+}
+
 .modal-content {
     height: 100%;
     display: flex;
@@ -30,9 +34,14 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
     background: #F8F8F8;
     border: 0px solid #F8F8F8;
     border-radius: 0 37px 37px 0;
+}
+
+.cont-log { /*for login.html*/
+    border-radius: 37px 0 0 37px;
 }
 
 .register {
@@ -42,7 +51,8 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 80%;
+    height: 100%;
+    padding-bottom: 10px;
 }
 
 .close {
@@ -77,9 +87,12 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 30px;
     font-size: 20px;
     color: #F4896F;
+}
+
+.registration-heading p {
+    margin: 0;
 }
 
 .registration-heading a, .green-text {
@@ -89,9 +102,11 @@
 .input-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-between;
     width: 70%;
-    height: 70%;
+    height: 100%;
+    max-height: 240px;
+    padding: 25px 0;
 }
 
 input {
@@ -108,6 +123,7 @@ input {
 
 .psw-container {
     position: relative;
+    margin-top: 5px;
 }
 
 .psw-container img {
@@ -228,7 +244,7 @@ label {
     border: 1px solid transparent;
     cursor: pointer;
     align-self: flex-end;
-    margin-right: 45px;
+    margin-right: -15px;
 }
 
 .submit:hover {
@@ -246,13 +262,16 @@ label {
 }
 
 .modal-social {
-    height: 20%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 70%;
     margin: 0 auto;
     font-size: 12px;
+}
+
+.soc-log { /*for login.html*/
+    justify-content: space-evenly;
 }
 
 .btn img {
@@ -268,4 +287,9 @@ label {
     max-width: 96px;
     justify-content: space-between;
     align-items: center;
+}
+
+.forgot-password a {
+    text-decoration: none;
+    color: #2C473E;
 }
