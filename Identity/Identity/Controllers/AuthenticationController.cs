@@ -268,7 +268,7 @@ namespace Identity.Controllers
                 }
 
                 var code = await userManager.GeneratePasswordResetTokenAsync(user);
-                var url = Url.Action("ResetPassword", "Account", new { userId = user.Id, token = code }, protocol: HttpContext.Request.Scheme);
+                var url = Url.Action("ResetPassword", "Authentication", new { userId = user.Id, token = code }, protocol: HttpContext.Request.Scheme);
                 EmailService emailService = new EmailService();
                 await emailService.SendEmailAsync(model.Email, "Reset Password",
                     $"Follow the link: <a href='{url}'>link</a>");

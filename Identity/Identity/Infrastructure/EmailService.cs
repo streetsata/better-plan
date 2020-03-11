@@ -25,7 +25,7 @@ namespace Identity.Infrastructure
             using (var client = new SmtpClient())
             {
                 await client.ConnectAsync("smtp.gmail.com", 587, false);
-                await client.AuthenticateAsync("daryan15646@gmail.com", "kocakola14");
+                await client.AuthenticateAsync("daryan15646@gmail.com", "pass");
                 await client.SendAsync(emailMessage);
 
                 await client.DisconnectAsync(true);
