@@ -65,7 +65,7 @@ namespace BetterPlan.Controllers
             catch (Exception e)
             {
                 Response.StatusCode = 500;
-                _logger.LogError(e.Message);
+                _logger.LogError($"{e.Message} : {e.StackTrace}");
                 return new JsonResult(new { status = "error", error_message = e.Message });
             }
         }
@@ -116,7 +116,7 @@ namespace BetterPlan.Controllers
             catch (Exception e)
             {
                 Response.StatusCode = 500;
-                _logger.LogError(e.Message);
+                _logger.LogError($"{e.Message} : {e.StackTrace}");
                 return new JsonResult(new { status = "error", error_message = e.Message });
             }
         }
@@ -179,7 +179,7 @@ namespace BetterPlan.Controllers
             catch (Exception e)
             {
                 Response.StatusCode = 500;
-                _logger.LogError(e.Message);
+                _logger.LogError($"{e.Message} : {e.StackTrace}");
                 return new JsonResult(new { status = "error", error_message = e.Message });
             }
         }
@@ -243,7 +243,7 @@ namespace BetterPlan.Controllers
             catch (Exception e)
             {
                 Response.StatusCode = 500;
-                _logger.LogError(e.Message);
+                _logger.LogError($"{e.Message} : {e.StackTrace}");
                 return new JsonResult(new { status = "error", error_message = e.Message });
             }
         }
@@ -310,7 +310,7 @@ namespace BetterPlan.Controllers
             catch (Exception e)
             {
                 Response.StatusCode = 500;
-                _logger.LogError(e.Message);
+                _logger.LogError($"{e.Message} : {e.StackTrace}");
                 return new JsonResult(new { status = "error", error_message = e.Message });
             }
         }
@@ -376,7 +376,7 @@ namespace BetterPlan.Controllers
             catch (Exception e)
             {
                 Response.StatusCode = 500;
-                _logger.LogError(e.Message);
+                _logger.LogError($"{e.Message} : {e.StackTrace}");
                 return new JsonResult(new { status = "error", error_message = e.Message });
             }
         }
@@ -428,7 +428,7 @@ namespace BetterPlan.Controllers
             catch (Exception e)
             {
                 Response.StatusCode = 500;
-                _logger.LogError(e.Message);
+                _logger.LogError($"{e.Message} : {e.StackTrace}");
                 return new JsonResult(new { status = "error", error_message = e.Message });
             }
 
@@ -480,7 +480,7 @@ namespace BetterPlan.Controllers
             catch (Exception e)
             {
                 Response.StatusCode = 500;
-                _logger.LogError(e.Message);
+                _logger.LogError($"{e.Message} : {e.StackTrace}");
                 return new JsonResult(new { status = "error", error_message = e.Message });
             }
         }
