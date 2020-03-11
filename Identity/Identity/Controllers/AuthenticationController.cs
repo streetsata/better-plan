@@ -2,19 +2,14 @@
 using Identity.Models;
 using Identity.Models.Requests;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Web.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Contracts;
-using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 
 namespace Identity.Controllers
 {
@@ -70,7 +65,7 @@ namespace Identity.Controllers
         }
 
         //Login users and geting tokens
-        [HttpGet]
+        [HttpPost]
         [Route("token")]
         public async Task<JsonResult> GetToken(AuthenticationRequest authRequest)
         {
@@ -112,6 +107,99 @@ namespace Identity.Controllers
             log.LogError("Login - ModelState is not valid.");
             return new JsonResult(new {result = "Invalid Data" });
         }
+
+        //[HttpPost]
+        ////[ValidateAntiForgeryToken]
+        //public async Task<JsonResult> ExternalLogin(string provider)
+        //{
+        //    string returnUrl = null;
+        //    var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
+        //    var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+        //    return new JsonResult(new { message = "LOG" });
+        //}
+
+        [HttpGet]
+        public async Task<JsonResult> ExternalLoginCallback(string returnUrl = null)
+        {
+            var info = await signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return new JsonResult(new { message = "User not fount" });
+            }
+
+            var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            if (signInResult.Succeeded)
+            {
+                return new JsonResult(new { message = "User login with google" });
+            }
+            if (signInResult.IsLockedOut)
+            {
+                return new JsonResult(new { message = "User data not valid" });
+            }
+            else
+            {
+                //ViewData["ReturnUrl"] = returnUrl;
+                //ViewData["Provider"] = info.LoginProvider;
+                //var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                //return View("ExternalLogin", new ExternalLoginModel { Email = email });
+                return new JsonResult(new { info });
+            }
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<JsonResult> ExternalLoginConfirmation(ExternalLoginModel model, string returnUrl = null)
+        {
+            if (!ModelState.IsValid)
+                return new JsonResult(new { mess = "Invalid data" });
+
+            var info = await signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+                return new JsonResult(new { mess = "Invalid data" });
+
+            var user = await userManager.FindByEmailAsync(model.Email);
+            IdentityResult result;
+
+            if (user != null)
+            {
+                result = await userManager.AddLoginAsync(user, info);
+                if (result.Succeeded)
+                {
+                    await signInManager.SignInAsync(user, isPersistent: false);
+                    return new JsonResult(new { mess = "Login seccidded" });
+                }
+            }
+            else
+            {
+                model.Principal = info.Principal;
+                user = new IdentityUser
+                {
+                    UserName = model.Email
+                };
+                var config = new MapperConfiguration(cfg => cfg.CreateMap<IdentityUser, ExternalLoginModel>());
+                var mapper = new Mapper(config);
+                user = mapper.Map<IdentityUser>(model);
+                result = await userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    result = await userManager.AddLoginAsync(user, info);
+                    if (result.Succeeded)
+                    {
+                        //TODO: Send an emal for the email confirmation and add a default role as in the Register action
+                        await signInManager.SignInAsync(user, isPersistent: false);
+                        return new JsonResult(new { mess = "Registr and Login seccidded" }); ;
+                    }
+                }
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.TryAddModelError(error.Code, error.Description);
+            }
+
+            return new JsonResult(new { model }); ;
+        }
+
 
         [HttpGet]
         [Route("LogOut")]
