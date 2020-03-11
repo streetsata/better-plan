@@ -15,13 +15,13 @@ using Newtonsoft.Json.Linq;
 namespace BetterPlan.Controllers
 {
     [Route("api/v1")]
-    public class MainController : ControllerBase
+    public class FacebookController : ControllerBase
     {
         private readonly ILoggerManager _logger;
         private BetterPlanAPI _bpApi;
         private BetterPlanContext _db;
 
-        public MainController(IConfiguration Configuration, BetterPlanContext context, ILoggerManager logger)
+        public FacebookController(IConfiguration Configuration, BetterPlanContext context, ILoggerManager logger)
         {
             _db = context;
             _logger = logger;
