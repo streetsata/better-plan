@@ -99,7 +99,7 @@ export default {
     justify-content: center;
     align-items: center;
 
-    position:absolute;
+    /* position:absolute; */
     color: white;
     /* padding: 5px; */
     width: 20px;

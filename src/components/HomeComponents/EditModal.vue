@@ -9,10 +9,10 @@
                 <div>
                 <img :src="user.picture" alt="avatar">
                 </div>
-                <textarea v-model="value" :placeholder="`Что у вас нового, ${user.name}`" />
+                <textarea v-model="text" :placeholder="`Что у вас нового, ${user.name}`" />
             </div>
             <div class="buttons"></div>
-            <div class="post-button-wrapper"><button @click="$emit('edit',value)" >Изменить</button></div>
+            <div class="post-button-wrapper"><button @click="$emit('edit',text)" >Изменить</button></div>
             
             
         </div>
@@ -24,7 +24,7 @@
 
 <script>
 export default {
-    props:['show','user','value']
+    props:['show','user','text']
 }
 </script>
 

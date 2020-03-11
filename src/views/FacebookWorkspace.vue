@@ -2,7 +2,7 @@
   <div class="home-container">
       <!-- <tool-bar></tool-bar> -->
         <Modal @publish="publishPost" @close="closeModal" :show="showModal" :user="users[active]" />
-        <EditModal :value="postEditText" @edit="editPost" @close="closeModal" :show="showEditModal" :user="users[active]" />
+        <EditModal :text="postEditText" @edit="editPost" @close="closeModal" :show="showEditModal" :user="users[active]" />
 
         <ToolBar />
         <SideMenu />
@@ -13,7 +13,7 @@
             <UserTabs :users="users" :active="active" @select="select" />
             <div class="content">
               <ProfileInfo :user="users[active]" />
-              <Posts :user="users[active]" :posts="posts" @deletePost="deletePost" @editPost="showEditModalFunc" />
+              <Posts :user="users[active]" :posts="posts" @deleteost="deletePost" @editPost="showEditModalFunc" />
               <CreatePost @create="createPost" />
             </div>
         </div>
@@ -135,43 +135,45 @@ export default {
     },
 
     editPost(postText) {
-      console.log(this.postEditId,this.postEditText,postText);
+      console.log(this.postEditId, postText);
       // this.showEditModal = true
       this.closeModal(true)
+      this.posts = null
+
       // this.dialog = false;
-      // let obj = JSON.stringify({ post_id: postId, edit_text: this.text });
-      // this.$api
-      //   .put(`USER/${this.users[this.active].id}/EDIT`, obj, {
-      //     headers: {
-      //       "Content-Type": "application/json"
-      //     }
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //     this.activate(this.active)
-      //   })
-      //   .catch(error => {
-      //     console.log(error.res);
-      //   });
+      let obj = JSON.stringify({ FacebookPostId: this.postEditId, edit_text: postText });
+      this.$api
+        .put(`USER/${this.users[this.active].id}/EDIT`, obj, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          console.log(res);
+          this.select(this.active)
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
 
     deletePost(postId) {
       // this.dialog = false;
-      console.log('delete'+postId)
-      // let obj = JSON.stringify({ post_id: postId });
-      // this.$api
-      //   .delete(`USER/${this.users[this.active].id}/DELETE`, obj, {
-      //     headers: {
-      //       "Content-Type": "application/json"
-      //     }
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //     this.activate(this.active)
-      //   })
-      //   .catch(error => {
-      //     console.log(error.res);
-      //   });
+      console.log('delete',postId)
+      let obj = JSON.stringify({ FacebookPostId: postId });
+      this.$api
+        .delete(`USER/${this.users[this.active].id}/DELETE`, obj, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          console.log(res);
+          this.select(this.active)
+        })
+        .catch(error => {
+          console.log(error.res);
+        });
     }
   },
   watch: {
