@@ -221,7 +221,7 @@ export default {
 
     publishPost() {
       this.dialog = false;
-      let obj = JSON.stringify({ post_text: this.text });
+      let obj = JSON.stringify({ post_text: this.text })
       this.$api
         .post(`USER/${this.users[this.active].id}/POST`, obj, {
           headers: {

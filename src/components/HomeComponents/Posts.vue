@@ -3,18 +3,7 @@
         <Loader />
     </div>
     <div v-else class="posts-container">
-        <!-- <Post 
-            :name="'Name'"
-            :avatar="'/images/avatar.png'"
-            :img="'/images/original-15yg.jpg'"
-            
-        />
-        <Post 
-            :name="'Name'"
-            :avatar="'/images/avatar.png'"
-            :text="'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'"
-        /> -->
-        <Post v-for="(post,index) in posts" :key="index" :text="post.text" :name="user.name" :avatar="user.picture" :img="post.img" />
+        <Post @delete="deletePost" @edit="editPost" v-for="(post,index) in posts" :key="index" :text="post.post_text" :name="user.name" :avatar="user.picture" :imgs="post.imagesURLList" :postId="post.facebookPostId" />
     </div>
 </template>
 
@@ -30,6 +19,14 @@ export default {
     },
     mounted(){
         console.log(this.posts)
+    },
+    methods:{
+        deletePost(postId){
+            this.$emit('deletePost',postId)
+        },
+        editPost(postId,postText){
+            this.$emit('editPost',postId,postText)
+        }
     }
 }
 </script>

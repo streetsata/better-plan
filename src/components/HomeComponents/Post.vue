@@ -1,5 +1,7 @@
 <template>
     <div class="post">
+        <div @click="$emit('delete',postId)" class="delete-button">X</div>
+
         <div class="post-title">
             <div class="user-data">
                 <img :src="avatar" alt="avatar">
@@ -8,18 +10,18 @@
                     <span class="date">26 июля 2017 г.</span>
                 </div>
             </div>
-            <img class="edit" src="/images/edit.svg" alt="edit">
+            <img @click="$emit('edit',postId,text)" class="edit" src="/images/edit.svg" alt="edit">
         </div>
         <div class="post-text">
             {{text}}
         </div>
-        <img class="post-image" v-if="img" :src="img" alt="img">
+        <!-- <img class="post-image" v-if="imgs" :src="imgs[0]" alt="img"> -->
     </div>
 </template>
 
 <script>
 export default {
-    props:['name','text','avatar','img']
+    props:['name','text','avatar','imgs','postId']
 }
 </script>
 
@@ -90,5 +92,20 @@ export default {
 .post .post-image{
     width: 545px;
     margin-bottom: 20px;
+}
+.delete-button{
+    background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position:absolute;
+    color: white;
+    /* padding: 5px; */
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    /* right: 10px; */
+    cursor: pointer;
 }
 </style>

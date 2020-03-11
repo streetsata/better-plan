@@ -1,18 +1,18 @@
 <template>
     <transition v-if="show" name="fade">
 
-    <div @click="$emit('close')" class="modal-container">
+    <div @click="$emit('close',true)" class="modal-container">
         <div class="modal-inner" @click.stop>
-            <div class="post-modal-header">Создать публикацию</div>
+            <div class="post-modal-header">Изменить публикацию</div>
             
             <div class="modal-input">
                 <div>
                 <img :src="user.picture" alt="avatar">
                 </div>
-                <textarea v-model="postText" :placeholder="`Что у вас нового, ${user.name}`" />
+                <textarea v-model="value" :placeholder="`Что у вас нового, ${user.name}`" />
             </div>
             <div class="buttons"></div>
-            <div class="post-button-wrapper"><button @click="$emit('publish',postText)" >Опубликовать</button></div>
+            <div class="post-button-wrapper"><button @click="$emit('edit',value)" >Изменить</button></div>
             
             
         </div>
@@ -24,7 +24,7 @@
 
 <script>
 export default {
-    props:['show','user']
+    props:['show','user','value']
 }
 </script>
 

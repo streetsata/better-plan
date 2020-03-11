@@ -1,7 +1,8 @@
 <template>
   <div class="home-container">
       <!-- <tool-bar></tool-bar> -->
-        <Modal @close="closeModal" :show="showModal" :user="users[active]" />
+        <Modal @publish="publishPost" @close="closeModal" :show="showModal" :user="users[active]" />
+        <EditModal :value="postEditText" @edit="editPost" @close="closeModal" :show="showEditModal" :user="users[active]" />
 
         <ToolBar />
         <SideMenu />
@@ -12,7 +13,7 @@
             <UserTabs :users="users" :active="active" @select="select" />
             <div class="content">
               <ProfileInfo :user="users[active]" />
-              <Posts :user="users[active]" :posts="posts" />
+              <Posts :user="users[active]" :posts="posts" @deletePost="deletePost" @editPost="showEditModalFunc" />
               <CreatePost @create="createPost" />
             </div>
         </div>
@@ -28,6 +29,7 @@ import Posts from "../components/HomeComponents/Posts"
 import ProfileInfo from "../components/HomeComponents/ProfileInfo"
 import CreatePost from "../components/HomeComponents/CreatePost"
 import Modal from "../components/HomeComponents/Modal"
+import EditModal from "../components/HomeComponents/EditModal"
 
 
 export default {
@@ -39,15 +41,20 @@ export default {
     ProfileInfo,
     CreatePost,
     Modal,
-    Loader
+    Loader,
+    EditModal
   },
   data: () => {
     return {
       showModal:false,
+      showEditModal:false,
       users: [],
       active: null,
       posts: null,
-      
+
+      postEditText:'',
+      postEditId:'',
+
       dialog: false,
       loading: false,
 
@@ -83,8 +90,14 @@ export default {
       // console.log(this.showModal)
       this.showModal = true;
     },
-    closeModal(){
-      this.showModal = false;
+    showEditModalFunc(postId,postText){
+      this.showEditModal = true
+      this.postEditText = postText 
+      this.postEditId = postId
+    },
+    closeModal(edit){
+      if(!edit) this.showModal = false;
+      else this.showEditModal = false
     },
     activate(index) {
       console.log(index)
@@ -100,9 +113,12 @@ export default {
         });
     },
 
-    publishPost() {
-      this.dialog = false;
-      let obj = JSON.stringify({ post_text: this.text });
+    publishPost(text,edit) {
+      this.closeModal(edit)
+      console.log(text)
+      this.posts = null
+      // console.log(this.postText)
+      let obj = JSON.stringify({ post_text: text, "isPosting": true, "isWaiting": false });
       this.$api
         .post(`USER/${this.users[this.active].id}/POST`, obj, {
           headers: {
@@ -111,48 +127,51 @@ export default {
         })
         .then(res => {
           console.log(res);
-          this.activate(this.active);
+          this.select(this.active);
         })
         .catch(error => {
           console.log(error.res);
         });
     },
 
-    editPost(postId) {
-      console.log(postId);
-      this.dialog = false;
-      let obj = JSON.stringify({ post_id: postId, edit_text: this.text });
-      this.$api
-        .put(`USER/${this.users[this.active].id}/EDIT`, obj, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          console.log(res);
-          this.activate(this.active)
-        })
-        .catch(error => {
-          console.log(error.res);
-        });
+    editPost(postText) {
+      console.log(this.postEditId,this.postEditText,postText);
+      // this.showEditModal = true
+      this.closeModal(true)
+      // this.dialog = false;
+      // let obj = JSON.stringify({ post_id: postId, edit_text: this.text });
+      // this.$api
+      //   .put(`USER/${this.users[this.active].id}/EDIT`, obj, {
+      //     headers: {
+      //       "Content-Type": "application/json"
+      //     }
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //     this.activate(this.active)
+      //   })
+      //   .catch(error => {
+      //     console.log(error.res);
+      //   });
     },
 
     deletePost(postId) {
       // this.dialog = false;
-      let obj = JSON.stringify({ post_id: postId });
-      this.$api
-        .delete(`USER/${this.users[this.active].id}/DELETE`, obj, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          console.log(res);
-          this.activate(this.active)
-        })
-        .catch(error => {
-          console.log(error.res);
-        });
+      console.log('delete'+postId)
+      // let obj = JSON.stringify({ post_id: postId });
+      // this.$api
+      //   .delete(`USER/${this.users[this.active].id}/DELETE`, obj, {
+      //     headers: {
+      //       "Content-Type": "application/json"
+      //     }
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //     this.activate(this.active)
+      //   })
+      //   .catch(error => {
+      //     console.log(error.res);
+      //   });
     }
   },
   watch: {

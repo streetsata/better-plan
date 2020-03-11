@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const baseUrl = "https://localhost:5001/api/v1/";
-const baseUrl = "https://better-plan.hillel.it/api/v1/";
+const baseUrl = "https://localhost:5001/api/v1/";
+// const baseUrl = "https://better-plan.hillel.it/api/v1/";
 
 const api = {
   get(url, data, options) {
