@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign-in</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,600,900&display=swap" rel="stylesheet">
+    <link href="styles/modal.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="id01" class="modal">
+        <form class="modal-content" action="/action_page.html">
+            <div class="imgcontainer">
+                <img src="images/modal-img.png" alt="modal image" class="modal-img">
+            </div>
+
+            <div class="container">
+                <div class="register">
+                    <div class="close">
+                        <a href="#" class="close-cross">+</a>
+                    </div>
+                    <div class="registration-heading">
+                        <p>Зарегистрироваться <span class="green-text">или <a href="#">Войти</a></span></p>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" placeholder="E-mail" name="email" required>
+
+                        <label for="psw">Password</label>
+                        <div class="psw-container">
+                            <img src="images/ion_eye.png" id="eye" alt="hide password"
+                                onclick="showPassword(); changeImage();">
+                            <input type="password" id="psw" placeholder="Password" name="psw" required>
+                        </div>
+                        <label for="psw-repeat">Password again</label>
+                        <div class="psw-container">
+                            <img src="images/ion_eye.png" id="eye" alt="hide password"
+                                onclick="showConfirmPassword(); changeImage();">
+                            <input type="password" id="confpsw" placeholder="Repeat password" name="psw-repeat" required>
+                        </div>
+
+                        <input type="checkbox" class="checkbox" id="checkbox" />
+                        <label for="checkbox">Не выходить из аккаунта</label>
+                    </div>
+                    <button type="submit" class="arrow-link submit">Далее<div class="arrow"></div></button>
+                </div>
+
+                <div class="modal-social">
+                    <p>Регистрация через соцсети</p>
+                    <div class="social-icons">
+                        <a href="#" class="fb btn">
+                            <img src="images/facebook.png">
+                        </a>
+                        <a href="#" class="google btn">
+                            <img src="images/google.png">
+                        </a>
+                        <a href="#" class="inst btn">
+                            <img src="images/instagram.png">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function showPassword() {
+            var psw = document.getElementById('psw')
+            if (psw.type == "password")
+                psw.type = "text";
+            else
+                psw.type = "password"
+        }
+
+        function showConfirmPassword() {
+            var confpsw = document.getElementById('confpsw')
+            if (confpsw.type == "password")
+                confpsw.type = "text";
+            else
+                confpsw.type = "password"
+        }
+
+        // function changeImage() {
+        //     var eye = document.getElementById('eye')
+        //     if (eye.src=="images/ion_eye.png")
+        //         eye.src = "images/ion_eye-off.png";
+        //     else
+        //         eye.src = "images/ion_eye.png"
+        // }
+    </script>
+
+</body>
+
+</html>
