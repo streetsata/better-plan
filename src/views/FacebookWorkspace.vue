@@ -13,7 +13,7 @@
             <UserTabs :users="users" :active="active" @select="select" />
             <div class="content">
               <ProfileInfo :user="users[active]" />
-              <Posts :user="users[active]" :posts="posts" @deleteost="deletePost" @editPost="showEditModalFunc" />
+              <Posts :user="users[active]" :posts="posts" @deletePost="deletePost" @editPost="showEditModalFunc" />
               <CreatePost @create="createPost" />
             </div>
         </div>
@@ -30,7 +30,7 @@ import ProfileInfo from "../components/HomeComponents/ProfileInfo"
 import CreatePost from "../components/HomeComponents/CreatePost"
 import Modal from "../components/HomeComponents/Modal"
 import EditModal from "../components/HomeComponents/EditModal"
-
+// import axios from "axios";
 
 export default {
   components: {
@@ -172,8 +172,16 @@ export default {
           this.select(this.active)
         })
         .catch(error => {
-          console.log(error.res);
+          console.log(error);
         });
+      // axios
+      //   .delete(`https://localhost:5001/api/v1/USER/${this.users[this.active].id}/DELETE`, obj, {
+      //     headers: {
+      //       "Content-Type": "application/json"
+      //     }
+      //   })
+      //   .then(response => console.log(response))
+      //   .catch(error => console.log(error));
     }
   },
   watch: {

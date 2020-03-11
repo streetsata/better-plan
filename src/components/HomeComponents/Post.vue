@@ -1,6 +1,6 @@
 <template>
     <div class="post">
-        <div @click="$emit('delete',postId)" class="delete-button">X</div>
+        <!-- <div @click="$emit('delete',postId)" class="delete-button">X</div> -->
 
         <div class="post-title">
             <div class="user-data">

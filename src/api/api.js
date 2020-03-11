@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const baseUrl = "https://localhost:5001/api/v1/";
-// const baseUrl = "https://better-plan.hillel.it/api/v1/";
+// const baseUrl = "https://localhost:5001/api/v1/";
+const baseUrl = "https://better-plan.hillel.it/api/v1/";
 
 const api = {
   get(url, data, options) {
@@ -21,9 +21,11 @@ const api = {
     });
   },
   delete(url, data, options) {
+    // console.log(url, data, options)
+    // console.log(url, data, options)
     return new Promise((resolve, reject) => {
       axios
-        .delete(baseUrl + url, data, options)
+        .delete(baseUrl + url, {...options,data})
         .then(response => resolve(response))
         .catch(error => reject(error));
     });

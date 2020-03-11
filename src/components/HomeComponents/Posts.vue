@@ -22,6 +22,7 @@ export default {
     },
     methods:{
         deletePost(postId){
+            // console.log('POSTS','DELETE',postId)
             this.$emit('deletePost',postId)
         },
         editPost(postId,postText){
