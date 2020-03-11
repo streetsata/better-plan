@@ -43,7 +43,7 @@ namespace Entities.Models
             using (var context = new BetterPlanContext())
             {
 
-                DateTime now = DateTime.Now;
+                DateTime now = DateTime.UtcNow;
                 PostViewModel postViewModel = model;
                 await Task.Delay( model.WhenCreateDateTime.GetValueOrDefault() - now);
 
@@ -215,7 +215,7 @@ namespace Entities.Models
                 if (result.Item1 == 200)
                 {
                     _post = _db.Posts.FirstOrDefaultAsync(id => id.PostId == post.PostId).Result;
-                    _post.CreateDateTime = DateTime.Now;
+                    _post.CreateDateTime = DateTime.UtcNow;
                     _post.FacebookPostId = result.Item2;
                     _post.status = Status.Published;
                     await _db.SaveChangesAsync();
@@ -315,7 +315,7 @@ namespace Entities.Models
                     model.Place = editPost.place;
                 }
 
-                model.UpdateDateTime = DateTime.Now;
+                model.UpdateDateTime = DateTime.UtcNow;
 
                 if (await _db.SaveChangesAsync() > 0)
                 {
@@ -361,7 +361,7 @@ namespace Entities.Models
                 var model = await _db.Posts.FirstOrDefaultAsync(post => post.FacebookPostId == deletePost.FacebookPostId);
 
                 model.IsDelete = true;
-                model.DeleteDateTime = DateTime.Now;
+                model.DeleteDateTime = DateTime.UtcNow;
                 
                 if (await _db.SaveChangesAsync() > 0)
                 {
