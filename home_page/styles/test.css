@@ -24,6 +24,20 @@ header {
     width: 100%;
     max-width: 1920px;
 }
+.cover-container-3 {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1920px;
+    max-height: 400px;
+}
+.cover-container-4 {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1920px;
+} 
 
 main {
     padding-top: 5%;
@@ -112,6 +126,17 @@ main {
     padding-left: 5%;
     padding-right: 5%;
 }
+.page-3-text {
+    text-align: center;
+    width: 100%;
+}
+
+.page-4-text {
+    text-align: center;
+    width: 100%;
+    color: #F4896F;
+    font-weight: 300;
+} 
 
 .main-text h2 {
     font-size: 2.5vw;
@@ -165,10 +190,47 @@ main {
     max-width: 900px;
     width: 50%;
 }
+.girl-img-3 {
+    margin: 0 auto;
+    max-width: 800px;
+    width: 100%;
+}
+.heart {
+    max-width: 1000px;
+    display: flex;
+    margin: auto 0;
+    justify-content: flex-end;
+    
+} 
+.start-work {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 40px;
+    border: none;
+    align-items: center;
+}
+.start-work a {
+    text-decoration: none;
+    color: #2C473E;
+}
+
 
 .girl-img img {
     width: 100%;
 }
+
+.girl-img-3 img {
+    height: 70%;
+}
+.start-work img {
+    padding: 0px 10px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 20px;
+} 
 
 footer {
     display: flex;
