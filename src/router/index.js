@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 // import Login from '../components/Identification/Login.vue';
-import LoginForm from '../components/Identification/LoginForm.vue';
+import Modal from '../components/Identification/Modal';
 import ModalLogIn from '../components/Identification/ModalLogIn'
 // import Posibilities from '../components/Posibilities.vue';
 // import Help from '../components/Help.vue';
@@ -29,8 +29,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/registration',
-    name: 'LoginForm',
-    component: LoginForm,
+    name: 'Modal',
+    component: Modal,
     // beforeEnter: ifNotAuthenticated
   },
   {
