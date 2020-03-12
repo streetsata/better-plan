@@ -1,0 +1,133 @@
+@import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
+/* Fonts */
+@import "./fonts/Lato.css";
+@import "./fonts/Roboto.css";
+@import "./fonts/MaterialIcons.css";
+
+/* Deprecated */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Lato;
+  font-style: normal;
+  background-color: #e5e5e5;
+  color: #2c473e;
+  margin: 0;
+  padding: 0;
+}
+
+.header__wrap {
+  max-width: 1920px;
+  height: 82px;
+  background-color: #84a295;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo__text {
+  color: honeydew;
+}
+
+.logo {
+  margin-left: 22px;
+  display: flex;
+  align-items: center;
+}
+
+.logo__text {
+  margin-left: 12px;
+}
+
+.main {
+  display: flex;
+}
+
+.main__side__menue {
+  height: 900px;
+  width: 100px;
+  background-color: #e5e5e5;
+  margin-top: 2px;
+}
+
+.tabs__nav {
+  display: flex;
+  margin-top: 18px;
+  margin-left: 15px;
+  position: relative;
+  padding-bottom: 0px;
+}
+
+.tabs__nav_tab {
+  height: 45px;
+  margin: 0 0.5rem 0 0;
+  background: #e5e5e5;
+  border-radius: 20px 20px 0px 0px;
+  padding: 10px 33px;
+  cursor: pointer;
+  transition: 100ms linear all;
+}
+
+.tabs__nav_tab--active {
+  background: #84a295;
+}
+
+.addPage {
+  width: 32px;
+  margin: 0px;
+  display: block;
+  text-align: right;
+}
+
+.main__workspace {
+  display: block;
+  width: 90%;
+}
+
+.tab__content {
+  border: 3px solid #e5e5e5;
+  margin: 0px 35px 25px 5px;
+  height: 90%;
+  width: 90%;
+}
+
+.tab__content_addPost {
+  width: 967px;
+  height: 84px;
+  border: 3px dashed #787878;
+  margin: 0 auto;
+}
+
+.add_post_link {
+  text-align: center;
+  display: block;
+  text-align: center;
+  height: 100%;
+  text-decoration: none;
+}
+
+.add_post_link:hover {
+  text-decoration: none;
+}
+
+.add_post_content {
+  display: flex;
+  vertical-align: center;
+  align-items: center;
+}
+
+.add_post_text {
+  margin: auto 0;
+  margin-left: 45px;
+  font-family: Tajawal;
+  font-weight: 500;
+  font-size: 24px;
+  text-align: center;
+  color: #84a295;
+}
