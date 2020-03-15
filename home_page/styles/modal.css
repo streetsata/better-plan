@@ -20,6 +20,11 @@
     height: 355px;
 }
 
+.forgot { /*Style for forgot.html*/
+    width: 386px;
+    height: 219px;
+}
+
 .modal-content {
     height: 100%;
     display: flex;
@@ -44,6 +49,11 @@
     border-radius: 37px 0 0 37px;
 }
 
+.cont-forgot { /*for forgot.html*/
+    width: 100%;
+    border-radius: 37px 0 37px 37px;
+}
+
 .register {
     position: relative;
     display: flex;
@@ -57,11 +67,6 @@
 
 .close {
     position: relative;
-    width: 32px;
-    height: 32px;
-    background: #FFAE9A;
-    opacity: 0.35;
-    border-radius: 0px 21px 21px 21px;
     align-self: flex-end;
     margin: 14px 14px 0 0;
 }
@@ -72,10 +77,9 @@
     font-weight: 900;
     text-decoration: none;
     top: -9px;
-    left: 3px;
+    left: 2px;
     color: red;
     opacity: 0.5;
-    transform: rotate(-45deg);
 }
 
 .close-cross:hover {
@@ -107,6 +111,10 @@
     height: 100%;
     max-height: 240px;
     padding: 25px 0;
+}
+
+.input-forgot { /*for forgot.html*/
+    width: 60%;
 }
 
 input {
