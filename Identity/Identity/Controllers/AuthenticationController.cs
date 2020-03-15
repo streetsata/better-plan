@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Contracts;
 using AutoMapper;
+using System;
 
 namespace Identity.Controllers
 {
@@ -39,28 +40,40 @@ namespace Identity.Controllers
         [Route("registration")]
         public async Task<IActionResult> PostRegistration([FromBody] RegisterBindingRequest userData)
         {
-            if (ModelState.IsValid)
+            try
             {
-                //IdentityUser user = await userManager.FindByNameAsync("test");
-                //await userManager.DeleteAsync(user);
-
-                user = new IdentityUser()
+                if (ModelState.IsValid)
                 {
-                    UserName = userData.Email,
-                    Email = userData.Email
-                };
-                log.LogInfo($"New user {user.UserName} registration.");
-                identityRez = await userManager.CreateAsync(user, userData.Password);
+                    //IdentityUser user = await userManager.FindByNameAsync("test");
+                    //await userManager.DeleteAsync(user);
+                    try
+                    {
+                        user = new IdentityUser()
+                        {
+                            UserName = userData.Email,
+                            Email = userData.Email
+                        };
+                        identityRez = await userManager.CreateAsync(user, userData.Password);
+                        log.LogInfo($"New user {user.UserName} registration.");
+                    }
+                    catch (Exception ex)
+                    {
+                        log.LogError($"{ ex.Message } - { ex.StackTrace }");
+                    }
 
-                if (identityRez.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "RegisteredUser");
-                    return new JsonResult(new { answer = true });
+                    if (identityRez.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(user, "RegisteredUser");
+                        return new JsonResult(new { answer = true });
+                    }
+                    log.LogError(identityRez.Errors.ToString());
+                    return new JsonResult(new { identityRez });
                 }
-                log.LogError(identityRez.Errors.ToString());
-                return new JsonResult(new { identityRez });
+            } 
+            catch (Exception ex)
+            {
+                log.LogError($"{ ex.Message } - { ex.StackTrace }");
             }
-            log.LogError("Registration - ModelState is not valid.");
             return new JsonResult(new { mes = "Error" });
         }
 
@@ -69,42 +82,48 @@ namespace Identity.Controllers
         [Route("token")]
         public async Task<JsonResult> GetToken(AuthenticationRequest authRequest)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var signInRez = await signInManager.PasswordSignInAsync(authRequest.Name, authRequest.Password, false, false);
-
-                if (signInRez.Succeeded)
+                if (ModelState.IsValid)
                 {
-                    user = await userManager.FindByNameAsync(authRequest.Name);
-                    var userRoles = await userManager.GetRolesAsync(user);
-                    var userPermissions = await userManager.GetClaimsAsync(user);// get UserClaims(Permissions)
+                    var signInRez = await signInManager.PasswordSignInAsync(authRequest.Name, authRequest.Password, false, false);
 
-                    IList<IdentityRole> roles = new List<IdentityRole>();
-                    foreach (var item in userRoles)
+                    if (signInRez.Succeeded)
                     {
-                        roles.Add(await roleManager.FindByNameAsync(item));
-                    }
+                        user = await userManager.FindByNameAsync(authRequest.Name);
+                        var userRoles = await userManager.GetRolesAsync(user);
+                        var userPermissions = await userManager.GetClaimsAsync(user);// get UserClaims(Permissions)
 
-                    IList<Claim> rolePermissions = new List<Claim>();
-                    foreach (var item in roles)
-                    {
-                        var claims = await roleManager.GetClaimsAsync(item);
-                        foreach (var claim in claims)
+                        IList<IdentityRole> roles = new List<IdentityRole>();
+                        foreach (var item in userRoles)
                         {
-                            rolePermissions.Add(claim); // get RoleClaims(Permissions)
+                            roles.Add(await roleManager.FindByNameAsync(item));
                         }
-                    }
-                    var permissoins = userPermissions.Union(rolePermissions).ToList();// all permissions (role + user)
 
-                    await userManager.RemoveAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
-                    var refresh_jwtToken = await userManager.GenerateUserTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
-                    await userManager.SetAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken", refresh_jwtToken);
-                    string access_jwtToken = TokenFactory.GenerateAccessToken(user, permissoins);
-                    log.LogInfo($"User {user.UserName} login successfully.");
-                    return new JsonResult(new { access_jwtToken, refresh_jwtToken });
+                        IList<Claim> rolePermissions = new List<Claim>();
+                        foreach (var item in roles)
+                        {
+                            var claims = await roleManager.GetClaimsAsync(item);
+                            foreach (var claim in claims)
+                            {
+                                rolePermissions.Add(claim); // get RoleClaims(Permissions)
+                            }
+                        }
+                        var permissoins = userPermissions.Union(rolePermissions).ToList();// all permissions (role + user)
+
+                        await userManager.RemoveAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
+                        var refresh_jwtToken = await userManager.GenerateUserTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
+                        await userManager.SetAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken", refresh_jwtToken);
+                        string access_jwtToken = TokenFactory.GenerateAccessToken(user, permissoins);
+                        log.LogInfo($"User {user.UserName} login successfully.");
+                        return new JsonResult(new { access_jwtToken, refresh_jwtToken });
+                    }
                 }
             }
-            log.LogError("Login - ModelState is not valid.");
+            catch (Exception ex)
+            {
+                log.LogError($"{ ex.Message } - { ex.StackTrace }");
+            }
             return new JsonResult(new {result = "Invalid Data" });
         }
 
@@ -205,53 +224,69 @@ namespace Identity.Controllers
         [Route("LogOut")]
         public async void LogOut(string userName)
         {
-            user = await userManager.FindByNameAsync(userName);
-            await userManager.UpdateSecurityStampAsync(user);
+            try
+            {
+                user = await userManager.FindByNameAsync(userName);
+                await userManager.UpdateSecurityStampAsync(user);
+                log.LogError($"User {user.UserName} logout.");
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"{ ex.Message } - { ex.StackTrace }");
+            }
         }
 
         // не проверяет на валидность userToken, принимает только RefreshToken и возвращвет пару "userToken + RefreshToken"
         [HttpPost("refreshUserToken")]
         public async Task<IActionResult> RefreshUserToken([FromBody] string RefreshToken)
         {
-            var token = await _context.UserTokens.FirstOrDefaultAsync(refT => refT.Value == RefreshToken);// проверка есть ли токен в базе
-
-            if (token != null)
-            { 
-                user = await userManager.FindByIdAsync(token.UserId);
-
-                // new refresh token
-                await userManager.RemoveAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
-                var refresh_jwtToken = await userManager.GenerateUserTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
-                await userManager.SetAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken", refresh_jwtToken);
-
-                var userRoles = await userManager.GetRolesAsync(user);
-                var userPermissions = await userManager.GetClaimsAsync(user);// get UserClaims(Permissions)
-
-                IList<IdentityRole> roles = new List<IdentityRole>();
-                foreach (var item in userRoles)
-                {
-                    roles.Add(await roleManager.FindByNameAsync(item));
-                }
-
-                IList<Claim> rolePermissions = new List<Claim>();
-                foreach (var item in roles)
-                {
-                    var claims = await roleManager.GetClaimsAsync(item);
-                    foreach (var claim in claims)
-                    {
-                        rolePermissions.Add(claim); // get RoleClaims(Permissions)
-                    }
-                }
-                var permissoins = userPermissions.Union(rolePermissions).ToList();// all permissions (role + user)
-
-                string access_jwtToken = TokenFactory.GenerateAccessToken(user, permissoins);
-
-                return new JsonResult(new { access_jwtToken, refresh_jwtToken });
-            }
-            else
+            try
             {
-                log.LogError($"Invalid refresh token");
-                return new JsonResult(new { result = "Invalid refresh token" });
+                var token = await _context.UserTokens.FirstOrDefaultAsync(refT => refT.Value == RefreshToken);// проверка есть ли токен в базе
+
+                if (token != null)
+                {
+                    user = await userManager.FindByIdAsync(token.UserId);
+
+                    // new refresh token
+                    await userManager.RemoveAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
+                    var refresh_jwtToken = await userManager.GenerateUserTokenAsync(user, AuthOptions.ISSUER, "RefreshToken");
+                    await userManager.SetAuthenticationTokenAsync(user, AuthOptions.ISSUER, "RefreshToken", refresh_jwtToken);
+
+                    var userRoles = await userManager.GetRolesAsync(user);
+                    var userPermissions = await userManager.GetClaimsAsync(user);// get UserClaims(Permissions)
+
+                    IList<IdentityRole> roles = new List<IdentityRole>();
+                    foreach (var item in userRoles)
+                    {
+                        roles.Add(await roleManager.FindByNameAsync(item));
+                    }
+
+                    IList<Claim> rolePermissions = new List<Claim>();
+                    foreach (var item in roles)
+                    {
+                        var claims = await roleManager.GetClaimsAsync(item);
+                        foreach (var claim in claims)
+                        {
+                            rolePermissions.Add(claim); // get RoleClaims(Permissions)
+                        }
+                    }
+                    var permissoins = userPermissions.Union(rolePermissions).ToList();// all permissions (role + user)
+
+                    string access_jwtToken = TokenFactory.GenerateAccessToken(user, permissoins);
+
+                    return new JsonResult(new { access_jwtToken, refresh_jwtToken });
+                }
+                else
+                {
+                    return new JsonResult(new { result = "Invalid refresh token" });
+                }
+            }
+            catch (Exception ex)
+            {
+                string mess = $"{ ex.Message } - { ex.StackTrace }";
+                log.LogError(mess);
+                return new JsonResult(new { mess });
             }
         }
 
@@ -259,22 +294,31 @@ namespace Identity.Controllers
         [HttpPost("forgotPassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var user = await userManager.FindByEmailAsync(model.Email);
-                if (user == null)
+                if (ModelState.IsValid)
                 {
-                    return new JsonResult(new { result = "Invalid email." });
-                }
+                    var user = await userManager.FindByEmailAsync(model.Email);
+                    if (user == null)
+                    {
+                        return new JsonResult(new { result = "Invalid email." });
+                    }
 
-                var code = await userManager.GeneratePasswordResetTokenAsync(user);
-                var url = Url.Action("ResetPassword", "Authentication", new { userId = user.Id, token = code }, protocol: HttpContext.Request.Scheme);
-                EmailService emailService = new EmailService();
-                await emailService.SendEmailAsync(model.Email, "Reset Password",
-                    $"Follow the link: <a href='{url}'>link</a>");
-                return new JsonResult(new { result = url });
+                    var code = await userManager.GeneratePasswordResetTokenAsync(user);
+                    var url = Url.Action("ResetPassword", "Authentication", new { userId = user.Id, token = code }, protocol: HttpContext.Request.Scheme);
+                    EmailService emailService = new EmailService();
+                    await emailService.SendEmailAsync(model.Email, "Reset Password",
+                        $"Follow the link: <a href='{url}'>link</a>");
+                    return new JsonResult(new { result = url });
+                }
+                return new JsonResult(new { result = "Invalid email." });
             }
-            return new JsonResult(new { result = "Invalid email." });
+            catch (Exception ex)
+            {
+                string mess = $"{ ex.Message } - { ex.StackTrace }";
+                log.LogError(mess);
+                return new JsonResult(new { mess });
+            }
         }
 
 
@@ -282,22 +326,31 @@ namespace Identity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
         {
-            var user = await userManager.FindByEmailAsync(model.Email);
-            if (user == null)
+            try
             {
-                return new JsonResult(new { result = "Invalid user." });
+                var user = await userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    return new JsonResult(new { result = "Invalid user." });
+                }
+                var result = await userManager.ResetPasswordAsync(user, model.Code, model.Password);
+                if (result.Succeeded)
+                {
+                    return new JsonResult(new { result = "Password was changed." });
+                }
+                string errors = null;
+                foreach (var error in result.Errors)
+                {
+                    errors += error.Description;
+                }
+                return new JsonResult(new { result = errors });
             }
-            var result = await userManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (result.Succeeded)
+            catch (Exception ex)
             {
-                return new JsonResult(new { result = "Password was changed." });
+                string mess = $"{ ex.Message } - { ex.StackTrace }";
+                log.LogError(mess);
+                return new JsonResult(new { mess });
             }
-            string errors = null;
-            foreach (var error in result.Errors)
-            {
-                errors += error.Description;
-            }
-            return new JsonResult(new { result = errors });
         }
     }
 }
