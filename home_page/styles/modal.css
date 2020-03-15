@@ -25,6 +25,11 @@
     height: 219px;
 }
 
+.recover { /*for recover-password.html*/
+    width: 386px;
+    height: 182px;
+}
+
 .modal-content {
     height: 100%;
     display: flex;
@@ -96,11 +101,18 @@
 }
 
 .registration-heading p {
-    margin: 0;
+    margin: 0 auto;
 }
 
 .registration-heading a, .green-text {
     color: #2C473E;
+}
+
+.recover-text { /*for recover-password.html*/
+    color: #2C473E;
+    text-align: center;
+    line-height: 28px;
+    font-weight: 300;
 }
 
 .input-container {
