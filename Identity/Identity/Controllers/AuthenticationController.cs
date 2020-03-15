@@ -108,15 +108,15 @@ namespace Identity.Controllers
             return new JsonResult(new {result = "Invalid Data" });
         }
 
-        //[HttpPost]
-        ////[ValidateAntiForgeryToken]
-        //public async Task<JsonResult> ExternalLogin(string provider)
-        //{
-        //    string returnUrl = null;
-        //    var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
-        //    var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-        //    return new JsonResult(new { message = "LOG" });
-        //}
+        [HttpPost]
+        [Route("signin-google")]
+        [ValidateAntiForgeryToken]
+        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
+            var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return new JsonResult(new { message = "LOG" });
+        }
 
         [HttpGet]
         public async Task<JsonResult> ExternalLoginCallback(string returnUrl = null)
@@ -146,59 +146,59 @@ namespace Identity.Controllers
             }
         }
 
-        [HttpPost]
+        //[HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<JsonResult> ExternalLoginConfirmation(ExternalLoginModel model, string returnUrl = null)
-        {
-            if (!ModelState.IsValid)
-                return new JsonResult(new { mess = "Invalid data" });
+        //public async Task<JsonResult> ExternalLoginConfirmation(ExternalLoginModel model, string returnUrl = null)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return new JsonResult(new { mess = "Invalid data" });
 
-            var info = await signInManager.GetExternalLoginInfoAsync();
-            if (info == null)
-                return new JsonResult(new { mess = "Invalid data" });
+        //    var info = await signInManager.GetExternalLoginInfoAsync();
+        //    if (info == null)
+        //        return new JsonResult(new { mess = "Invalid data" });
 
-            var user = await userManager.FindByEmailAsync(model.Email);
-            IdentityResult result;
+        //    var user = await userManager.FindByEmailAsync(model.Email);
+        //    IdentityResult result;
 
-            if (user != null)
-            {
-                result = await userManager.AddLoginAsync(user, info);
-                if (result.Succeeded)
-                {
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    return new JsonResult(new { mess = "Login seccidded" });
-                }
-            }
-            else
-            {
-                model.Principal = info.Principal;
-                user = new IdentityUser
-                {
-                    UserName = model.Email
-                };
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<IdentityUser, ExternalLoginModel>());
-                var mapper = new Mapper(config);
-                user = mapper.Map<IdentityUser>(model);
-                result = await userManager.CreateAsync(user);
-                if (result.Succeeded)
-                {
-                    result = await userManager.AddLoginAsync(user, info);
-                    if (result.Succeeded)
-                    {
-                        //TODO: Send an emal for the email confirmation and add a default role as in the Register action
-                        await signInManager.SignInAsync(user, isPersistent: false);
-                        return new JsonResult(new { mess = "Registr and Login seccidded" }); ;
-                    }
-                }
-            }
+        //    if (user != null)
+        //    {
+        //        result = await userManager.AddLoginAsync(user, info);
+        //        if (result.Succeeded)
+        //        {
+        //            await signInManager.SignInAsync(user, isPersistent: false);
+        //            return new JsonResult(new { mess = "Login seccidded" });
+        //        }
+        //    }
+        //    else
+        //    {
+        //        model.Principal = info.Principal;
+        //        user = new IdentityUser
+        //        {
+        //            UserName = model.Email
+        //        };
+        //        var config = new MapperConfiguration(cfg => cfg.CreateMap<IdentityUser, ExternalLoginModel>());
+        //        var mapper = new Mapper(config);
+        //        user = mapper.Map<IdentityUser>(model);
+        //        result = await userManager.CreateAsync(user);
+        //        if (result.Succeeded)
+        //        {
+        //            result = await userManager.AddLoginAsync(user, info);
+        //            if (result.Succeeded)
+        //            {
+        //                //TODO: Send an emal for the email confirmation and add a default role as in the Register action
+        //                await signInManager.SignInAsync(user, isPersistent: false);
+        //                return new JsonResult(new { mess = "Registr and Login seccidded" }); ;
+        //            }
+        //        }
+        //    }
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.TryAddModelError(error.Code, error.Description);
-            }
+        //    foreach (var error in result.Errors)
+        //    {
+        //        ModelState.TryAddModelError(error.Code, error.Description);
+        //    }
 
-            return new JsonResult(new { model }); ;
-        }
+        //    return new JsonResult(new { model }); ;
+        //}
 
 
         [HttpGet]
