@@ -30,7 +30,7 @@ namespace Entities.Models
             //var connectionString = ConfigurationManager.AppSettings.Get("DefaultConnection");
             //var connectionString = configure["ConnectionStrings:DefaultConnection"];
             optionsBuilder.UseSqlServer(
-                "Data Source=SQL5050.site4now.net;Initial Catalog=DB_A54339_betterplanDBTest;User Id=DB_A54339_betterplanDBTest_admin;Password=betterplan2020;");
+                "Data Source=SQL5052.site4now.net;Initial Catalog=DB_A56840_betterplanDBTest;User Id=DB_A56840_betterplanDBTest_admin;Password=betterplan2020;");
         }
     }
 }

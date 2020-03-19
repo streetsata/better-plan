@@ -12,8 +12,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Entities.ViewModels
 {
-
-
     /// <summary>
     /// Модель для публикации поста
     /// </summary>
@@ -30,36 +28,14 @@ namespace Entities.ViewModels
         public String post_text { get; set; }
 
         /// <summary>
-        /// ID места приклепленному к посту
-        /// </summary>
-        public String place { get; set; }
-
-        /// <summary>
         /// Id поста в facebook
         /// </summary>
         public string FacebookPostId { get; set; }
-
-        ///// <summary>
-        ///// действие к посту
-        ///// </summary>
-        //public String action { get; set; }
-
-        ///// <summary>
-        ///// действие к посту2
-        ///// </summary>
-        //public String objectAction { get; set; }
-
-        ///// <summary>
-        ///// иконка к посту 
-        ///// </summary>
-        //public String icon { get; set; }
-
 
         /// <summary>
         /// List картинок(array bte)
         /// </summary>
         public List<Object> ImagesURLList { get; set; }
-
 
         /// <summary>
         /// Публиковать пост
@@ -70,6 +46,21 @@ namespace Entities.ViewModels
         /// Публикуется отложенный пост
         /// </summary>
         public Boolean isWaiting { get; set; }
+
+        /// <summary>
+        /// Время сохранения поста
+        /// </summary>
+        public DateTime? SaveCreateDateTime { get; set; }
+
+        /// <summary>
+        /// Время изменения поста
+        /// </summary>
+        public DateTime? SaveUpdateDateTime { get; set; }
+
+        /// <summary>
+        /// Время Удаления поста
+        /// </summary>
+        public DateTime? SaveDeleteDateTime { get; set; }
 
         /// <summary>
         /// Время создания поста
@@ -91,7 +82,6 @@ namespace Entities.ViewModels
         /// </summary>
         public DateTime? WhenCreateDateTime { get; set; }
 
-
         /// <summary>
         /// Статус публикации
         /// </summary>
@@ -107,7 +97,6 @@ namespace Entities.ViewModels
             this.PostId = post.PostId;
             this.FacebookPostId = post.FacebookPostId;
             this.post_text = post.Text;
-            this.place = post.Place;
 
             if (post.ImagesListJSON != null && !isPosing)
             {
@@ -119,6 +108,9 @@ namespace Entities.ViewModels
             this.CreateDateTime = post.CreateDateTime;
             this.UpdateDateTime = post.UpdateDateTime;
             this.DeleteDateTime = post.DeleteDateTime;
+            this.SaveCreateDateTime = post.SaveCreateDateTime;
+            this.SaveUpdateDateTime = post.SaveUpdateDateTime;
+            this.SaveDeleteDateTime = post.SaveDeleteDateTime;
             this.WhenCreateDateTime = post.WhenCreateDateTime;
             this.status = post.status;
 

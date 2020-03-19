@@ -214,6 +214,88 @@ namespace Entities.Models
             }
         }
 
+        public async Task<Tuple<int, string>> PostToFacebookAsync(PostViewModelFiles post)
+        {
+
+            using (var http = new HttpClient())
+            {
+                var data = new Dictionary<string, string> {
+                    { "access_token", _pageAccessToken }
+                };
+
+                if (post.post_text != null)
+                {
+                    data.Add("message", post.post_text);
+                }
+
+                //if (post.action != null && post.objectAction != null)
+                //{
+                //    data.Add("og_action_type_id", post.action);
+                //    data.Add("og_object_id", post.objectAction);
+                //    if (post.icon != null)
+                //    {
+                //        data.Add("og_icon_id", post.icon);
+                //    }
+                //}
+
+                if (post.ImagesListIFormFile != null)
+                {
+                    RestClient client = new RestClient(_photosPageURL);
+                    RestRequest request;
+                    List<string> idList = new List<string>();
+
+                    for (int i = 0; i < post.ImagesListIFormFile.Count; i++)
+                    {
+                        if (post.ImagesListIFormFile[i].Length > 0)
+                        {
+                            using (var ms = new MemoryStream())
+                            {
+                                post.ImagesListIFormFile[i].CopyTo(ms);
+                                byte[] bytes = ms.ToArray();
+                                // act on the Base64 data
+                                request = new RestRequest(Method.POST);
+                                request.AddFileBytes($"{post.ImagesListIFormFile[i].Name}+{i}", bytes, post.ImagesListIFormFile[i].FileName, "multipart/form-data");
+                                request.AddParameter("published", false);
+                                request.AddParameter("access_token", _pageAccessToken);
+                                var resp = client.Post(request);
+                                var rezImageJson = JObject.Parse(resp.Content);
+                                string postID = rezImageJson["id"].Value<string>();
+
+                                idList.Add(postID);
+                            }
+                        }
+                    }
+
+                    var postImagesData = new List<Object>();
+
+                    request = new RestRequest(Method.POST);
+
+                    for (int i = 0; i < idList.Count; i++)
+
+                    {
+                        postImagesData.Add(new { media_fbid = idList[i].ToString() });
+                    }
+                    string json = JsonConvert.SerializeObject(postImagesData);
+
+                    data.Add("attached_media", json);
+
+                    // В идеале вот это одна строчка
+                    //data.Add("attached_media", ListJSON);
+                }
+
+                var httpResponse = await http.PostAsync(_feedPageURL, new FormUrlEncodedContent(data));
+                var httpContent = await httpResponse.Content.ReadAsStringAsync();
+
+                var Json = JObject.Parse(httpContent);
+                if (Json["error"] != null)
+                {
+                    return new Tuple<int, string>(400, Json["error"]["message"].ToString());
+                }
+
+                return new Tuple<int, string>(200, Json["id"].ToString());
+            }
+        }
+
 
 
         /// <summary>
@@ -234,14 +316,7 @@ namespace Entities.Models
                 {
                     data.Add("message", editPost.edit_text);
                 }
-
-                //надо узнать можно ли менять place
-                if (editPost.place != null)
-                {
-                    data.Add("place", editPost.place);
-                }
-
-
+                
                 var httpResponse = await http.PostAsync($"{_facebookAPI}{editPost.FacebookPostId}", new FormUrlEncodedContent(data));
                 var httpContent = await httpResponse.Content.ReadAsStringAsync();
 

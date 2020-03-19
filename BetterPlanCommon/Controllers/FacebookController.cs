@@ -54,13 +54,10 @@ namespace BetterPlan.Controllers
             _logger.LogInfo("GET /api/v1/USERS");
             try
             {
-                //_logger.LogWarn("TEST WARM");
-                //throw new Exception();
                 var result = _bpApi.GetUsers();
                 var res = result.Value;
                 _logger.LogInfo($"GET JsonResult: {res}");
                 return result;
-
             }
             catch (Exception e)
             {
@@ -75,6 +72,7 @@ namespace BetterPlan.Controllers
         /// <param name="userId">ID Пользователя</param>
         /// <returns></returns>
         /// <response code="200">
+        /// 
         /// Sample response:
         /// 
         ///     {
@@ -82,7 +80,6 @@ namespace BetterPlan.Controllers
         ///         {
         ///             "postId": Int32,
         ///             "post_text": "string",
-        ///             "place": "string",
         ///             "facebookPostId": "string",
         ///             "imagesURLList":
         ///             [
@@ -91,9 +88,12 @@ namespace BetterPlan.Controllers
         ///             ],
         ///             "isPosting": false,
         ///             "isWaiting": false,
-        ///             "createDateTime": "DATETIME2" or null,
-        ///             "updateDateTime": "DATETIME2" or null,
-        ///             "deleteDateTime": "DATETIME2" or null,
+        ///             "CreateDateTime": "DATETIME2" or null,
+        ///             "UpdateDateTime": "DATETIME2" or null,
+        ///             "DeleteDateTime": "DATETIME2" or null,
+        ///             "SaveCreateDateTime": "DATETIME2" or null,
+        ///             "SaveUpdateDateTime": "DATETIME2" or null,
+        ///             "SaveDeleteDateTime": "DATETIME2" or null,
         ///             "whenCreateDateTime": "DATETIME2" or null,
         ///             "status": Int32
         ///         }
@@ -125,23 +125,75 @@ namespace BetterPlan.Controllers
         /// Публикует пост на Facebook
         /// </summary>
         /// <remarks>
+        /// Публикует новый пост (текст) в Facebook, пост сохраняется в DB 
+        /// 
         /// Sample request:
-        ///
+        /// 
         ///     POST /{id}/POST
         ///     {
-        ///             "postId": null,
-        ///             "post_text": "string",
-        ///             "place": "string",
-        ///             "facebookPostId": "string",
-        ///             "isPosting": true,
-        ///             "ImagesListIFormFile": null,
-        ///             "isWaiting": false,
-        ///             "createDateTime": "DATETIME2" or null,
-        ///             "updateDateTime": "DATETIME2" or null,
-        ///             "deleteDateTime": "DATETIME2" or null,
-        ///             "whenCreateDateTime": "DATETIME2" or null,
-        ///             "status": Int32 or null
+        ///       [
+        ///         {
+        ///             "post_text": "string"
+        ///         }
+        ///       ]
         ///     }
+        ///<response code="200">
+        /// Sample response:
+        /// 
+        ///     {
+        ///         "status": "OK",
+        ///         "facebookPostId": "id"
+        ///     }
+        /// 
+        /// </response>
+        ///
+        /// -----------------------------------------------------------------------
+        /// Публикует отложенный новый пост (текст) в Facebook, пост сохраняется в DB 
+        /// 
+        /// Sample request:
+        /// 
+        ///     POST /{id}/POST
+        ///     {
+        ///       [
+        ///         {
+        ///             "post_text": "string",
+        ///             "WhenCreateDateTime": "DATETIME2" ("2020-03-07T00:37:00"),
+        ///             "isWaiting": true
+        ///         }
+        ///       ]
+        ///     }
+        ///<response code="200">
+        /// Sample response:
+        /// 
+        ///     {
+        ///         "status": "Wait",
+        ///         "post_id": ""
+        ///     }
+        /// 
+        /// </response>
+        /// -----------------------------------------------------------------------
+        /// Перезапишет существующий пост в DB и потом опубликует его в Facebook
+        ///
+        /// Sample request:
+        /// 
+        ///     POST /{id}/POST
+        ///     {
+        ///       [
+        ///         {
+        ///             "postId": Int32,
+        ///             "post_text": "string"
+        ///         }
+        ///       ]
+        ///     }
+        ///<response code="200">
+        /// Sample response:
+        /// 
+        ///     {
+        ///         "status": "OK",
+        ///         "facebookPostId": "id"
+        ///     }
+        /// 
+        /// </response>
         ///
         /// </remarks>
         /// <param name="post"></param>
@@ -188,23 +240,78 @@ namespace BetterPlan.Controllers
         /// Публикует пост на Facebook c picture
         /// </summary>
         /// <remarks>
+        /// Публикует новый пост в Facebook, пост сохраняется в DB 
+        /// 
         /// Sample request:
-        ///
+        /// 
         ///     POST /{id}/POST
         ///     {
-        ///             "postId": null,
+        ///       [
+        ///         {
         ///             "post_text": "string",
-        ///             "place": "string",
-        ///             "facebookPostId": "string",
-        ///             "isPosting": true,
-        ///             "ImagesListIFormFile": [],
-        ///             "isWaiting": false,
-        ///             "createDateTime": "DATETIME2" or null,
-        ///             "updateDateTime": "DATETIME2" or null,
-        ///             "deleteDateTime": "DATETIME2" or null,
-        ///             "whenCreateDateTime": "DATETIME2" or null,
-        ///             "status": Int32 or null
+        ///             "ImagesListIFormFile": []
+        ///         }
+        ///       ]
         ///     }
+        ///<response code="200">
+        /// Sample response:
+        /// 
+        ///     {
+        ///         "status": "OK",
+        ///         "facebookPostId": "id"
+        ///     }
+        /// 
+        /// </response>
+        ///
+        /// -----------------------------------------------------------------------
+        /// Публикует отложенный новый пост (текст) в Facebook, пост сохраняется в DB 
+        /// 
+        /// Sample request:
+        /// 
+        ///     POST /{id}/POST
+        ///     {
+        ///       [
+        ///         {
+        ///             "post_text": "string",
+        ///             "ImagesListIFormFile": [],
+        ///             "WhenCreateDateTime": "DATETIME2" ("2020-03-07T00:37:00"),
+        ///             "isWaiting": true
+        ///         }
+        ///       ]
+        ///     }
+        ///<response code="200">
+        /// Sample response:
+        /// 
+        ///     {
+        ///         "status": "Wait",
+        ///         "post_id": ""
+        ///     }
+        /// 
+        /// </response>
+        /// -----------------------------------------------------------------------
+        /// Перезапишет существующий пост в DB и потом опубликует его в Facebook
+        ///
+        /// Sample request:
+        /// 
+        ///     POST /{id}/POST
+        ///     {
+        ///       [
+        ///         {
+        ///             "postId": Int32,
+        ///             "post_text": "string",
+        ///             "ImagesListIFormFile": []
+        ///         }
+        ///       ]
+        ///     }
+        ///<response code="200">
+        /// Sample response:
+        /// 
+        ///     {
+        ///         "status": "OK",
+        ///         "facebookPostId": "id"
+        ///     }
+        /// 
+        /// </response>
         ///
         /// </remarks>
         /// <param name="post"></param>
@@ -228,7 +335,7 @@ namespace BetterPlan.Controllers
         ///     }
         /// </response>
         [HttpPost("USER/{userId}/POSTIMAGE")]
-        public async Task<JsonResult> PostFromImages(string userId, PostViewModel post)
+        public async Task<JsonResult> PostFromImages(string userId, PostViewModelFiles post)
         {
             _logger.LogInfo($"POST /api/v1/USER/{userId}/POSTIMAGE {post}");
             try
@@ -252,41 +359,55 @@ namespace BetterPlan.Controllers
         /// Сохранение поста в DB
         /// </summary>
         /// <remarks>
+        /// Сохраняет новый пост в DB
+        /// 
         /// Sample request:
-        ///
-        ///     POST /{id}/POST
+        /// 
+        ///     POST /{id}/SavePost
         ///     {
         ///       [
         ///         {
-        ///             "postId": null,
-        ///             "post_text": "string",
-        ///             "place": "string",
-        ///             "facebookPostId": "string",
-        ///             "ImagesListIFormFile": null,
-        ///             "isPosting": false,
-        ///             "isWaiting": false,
-        ///             "createDateTime": "DATETIME2" or null,
-        ///             "updateDateTime": "DATETIME2" or null,
-        ///             "deleteDateTime": "DATETIME2" or null,
-        ///             "whenCreateDateTime": "DATETIME2" or null,
-        ///             "status": Int32
+        ///             "post_text": "string"
         ///         }
         ///       ]
         ///     }
+        ///<response code="200">
+        /// Sample response:
+        /// 
+        ///     {
+        ///         "status": "OK",
+        ///         "PostId": int32
+        ///     }
+        /// 
+        /// </response>
+        /// -----------------------------------------------------------------------
+        /// Изменит существующий пост в DB
+        ///
+        /// Sample request:
+        /// 
+        ///     POST /{id}/SavePost
+        ///     {
+        ///       [
+        ///         {
+        ///             "postId": Int32,
+        ///             "post_text": "string"
+        ///         }
+        ///       ]
+        ///     }
+        ///<response code="200">
+        /// Sample response:
+        /// 
+        ///     {
+        ///         "status": "OK",
+        ///         "PostId": int32
+        ///     }
+        /// 
+        /// </response>
         ///
         /// </remarks>
         /// <param name="post"></param>
         /// <param name="userId">ID Пользователя</param>
         /// <returns></returns>
-        /// <response code="200">
-        /// Sample response:
-        /// 
-        ///     {
-        ///         "status": "OK",
-        ///         "post_id": "id"
-        ///     }
-        /// 
-        /// </response>
         /// <response code="400">
         /// Error response:
         /// 
@@ -297,7 +418,7 @@ namespace BetterPlan.Controllers
         /// </response>
         [HttpPost("USER/{userId}/SavePost")]
         [Produces("application/json")]
-        public async Task<JsonResult> SavePostDB(string userId, [FromBody] PostViewModel post)
+        public async Task<JsonResult> SavePostDB(string userId, [FromBody] SaveViewModel post)
         {
             _logger.LogInfo($"SavePostDB /api/v1/USER/{userId}/SavePost [Body] {post}");
             try
@@ -319,29 +440,55 @@ namespace BetterPlan.Controllers
         /// Сохранение поста в DB c picture
         /// </summary>
         /// <remarks>
+        /// Создаст новый пост в DB
+        /// 
         /// Sample request:
-        ///
-        ///     POST /{id}/POST
+        /// 
+        ///     POST /{id}/SavePost
         ///     {
         ///       [
         ///         {
-        ///             "postId": null,
         ///             "post_text": "string",
-        ///             "place": "string",
-        ///             "facebookPostId": "string",
-        ///             "ImagesListIFormFile": [],
-        ///             "isPosting": false,
-        ///             "isWaiting": false,
-        ///             "createDateTime": "DATETIME2" or null,
-        ///             "updateDateTime": "DATETIME2" or null,
-        ///             "deleteDateTime": "DATETIME2" or null,
-        ///             "whenCreateDateTime": "DATETIME2" or null,
-        ///             "status": Int32
+        ///             "ImagesListIFormFile": []
         ///         }
         ///       ]
         ///     }
+        ///<response code="200">
+        /// Sample response:
+        /// 
+        ///     {
+        ///         "status": "OK",
+        ///         "PostId": int32
+        ///     }
+        /// 
+        /// </response>
+        /// -----------------------------------------------------------------------
+        /// Изменит существующий пост в DB
+        ///
+        /// Sample request:
+        /// 
+        ///     POST /{id}/SavePost
+        ///     {
+        ///       [
+        ///         {
+        ///             "postId": Int32,
+        ///             "post_text": "string",
+        ///             "ImagesListIFormFile": []
+        ///         }
+        ///       ]
+        ///     }
+        ///<response code="200">
+        /// Sample response:
+        /// 
+        ///     {
+        ///         "status": "OK",
+        ///         "PostId": int32
+        ///     }
+        /// 
+        /// </response>
         ///
         /// </remarks>
+        /// 
         /// <param name="post"></param>
         /// <param name="userId">ID Пользователя</param>
         /// <returns></returns>
@@ -363,7 +510,7 @@ namespace BetterPlan.Controllers
         ///     }
         /// </response>
         [HttpPost("USER/{userId}/SavePostImages")]
-        public async Task<JsonResult> SavePostDBImages(string userId, PostViewModel post)
+        public async Task<JsonResult> SavePostDBImages(string userId, SaveViewModelFiles post)
         {
             _logger.LogInfo($"SavePostDBImages /api/v1/USER/{userId}/SavePost [Body] {post}");
             try

@@ -35,9 +35,19 @@ namespace Entities.Models
         public string Text { get; set; }
 
         /// <summary>
-        /// ID места приклепленному к посту
+        /// Время сохранения поста
         /// </summary>
-        public string Place { get; set; }
+        public DateTime? SaveCreateDateTime { get; set; }
+
+        /// <summary>
+        /// Время изменения поста
+        /// </summary>
+        public DateTime? SaveUpdateDateTime { get; set; }
+
+        /// <summary>
+        /// Время Удаления поста
+        /// </summary>
+        public DateTime? SaveDeleteDateTime { get; set; }
 
         /// <summary>
         /// Время создания поста
@@ -93,15 +103,40 @@ namespace Entities.Models
             this.UserId = userId;
 
             this.Text = postViewModel.post_text;
-            this.Place = postViewModel.place;
-
-            this.CreateDateTime = postViewModel.CreateDateTime;
-            this.UpdateDateTime = postViewModel.UpdateDateTime;
-            this.DeleteDateTime = postViewModel.DeleteDateTime;
 
             this.IsDelete = false;
             this.isPosting = postViewModel.isPosting;
-            this.status = postViewModel.status;
+            this.WhenCreateDateTime = postViewModel.WhenCreateDateTime;
+
+            if (postViewModel.ImagesListIFormFile != null)
+            {
+                if (postViewModel.ImagesURLList == null)
+                {
+                    this.ImagesListJSON = JsonConvert.SerializeObject(this.ImgJSON(postViewModel.ImagesListIFormFile).Result, Formatting.None);
+                }
+                else
+                {
+                    var res = this.ImgJSON(postViewModel.ImagesListIFormFile).Result;
+                    var list = postViewModel.ImagesURLList;
+                    for (int i = 0; i < res.Count; i++)
+                    {
+                        list.Add(res[i]);
+                    }
+                    this.ImagesListJSON = JsonConvert.SerializeObject(list, Formatting.None);
+                }
+
+            }
+
+        }
+
+        public Post(string userId, PostViewModelFiles postViewModel)
+        {
+            this.UserId = userId;
+
+            this.Text = postViewModel.post_text;
+
+            this.IsDelete = false;
+            this.isPosting = postViewModel.isPosting;
             this.WhenCreateDateTime = postViewModel.WhenCreateDateTime;
 
             if (postViewModel.ImagesListIFormFile != null)
@@ -130,20 +165,106 @@ namespace Entities.Models
 
         }
 
+        public Post(string userId, SaveViewModelFiles saveViewModel)
+        {
+            this.UserId = userId;
+
+            this.Text = saveViewModel.post_text;
+
+            if (saveViewModel.ImagesListIFormFile != null)
+            {
+                if (saveViewModel.ImagesURLList == null)
+                {
+                    this.ImagesListJSON = JsonConvert.SerializeObject(this.ImgJSON(saveViewModel.ImagesListIFormFile).Result, Formatting.None);
+                }
+                else
+                {
+                    var res = this.ImgJSON(saveViewModel.ImagesListIFormFile).Result;
+                    var list = saveViewModel.ImagesURLList;
+                    for (int i = 0; i < res.Count; i++)
+                    {
+                        list.Add(res[i]);
+                    }
+                    this.ImagesListJSON = JsonConvert.SerializeObject(list, Formatting.None);
+                }
+
+            }
+        }
+
+        public Post(string userId, SaveViewModel saveViewModel)
+        {
+            this.UserId = userId;
+            this.Text = saveViewModel.post_text;
+        }
+
 
         public void Copy(PostViewModel model)
         {
             this.Text = model.post_text;
-            this.Place = model.place;
-
-            this.CreateDateTime = model.CreateDateTime;
-            this.UpdateDateTime = model.UpdateDateTime;
-            this.DeleteDateTime = model.DeleteDateTime;
 
             this.IsDelete = false;
             this.isPosting = model.isPosting;
-            this.status = model.status;
             this.WhenCreateDateTime = model.WhenCreateDateTime;
+
+            if (model.ImagesListIFormFile != null)
+            {
+                if (model.ImagesURLList == null)
+                {
+                    this.ImagesListJSON = JsonConvert.SerializeObject(this.ImgJSON(model.ImagesListIFormFile).Result, Formatting.None);
+                }
+                else
+                {
+                    var res = this.ImgJSON(model.ImagesListIFormFile).Result;
+                    var list = model.ImagesURLList;
+                    for (int i = 0; i < res.Count; i++)
+                    {
+                        list.Add(res[i]);
+                    }
+                    this.ImagesListJSON = JsonConvert.SerializeObject(list, Formatting.None);
+                }
+
+            }
+        }
+
+        public void Copy(PostViewModelFiles model)
+        {
+            this.Text = model.post_text;
+
+            this.IsDelete = false;
+            this.isPosting = model.isPosting;
+            this.WhenCreateDateTime = model.WhenCreateDateTime;
+
+            if (model.ImagesListIFormFile != null)
+            {
+                if (model.ImagesURLList == null)
+                {
+                    this.ImagesListJSON = JsonConvert.SerializeObject(this.ImgJSON(model.ImagesListIFormFile).Result, Formatting.None);
+                }
+                else
+                {
+                    var res = this.ImgJSON(model.ImagesListIFormFile).Result;
+                    var list = model.ImagesURLList;
+                    for (int i = 0; i < res.Count; i++)
+                    {
+                        list.Add(res[i]);
+                    }
+                    this.ImagesListJSON = JsonConvert.SerializeObject(list, Formatting.None);
+                }
+
+            }
+        }
+
+        public void Copy(SaveViewModel model)
+        {
+            this.Text = model.post_text;
+            this.IsDelete = false;
+        }
+
+        public void Copy(SaveViewModelFiles model)
+        {
+            this.Text = model.post_text;
+
+            this.IsDelete = false;
 
             if (model.ImagesListIFormFile != null)
             {

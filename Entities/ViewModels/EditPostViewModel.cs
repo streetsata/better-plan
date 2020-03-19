@@ -21,9 +21,6 @@ namespace Entities.ViewModels
         /// </summary>
         [Required]
         public string edit_text { get; set; }
-        /// <summary>
-        /// ID места приклепленному к посту
-        /// </summary>
-        public string place { get; set; }
+
     }
 }

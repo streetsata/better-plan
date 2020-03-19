@@ -22,8 +22,10 @@ namespace Entities.Models
         private Post _post;
 
         public delegate Task<Tuple<int, string>> MyDel(PostViewModel model);
+        public delegate Task<Tuple<int, string>> MyDelFiles(PostViewModelFiles model);
 
         private event MyDel MyEvent;
+        private event MyDelFiles MyEventFiles;
         public BetterPlanAPI(HttpResponse response, BetterPlanContext context, ILoggerManager logger)
         {
             _response = response;
@@ -68,17 +70,53 @@ namespace Entities.Models
             }
         }
 
+        public async void PublishPostDelay(PostViewModelFiles model)
+        {
+
+            using (var context = new BetterPlanContext())
+            {
+
+                DateTime now = DateTime.UtcNow;
+                PostViewModelFiles postViewModel = model;
+                await Task.Delay(model.WhenCreateDateTime.GetValueOrDefault() - now);
+
+                Post resDB = await context.Posts.FirstOrDefaultAsync(id => id.PostId == postViewModel.PostId);
+                if (resDB.status == Status.Waiting && resDB.WhenCreateDateTime == postViewModel.WhenCreateDateTime && resDB.isPosting == true)
+                {
+                    var result = await MyEventFiles.Invoke(model);
+
+                    if (result.Item1 == 200)
+                    {
+                        resDB.CreateDateTime = DateTime.UtcNow;
+                        resDB.FacebookPostId = result.Item2;
+                        resDB.status = Status.Published;
+                    }
+                    else
+                    {
+                        resDB.status = Status.Error;
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
+
         /// <summary>
         /// Сохраняет пост на DВ
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<Tuple<Int32, Int32>> SavePost(string userId, PostViewModel model)
+        /// <remarks>
+        ///
+        /// 
+        /// </remarks>
+        public async Task<Tuple<Int32, Int32>> SavePost(string userId, SaveViewModel model)
         {
             if (model.PostId == null)
             {
                 Post postDB = new Post(userId, model);
+                postDB.SaveCreateDateTime = DateTime.UtcNow;
 
                 try
                 {
@@ -106,6 +144,7 @@ namespace Entities.Models
             {
                 Post resDB = await _db.Posts.FirstOrDefaultAsync(id => id.PostId == model.PostId);
                 resDB.Copy(model);
+                resDB.SaveUpdateDateTime = DateTime.UtcNow;
                 if (await _db.SaveChangesAsync() > 0)
                 {
                     return new Tuple<Int32, Int32>(200, model.PostId.Value);
@@ -116,6 +155,140 @@ namespace Entities.Models
                 }
             }
         }
+
+        public async Task<Tuple<Int32, Int32>> SavePost(string userId, SaveViewModelFiles model)
+        {
+            if (model.PostId == null)
+            {
+                Post postDB = new Post(userId, model);
+                postDB.SaveCreateDateTime = DateTime.UtcNow;
+                try
+                {
+                    var res = _db.Posts.Add(postDB);
+
+                    if (await _db.SaveChangesAsync() > 0)
+                    {
+                        //переделать не нравится
+                        Post post = await _db.Posts.FirstOrDefaultAsync(e => e.Text == postDB.Text);
+
+                        return new Tuple<Int32, Int32>(200, post.PostId);
+                    }
+                    else
+                    {
+                        return new Tuple<Int32, Int32>(400, -1);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    throw;
+                }
+            }
+            else
+            {
+                Post resDB = await _db.Posts.FirstOrDefaultAsync(id => id.PostId == model.PostId);
+                resDB.Copy(model);
+                resDB.SaveUpdateDateTime = DateTime.UtcNow;
+                if (await _db.SaveChangesAsync() > 0)
+                {
+                    return new Tuple<Int32, Int32>(200, model.PostId.Value);
+                }
+                else
+                {
+                    return new Tuple<Int32, Int32>(400, -1);
+                }
+            }
+        }
+
+        public async Task<Tuple<Int32, Int32>> SavePost(string userId, PostViewModel model)
+        {
+            if (model.PostId == null)
+            {
+                Post postDB = new Post(userId, model);
+                postDB.SaveCreateDateTime = DateTime.UtcNow;
+                try
+                {
+                    var res = _db.Posts.Add(postDB);
+
+                    if (await _db.SaveChangesAsync() > 0)
+                    {
+                        //переделать не нравится
+                        Post post = await _db.Posts.FirstOrDefaultAsync(e => e.Text == postDB.Text);
+
+                        return new Tuple<Int32, Int32>(200, post.PostId);
+                    }
+                    else
+                    {
+                        return new Tuple<Int32, Int32>(400, -1);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    throw;
+                }
+            }
+            else
+            {
+                Post resDB = await _db.Posts.FirstOrDefaultAsync(id => id.PostId == model.PostId);
+                resDB.Copy(model);
+                resDB.SaveUpdateDateTime = DateTime.UtcNow;
+                if (await _db.SaveChangesAsync() > 0)
+                {
+                    return new Tuple<Int32, Int32>(200, model.PostId.Value);
+                }
+                else
+                {
+                    return new Tuple<Int32, Int32>(400, -1);
+                }
+            }
+        }
+
+        public async Task<Tuple<Int32, Int32>> SavePost(string userId, PostViewModelFiles model)
+        {
+            if (model.PostId == null)
+            {
+                Post postDB = new Post(userId, model);
+                postDB.SaveCreateDateTime = DateTime.UtcNow;
+                try
+                {
+                    var res = _db.Posts.Add(postDB);
+
+                    if (await _db.SaveChangesAsync() > 0)
+                    {
+                        //переделать не нравится
+                        Post post = await _db.Posts.FirstOrDefaultAsync(e => e.Text == postDB.Text);
+
+                        return new Tuple<Int32, Int32>(200, post.PostId);
+                    }
+                    else
+                    {
+                        return new Tuple<Int32, Int32>(400, -1);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    throw;
+                }
+            }
+            else
+            {
+                Post resDB = await _db.Posts.FirstOrDefaultAsync(id => id.PostId == model.PostId);
+                resDB.Copy(model);
+                resDB.SaveUpdateDateTime = DateTime.UtcNow;
+                if (await _db.SaveChangesAsync() > 0)
+                {
+                    return new Tuple<Int32, Int32>(200, model.PostId.Value);
+                }
+                else
+                {
+                    return new Tuple<Int32, Int32>(400, -1);
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// Получает всех пользуватель из "импровизированной" (временно) базы данных 
@@ -138,6 +311,8 @@ namespace Entities.Models
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
+///<remarks>
+/// </remarks>
         public JsonResult GetUserPosts(string userId)
         {
             if (!TempUsersDb.ContainsKey(userId))
@@ -232,6 +407,62 @@ namespace Entities.Models
 
         }
 
+        /// <summary>
+        /// Публикует пост на бизнес странице пользователя
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="post"></param>
+        /// <returns></returns>
+        public async Task<JsonResult> UserPost(string userId, PostViewModelFiles post)
+        {
+            if (!TempUsersDb.ContainsKey(userId))
+            {
+                _response.StatusCode = 400;
+                return new JsonResult(new { status = "error", error_message = "Полученный id не существует!" });
+            }
+
+            var page = FacebookAPI.GetPageIdAndTokenAsync(TempUsersDb[userId]).Result;
+            //PostViewModel postView = post;
+
+            if (post.PostId == null)
+            {
+                var res = SavePost(userId, post).Result;
+                post.PostId = res.Item2;
+            }
+            else
+            {
+                _post = await _db.Posts.FirstOrDefaultAsync(id => id.PostId == post.PostId);
+                _post.Copy(post);
+                await _db.SaveChangesAsync();
+            }
+
+            Tuple<Int32, String> result;
+            FacebookAPI facebookApi = new FacebookAPI(page.Item2, page.Item1);
+
+            if (post.isWaiting == false)
+            {
+                result = new FacebookAPI(page.Item2, page.Item1).PostToFacebookAsync(post).Result;//??? 
+
+                if (result.Item1 == 200)
+                {
+                    _post = _db.Posts.FirstOrDefaultAsync(id => id.PostId == post.PostId).Result;
+                    _post.CreateDateTime = DateTime.UtcNow;
+                    _post.FacebookPostId = result.Item2;
+                    _post.status = Status.Published;
+                    await _db.SaveChangesAsync();
+                    return new JsonResult(new { status = "OK", post_id = result.Item2 });
+                }
+                return new JsonResult(new { status = "error", error_message = result.Item2 });
+            }
+            else
+            {
+                this.MyEventFiles += facebookApi.PostToFacebookAsync;
+                PublishPostDelay(post);
+                return new JsonResult(new { status = "Wait", post_id = "" });
+            }
+
+        }
+
         ///// <summary>
         ///// Публикует пост на бизнес странице пользователя
         ///// </summary>
@@ -310,10 +541,6 @@ namespace Entities.Models
                     model.Text = editPost.edit_text;
                 }
 
-                if (editPost.place != null)
-                {
-                    model.Place = editPost.place;
-                }
 
                 model.UpdateDateTime = DateTime.UtcNow;
 
@@ -383,18 +610,10 @@ namespace Entities.Models
 
         private static Dictionary<string, string> TempUsersDb = new Dictionary<string, string>() {
             { "100559284835939","EAAHD5fytWZAABADfTdcE8ZCp2d323x0YYgcaNMAfVGbNjtnCtKN9Ay9yBDBfnM2MkhzT5UQZBC0eDZBizgJEZCBgXZAxNXDFgAK1TN2ZCwPD6iLMpP6X8gSkQoN6YcFG39oZBgHz6U6OeOcOB41oLGNXQYVXJVeh4nfjhRCnuEde8CwQF83UYFee" },
-            { "895127244222164","EAAjnVI1sCkwBADWHQOeCunZCMMezGDc2Xit0rb4ZCM86gnOe78qMUtjwqkDel73hJPwilAZANenNKPufhXRFEbydLEplhSwIuRORFe4HICwflMQqVEyFR49c9VsgZCVsYFivZCmNYEOdCuXJ7auyVFZCN4eVBwqP2hFi8EvkfI7QZDZD" },/*,
-            {"2404663569642984","EAAiLB13fdegBALTQtH18dGlJ13ccl0tB8L9iXrQf5rOi9ZBzflcyRv7aYaPY7AO2aUKMWEyrAjKHdeSSHy9ZCZCdPx6jKqE9xJNfYHYDvZBd5gjIrvkp9mjmzPgnFd0ZAFTd2PhNpu5vf2rsyK9CUku2zM46vipxb7a61eBaNNPbcFCpCH3nx8APRf4Iy7fWhJmVjvtdrWgZDZD" }*/
+            { "895127244222164","EAAjnVI1sCkwBADWHQOeCunZCMMezGDc2Xit0rb4ZCM86gnOe78qMUtjwqkDel73hJPwilAZANenNKPufhXRFEbydLEplhSwIuRORFe4HICwflMQqVEyFR49c9VsgZCVsYFivZCmNYEOdCuXJ7auyVFZCN4eVBwqP2hFi8EvkfI7QZDZD" },
+            {"2404663569642984","EAAiLB13fdegBAKZBZCO29uWX9R6kYlKRCIS2bxxgsEcibfj1jV7HP8X86Ew5QIVZBrro2UolBjgeiug6z6rhDoiEZAvC5G1f2R5F6EX3ZCgiPk4GAGFk4ElaC7uRoaktbjowceVQfHuWixZAC3DF0z9EMqNipj4B04rGiyBDrLnWae4909mKbFeZCOcPwMYz8MfeSLEItqkPAZDZD" }
         };
 
-
-        // моя страничка
-        //private static Dictionary<string, string> TempUsersDb = new Dictionary<string, string>()
-        //{
-        //    {
-        //        "2404663569642984","EAAiLB13fdegBACqSIWtWZAsWCC9HDps2YuymmwLq6Yibnw3FahBDD0p4ziprGJgdDNdvNfeQgwixGki4P2rOtjwhOYq2v33dZC7ldiW7tZBH5ZAxVTt7GmhloD8XEFqc66yZCxHR2aEoQ9laNnrpmG8CfRSjWVnFrxxP2zlzu1cgMX06VXZCC5CrbmTR5I9IueUx941PFZA7QZDZD"
-        //    }
-        //};
 
         /* //
         private async Task<String> ImgJSON(PostViewModel postViewModel)
