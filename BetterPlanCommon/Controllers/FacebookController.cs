@@ -88,6 +88,7 @@ namespace BetterPlan.Controllers
         ///             ],
         ///             "isPosting": false,
         ///             "isWaiting": false,
+        ///             "IsDelete": false,
         ///             "CreateDateTime": "DATETIME2" or null,
         ///             "UpdateDateTime": "DATETIME2" or null,
         ///             "DeleteDateTime": "DATETIME2" or null,

@@ -48,6 +48,11 @@ namespace Entities.ViewModels
         public Boolean isWaiting { get; set; }
 
         /// <summary>
+        /// Удален ли пост
+        /// </summary>
+        public bool IsDelete { get; set; }
+
+        /// <summary>
         /// Время сохранения поста
         /// </summary>
         public DateTime? SaveCreateDateTime { get; set; }
@@ -103,6 +108,7 @@ namespace Entities.ViewModels
                 this.ImagesURLList = JsonConvert.DeserializeObject<List<Object>>(post.ImagesListJSON);
             }
 
+            this.IsDelete = post.IsDelete;
             this.isPosting = post.isPosting;
             this.isWaiting = post.isWaiting;
             this.CreateDateTime = post.CreateDateTime;
