@@ -146,16 +146,6 @@ namespace Entities.Models
                     data.Add("message", post.post_text);
                 }
 
-                //if (post.action != null && post.objectAction != null)
-                //{
-                //    data.Add("og_action_type_id", post.action);
-                //    data.Add("og_object_id", post.objectAction);
-                //    if (post.icon != null)
-                //    {
-                //        data.Add("og_icon_id", post.icon);
-                //    }
-                //}
-
                 if (post.ImagesListIFormFile != null)
                 {
                     RestClient client = new RestClient(_photosPageURL);

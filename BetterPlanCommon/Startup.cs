@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,7 +24,8 @@ namespace BetterPlan
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureMSSqlContext(Configuration);
+            //services.ConfigureMSSqlContext(Configuration);
+            services.ConfigureMySqlContext(Configuration);
             services.ConfigureCors();
             services.ConfigureIISIntegration();
             services.ConfigureLoggerService();

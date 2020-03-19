@@ -13,7 +13,7 @@ namespace Entities.Models
 {
     public class BetterPlanContext : DbContext
     {
-        public DbSet<Post> Posts { get; set; }
+
         public BetterPlanContext(DbContextOptions<BetterPlanContext> options)
             : base(options)
         {
@@ -29,8 +29,14 @@ namespace Entities.Models
         {
             //var connectionString = ConfigurationManager.AppSettings.Get("DefaultConnection");
             //var connectionString = configure["ConnectionStrings:DefaultConnection"];
-            optionsBuilder.UseSqlServer(
-                "Data Source=SQL5052.site4now.net;Initial Catalog=DB_A56840_betterplanDBTest;User Id=DB_A56840_betterplanDBTest_admin;Password=betterplan2020;");
+            //optionsBuilder.UseSqlServer("Data Source=SQL5052.site4now.net;Initial Catalog=DB_A56840_betterplanDBTest;User Id=DB_A56840_betterplanDBTest_admin;Password=betterplan2020;");
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseMySql("server=remotemysql.com;UserId=A33OXseZmP;Password=yeJmMLTiDX;database=A33OXseZmP;port=3306");
+            }
         }
+        public DbSet<Post> Posts { get; set; }
+
+
     }
 }

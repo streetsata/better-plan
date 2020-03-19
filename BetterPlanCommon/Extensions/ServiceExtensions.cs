@@ -66,15 +66,26 @@ namespace BetterPlanCommon.Extensions
             services.AddSingleton<ILoggerManager, LoggerManager>();
         }
 
+        ///// <summary>
+        ///// Configure MS Sql Context
+        ///// </summary>
+        ///// <param name="services"></param>
+        ///// <param name="config"></param>
+        //public static void ConfigureMSSqlContext(this IServiceCollection services, IConfiguration config)
+        //{
+        //    var connectionString = config["ConnectionStrings:DefaultConnection"];
+        //    services.AddDbContext<BetterPlanContext>(o => o.UseSqlServer(connectionString)); // поменять на RepositoryContext
+        //}
+
         /// <summary>
         /// Configure MS Sql Context
         /// </summary>
         /// <param name="services"></param>
         /// <param name="config"></param>
-        public static void ConfigureMSSqlContext(this IServiceCollection services, IConfiguration config)
+        public static void ConfigureMySqlContext(this IServiceCollection services, IConfiguration config)
         {
-            var connectionString = config["ConnectionStrings:DefaultConnection"];
-            services.AddDbContext<BetterPlanContext>(o => o.UseSqlServer(connectionString)); // поменять на RepositoryContext
+            var connectionString = config["ConnectionStrings:DefaultConnectionMySQL"];
+            services.AddDbContext<BetterPlanContext>(o => o.UseMySql(connectionString)); // поменять на RepositoryContext
         }
     }
 }
