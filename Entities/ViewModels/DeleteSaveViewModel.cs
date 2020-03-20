@@ -9,12 +9,12 @@ namespace Entities.ViewModels
     /// <summary>
     /// Модель для удаления поста
     /// </summary>
-    public class DeletePostViewModel
+    public class DeleteSaveViewModel
     {
         /// <summary>
         /// ID поста на Facebook
         /// </summary>
         [Required]
-        public string FacebookPostId { get; set; }
+        public Int32 PostId { get; set; }
     }
 }
