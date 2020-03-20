@@ -330,25 +330,8 @@ namespace Entities.Models
             }
 
 
-            return new JsonResult(/*list.OrderByDescending(e => e.PostId.Value)*/list);
+            return new JsonResult(list);
 
-            /*
-
-            JToken posts = FacebookAPI.GetPagePostsAsync(TempUsersDb[userId]).Result;
-            string str = posts.ToString();
-
-
-            List<object> postsObj = new List<object>();
-            foreach (var post in posts)
-            {
-
-
-
-                postsObj.Add(Info.GetJSONImage(post));
-            }
-
-            */
-            //return new JsonResult(postsObj);
         }
 
         /// <summary>
@@ -462,46 +445,6 @@ namespace Entities.Models
             }
 
         }
-
-        ///// <summary>
-        ///// Публикует пост на бизнес странице пользователя
-        ///// </summary>
-        ///// <param name="userId"></param>
-        ///// <param name="post"></param>
-        ///// <returns></returns>
-        //public async Task<JsonResult> UserPostFromImages(string userId, PostViewModel post)
-        //{
-        //    if (!TempUsersDb.ContainsKey(userId))
-        //    {
-        //        _response.StatusCode = 400;
-        //        return new JsonResult(new { status = "error", error_message = "Полученный id не существует!" });
-        //    }
-
-        //    var page = FacebookAPI.GetPageIdAndTokenAsync(TempUsersDb[userId]).Result;
-        //    string JSON = String.Empty;
-        //    //string JSON = await ImgJSON(post);
-        //    var result = new FacebookAPI(page.Item2, page.Item1).PostFromImagesToFacebookAsync(post, JSON).Result;
-
-        //    if (result.Item1 == 200)
-        //    {
-        //        _post = new Post(userId, post);
-        //        _post.CreateDateTime = DateTime.UtcNow;
-        //        _post.FacebookPostId = result.Item2;
-        //        //_post.ImagesListJSON = JSON;
-        //        _db.Posts.Add(_post);
-        //        await _db.SaveChangesAsync();
-
-
-        //        _response.StatusCode = result.Item1;
-        //        return new JsonResult(new { status = "OK", post_id = result.Item2 });
-        //    }
-        //    else
-        //    {
-        //        //сделать метод для удаления файлов с диска
-        //        _response.StatusCode = result.Item1;
-        //        return new JsonResult(new { status = "error", error_message = result.Item2 });
-        //    }
-        //}
 
         /// <summary>
         /// Изменяет публикацию пользователя по FacebookPostId
@@ -643,31 +586,10 @@ namespace Entities.Models
 
         private static Dictionary<string, string> TempUsersDb = new Dictionary<string, string>() {
             { "100559284835939","EAAHD5fytWZAABADfTdcE8ZCp2d323x0YYgcaNMAfVGbNjtnCtKN9Ay9yBDBfnM2MkhzT5UQZBC0eDZBizgJEZCBgXZAxNXDFgAK1TN2ZCwPD6iLMpP6X8gSkQoN6YcFG39oZBgHz6U6OeOcOB41oLGNXQYVXJVeh4nfjhRCnuEde8CwQF83UYFee" },
-            { "895127244222164","EAAjnVI1sCkwBADWHQOeCunZCMMezGDc2Xit0rb4ZCM86gnOe78qMUtjwqkDel73hJPwilAZANenNKPufhXRFEbydLEplhSwIuRORFe4HICwflMQqVEyFR49c9VsgZCVsYFivZCmNYEOdCuXJ7auyVFZCN4eVBwqP2hFi8EvkfI7QZDZD" },
-            {"2404663569642984","EAAiLB13fdegBAKZBZCO29uWX9R6kYlKRCIS2bxxgsEcibfj1jV7HP8X86Ew5QIVZBrro2UolBjgeiug6z6rhDoiEZAvC5G1f2R5F6EX3ZCgiPk4GAGFk4ElaC7uRoaktbjowceVQfHuWixZAC3DF0z9EMqNipj4B04rGiyBDrLnWae4909mKbFeZCOcPwMYz8MfeSLEItqkPAZDZD" }
+            { "895127244222164","EAAjnVI1sCkwBADWHQOeCunZCMMezGDc2Xit0rb4ZCM86gnOe78qMUtjwqkDel73hJPwilAZANenNKPufhXRFEbydLEplhSwIuRORFe4HICwflMQqVEyFR49c9VsgZCVsYFivZCmNYEOdCuXJ7auyVFZCN4eVBwqP2hFi8EvkfI7QZDZD" } /*,
+            {"2404663569642984","EAAiLB13fdegBAKZBZCO29uWX9R6kYlKRCIS2bxxgsEcibfj1jV7HP8X86Ew5QIVZBrro2UolBjgeiug6z6rhDoiEZAvC5G1f2R5F6EX3ZCgiPk4GAGFk4ElaC7uRoaktbjowceVQfHuWixZAC3DF0z9EMqNipj4B04rGiyBDrLnWae4909mKbFeZCOcPwMYz8MfeSLEItqkPAZDZD" }*/
         };
 
-
-        /* //
-        private async Task<String> ImgJSON(PostViewModel postViewModel)
-        {
-            List<String> linksList = new List<string>();
-            var uploads = Path.Combine(Directory.GetCurrentDirectory() + "\\App_Data\\internal_logs", "Uploads");
-
-            foreach (var imageFile in postViewModel.ImagesListJSON)
-            {
-                var filePath = Path.Combine(uploads, Guid.NewGuid() + imageFile.FileName);
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    linksList.Add(filePath);
-                    await imageFile.CopyToAsync(fileStream);
-                }
-            }
-
-            return JsonConvert.SerializeObject(linksList, Formatting.Indented);
-        }
-        */
     }
 
 }
