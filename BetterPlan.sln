@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entiti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{9F81EFB2-38A6-49ED-8C1A-486323537B77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterPlanAndFacebook", "BetterPlanAndFacebook\BetterPlanAndFacebook.csproj", "{904EA64F-00B9-4FB4-B0A9-FC517CC48825}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{9F81EFB2-38A6-49ED-8C1A-486323537B77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F81EFB2-38A6-49ED-8C1A-486323537B77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F81EFB2-38A6-49ED-8C1A-486323537B77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{904EA64F-00B9-4FB4-B0A9-FC517CC48825}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{904EA64F-00B9-4FB4-B0A9-FC517CC48825}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{904EA64F-00B9-4FB4-B0A9-FC517CC48825}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{904EA64F-00B9-4FB4-B0A9-FC517CC48825}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

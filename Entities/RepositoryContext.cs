@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Entities.Models;
 
 namespace Entities
 {
@@ -11,6 +12,7 @@ namespace Entities
             : base(options)
         {}
 
+        public DbSet<Post> Posts { get; set; }
         #region DbSet<Entity>
         #endregion
     }
