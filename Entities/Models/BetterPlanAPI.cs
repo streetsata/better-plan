@@ -321,14 +321,13 @@ namespace Entities.Models
                 return new JsonResult(new { status = "error", error_message = "Полученный id не существует!" });
             }
 
-            var res = _db.Posts.Where(e => e.UserId == userId).ToListAsync().Result.OrderByDescending(e => e.PostId).ToList();
+            List<Post> res = _db.Posts.Where(e => e.UserId == userId).ToListAsync().Result.OrderByDescending(e => e.PostId).ToList();
 
             List<PostViewModelGetPost> list = new List<PostViewModelGetPost>();
             for (int i = 0; i < res.Count(); i++)
             {
                 list.Add(new PostViewModelGetPost(res[i], false));
             }
-
 
             return new JsonResult(list);
 
@@ -349,7 +348,6 @@ namespace Entities.Models
             }
 
             var page = FacebookAPI.GetPageIdAndTokenAsync(TempUsersDb[userId]).Result;
-            //PostViewModel postView = post;
 
             if (post.PostId == null)
             {
@@ -405,7 +403,6 @@ namespace Entities.Models
             }
 
             var page = FacebookAPI.GetPageIdAndTokenAsync(TempUsersDb[userId]).Result;
-            //PostViewModel postView = post;
 
             if (post.PostId == null)
             {

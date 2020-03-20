@@ -583,7 +583,7 @@ namespace BetterPlan.Controllers
         }
 
         /// <summary>
-        /// Удаляет пост на Facebook по FacebookPostId
+        /// Удаляет пост на Facebook по FacebookPostId (помечает IsDelete = true)
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -633,6 +633,38 @@ namespace BetterPlan.Controllers
             }
         }
 
+        /// <summary>
+        /// Удаляет сохраненный пост в базе данных (помечает IsDelete = true)
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     DELETE /{id}/DELETESAVEPOST
+        ///     {
+        ///        "PostId":Int32
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="userId"></param>
+        /// <param name="deleteSavePost"></param>
+        /// <returns></returns>
+
+        /// <response code="200">
+        /// Sample response:
+        /// 
+        ///     {
+        ///         "status": "OK"
+        ///     }
+        ///  
+        /// </response>
+        /// <response code="400">
+        /// Error response:
+        /// 
+        ///     {
+        ///         "status": "error",
+        ///         "error_message": "msg"
+        ///     }
+        /// </response>
 
         [HttpDelete("USER/{userId}/DELETESAVEPOST")]
         [Produces("application/json")]
