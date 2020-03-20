@@ -47,7 +47,7 @@ namespace Entities.Models
 
                 DateTime now = DateTime.UtcNow;
                 PostViewModel postViewModel = model;
-                await Task.Delay( model.WhenCreateDateTime.GetValueOrDefault() - now);
+                await Task.Delay(model.WhenCreateDateTime.GetValueOrDefault() - now);
 
                 Post resDB = await context.Posts.FirstOrDefaultAsync(id => id.PostId == postViewModel.PostId);
                 if (resDB.status == Status.Waiting && resDB.WhenCreateDateTime == postViewModel.WhenCreateDateTime && resDB.isPosting == true)
@@ -311,8 +311,8 @@ namespace Entities.Models
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-///<remarks>
-/// </remarks>
+        ///<remarks>
+        /// </remarks>
         public JsonResult GetUserPosts(string userId)
         {
             if (!TempUsersDb.ContainsKey(userId))
@@ -589,7 +589,7 @@ namespace Entities.Models
 
                 model.IsDelete = true;
                 model.DeleteDateTime = DateTime.UtcNow;
-                
+
                 if (await _db.SaveChangesAsync() > 0)
                 {
                     return new JsonResult(new { status = "OK" });
@@ -602,6 +602,39 @@ namespace Entities.Models
             else
             {
                 return new JsonResult(new { status = "error", error_message = result.Item2 });
+            }
+        }
+
+        /// <summary>
+        /// Удаляет публикацию по FacebookPostId
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="deletePost"></param>
+        /// <returns></returns>
+        public async Task<JsonResult> UserDeleteSavePost(string user_id, DeleteSaveViewModel deletePost)
+        {
+            if (!TempUsersDb.ContainsKey(user_id))
+            {
+                _response.StatusCode = 400;
+                return new JsonResult(new { status = "error", error_message = "Полученный id не существует!" });
+            }
+
+
+            var model = await _db.Posts.FirstOrDefaultAsync(post => post.PostId == deletePost.PostId);
+            if (model == null)
+            {
+                return new JsonResult(new { status = "error", error_message = "Данный пост не найден в DB" });
+            }
+            model.IsDelete = true;
+            model.SaveDeleteDateTime = DateTime.UtcNow;
+
+            if (await _db.SaveChangesAsync() > 0)
+            {
+                return new JsonResult(new { status = "OK" });
+            }
+            else
+            {
+                return new JsonResult(new { status = "error", error_message = "Данный пост не был удален с DB" });
             }
         }
 

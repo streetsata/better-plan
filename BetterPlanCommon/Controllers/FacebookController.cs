@@ -617,12 +617,33 @@ namespace BetterPlan.Controllers
         [Produces("application/json")]
         public async Task<JsonResult> DeletePost(string userId, [FromBody] DeletePostViewModel deletePost)
         {
-            _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{deletePost.FacebookPostId}'");
+            _logger.LogInfo($"PUT /api/v1/USER/{userId}/DELETE [Body]: post_id: '{deletePost.FacebookPostId}'");
             try
             {
                 var result = await _bpApi.UserDelete(userId, deletePost);
                 var res = result.Value;
-                _logger.LogInfo($"PUT /api/v1/USER/{userId}/EDIT [Body]: post_id: '{deletePost.FacebookPostId}' result {res}");
+                _logger.LogInfo($"PUT /api/v1/USER/{userId}/DELETE [Body]: post_id: '{deletePost.FacebookPostId}' result {res}");
+                return result;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = 500;
+                _logger.LogError($"{e.Message} : {e.StackTrace}");
+                return new JsonResult(new { status = "error", error_message = e.Message });
+            }
+        }
+
+
+        [HttpDelete("USER/{userId}/DELETESAVEPOST")]
+        [Produces("application/json")]
+        public async Task<JsonResult> DeleteSavePost(string userId, [FromBody] DeleteSaveViewModel deleteSavePost)
+        {
+            _logger.LogInfo($"PUT /api/v1/USER/{userId}/DELETESAVEPOST [Body]: PostId: '{deleteSavePost.PostId}'");
+            try
+            {
+                var result = await _bpApi.UserDeleteSavePost(userId, deleteSavePost);
+                var res = result.Value;
+                _logger.LogInfo($"PUT /api/v1/USER/{userId}/DELETESAVEPOST [Body]: PostId: '{deleteSavePost.PostId}' result {res}");
                 return result;
             }
             catch (Exception e)
