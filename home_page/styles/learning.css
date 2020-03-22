@@ -14,6 +14,11 @@ body {
     border-radius: 37px;
 }
 
+.steps {
+    width: 340px;
+    border-radius: 37px 0px 37px 37px;
+}
+
 .learning-image {
     align-self: flex-end;
     padding-bottom: 16px;
@@ -28,7 +33,15 @@ body {
     justify-content: space-between;
     padding: 10px;
     background: #F8F8F8;
-    border-radius: 0px 37px 37px 37px;
+    border-radius: 37px 0px 37px 37px;
+}
+
+.step-number {
+    font-size: 12px;
+    line-height: 14px;
+    color: #999999;
+    align-self: flex-end;
+    padding-right: 17px;
 }
 
 .learning-content h2 {
