@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Repository;
 using System;
 using System.IO;
 using System.Reflection;
@@ -86,6 +87,11 @@ namespace BetterPlanCommon.Extensions
         {
             var connectionString = config["ConnectionStrings:DefaultConnectionMySQL"];
             services.AddDbContext<BetterPlanContext>(o => o.UseMySql(connectionString)); // поменять на RepositoryContext
+        }
+
+        public static void ConfigureRepositoryWrapper(this IServiceCollection services)
+        {
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         }
     }
 }

@@ -29,6 +29,7 @@ namespace BetterPlan
             services.ConfigureCors();
             services.ConfigureIISIntegration();
             services.ConfigureLoggerService();
+            services.ConfigureRepositoryWrapper();
             services.AddControllers();
             services.ConfigureSwaggerGen();
         }

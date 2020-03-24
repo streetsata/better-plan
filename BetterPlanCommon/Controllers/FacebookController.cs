@@ -20,6 +20,7 @@ namespace BetterPlan.Controllers
         private readonly ILoggerManager _logger;
         private BetterPlanAPI _bpApi;
         private BetterPlanContext _db;
+        private IRepositoryWrapper _repositoryWrapper;
 
         public FacebookController(IConfiguration Configuration, BetterPlanContext context, ILoggerManager logger)
         {
@@ -108,6 +109,7 @@ namespace BetterPlan.Controllers
             _logger.LogInfo($"GET /api/v1/USER/{userId}/POSTS");
             try
             {
+                
                 // will be checked
                 var result = _bpApi.GetUserPosts(userId);
                 var res = result.Value;
