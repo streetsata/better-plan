@@ -167,6 +167,10 @@ label {
     margin: 65% 0 0 0;
 }
 
+.checkbox-in-learning {
+    margin: 0;
+}
+
 .checkbox + label {
 	position: relative;
     padding: 0 0 0 26px;
