@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Contracts;
 using Entities;
 
@@ -28,9 +29,9 @@ namespace Repository
             }
         }
 
-        public void Save()
+        public Int32 Save()
         {
-            _repositoryContext.SaveChanges();
+           return _repositoryContext.SaveChanges();
         }
     }
 }

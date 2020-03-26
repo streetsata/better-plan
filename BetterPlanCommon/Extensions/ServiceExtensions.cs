@@ -86,7 +86,7 @@ namespace BetterPlanCommon.Extensions
         public static void ConfigureMySqlContext(this IServiceCollection services, IConfiguration config)
         {
             var connectionString = config["ConnectionStrings:DefaultConnectionMySQL"];
-            services.AddDbContext<BetterPlanContext>(o => o.UseMySql(connectionString)); // поменять на RepositoryContext
+            services.AddDbContext<RepositoryContext>(o => o.UseMySql(connectionString));
         }
 
         public static void ConfigureRepositoryWrapper(this IServiceCollection services)

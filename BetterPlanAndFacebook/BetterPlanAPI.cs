@@ -17,7 +17,7 @@ namespace Entities.Models
     public class BetterPlanAPI
     {
         private HttpResponse _response;
-        private BetterPlanContext _db;
+        private IRepositoryWrapper _db;
         private ILoggerManager _logger;
         private Post _post;
 
@@ -26,12 +26,11 @@ namespace Entities.Models
 
         private event MyDel MyEvent;
         private event MyDelFiles MyEventFiles;
-        public BetterPlanAPI(HttpResponse response, BetterPlanContext context, ILoggerManager logger)
+        public BetterPlanAPI(HttpResponse response, IRepositoryWrapper context, ILoggerManager logger)
         {
             _response = response;
             _db = context;
             _logger = logger;
-
         }
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace Entities.Models
         public async void PublishPostDelay(PostViewModel model)
         {
 
-            using (var context = new BetterPlanContext())
+            using (var context = new RepositoryContext())
             {
 
                 DateTime now = DateTime.UtcNow;
@@ -73,7 +72,7 @@ namespace Entities.Models
         public async void PublishPostDelay(PostViewModelFiles model)
         {
 
-            using (var context = new BetterPlanContext())
+            using (var context = new RepositoryContext())
             {
 
                 DateTime now = DateTime.UtcNow;
@@ -120,14 +119,14 @@ namespace Entities.Models
 
                 try
                 {
-                    var res = _db.Posts.Add(postDB);
+                    _db.postRepository.Create(postDB);
 
-                    if (await _db.SaveChangesAsync() > 0)
+                    if (_db.Save() > 0)
                     {
                         //переделать не нравится
-                        Post post = await _db.Posts.FirstOrDefaultAsync(e => e.Text == postDB.Text);
+                        var post = _db.postRepository.FindByCondition(e => e.Text == postDB.Text);
 
-                        return new Tuple<Int32, Int32>(200, post.PostId);
+                        return new Tuple<Int32, Int32>(200, ((Post)post.First()).PostId);
                     }
                     else
                     {
@@ -142,10 +141,11 @@ namespace Entities.Models
             }
             else
             {
-                Post resDB = await _db.Posts.FirstOrDefaultAsync(id => id.PostId == model.PostId);
+                var arrayresDB = _db.postRepository.FindByCondition(id => id.PostId == model.PostId);
+                var resDB = arrayresDB.First();
                 resDB.Copy(model);
                 resDB.SaveUpdateDateTime = DateTime.UtcNow;
-                if (await _db.SaveChangesAsync() > 0)
+                if (_db.Save() > 0)
                 {
                     return new Tuple<Int32, Int32>(200, model.PostId.Value);
                 }
@@ -164,12 +164,15 @@ namespace Entities.Models
                 postDB.SaveCreateDateTime = DateTime.UtcNow;
                 try
                 {
-                    var res = _db.Posts.Add(postDB);
+                    _db.postRepository.Create(postDB);
 
-                    if (await _db.SaveChangesAsync() > 0)
+                    if (_db.Save() > 0)
                     {
                         //переделать не нравится
-                        Post post = await _db.Posts.FirstOrDefaultAsync(e => e.Text == postDB.Text);
+                        var postArray = _db.postRepository.FindByCondition(e => e.Text == postDB.Text);
+                        var post = postArray.First();
+
+
 
                         return new Tuple<Int32, Int32>(200, post.PostId);
                     }
@@ -186,10 +189,11 @@ namespace Entities.Models
             }
             else
             {
-                Post resDB = await _db.Posts.FirstOrDefaultAsync(id => id.PostId == model.PostId);
+                var resDBArray = _db.postRepository.FindByCondition(id => id.PostId == model.PostId);
+                var resDB = resDBArray.First();
                 resDB.Copy(model);
                 resDB.SaveUpdateDateTime = DateTime.UtcNow;
-                if (await _db.SaveChangesAsync() > 0)
+                if (_db.Save() > 0)
                 {
                     return new Tuple<Int32, Int32>(200, model.PostId.Value);
                 }
@@ -208,13 +212,13 @@ namespace Entities.Models
                 postDB.SaveCreateDateTime = DateTime.UtcNow;
                 try
                 {
-                    var res = _db.Posts.Add(postDB);
+                    _db.postRepository.Create(postDB);
 
-                    if (await _db.SaveChangesAsync() > 0)
+                    if (_db.Save() > 0)
                     {
                         //переделать не нравится
-                        Post post = await _db.Posts.FirstOrDefaultAsync(e => e.Text == postDB.Text);
-
+                        var postArray = _db.postRepository.FindByCondition(e => e.Text == postDB.Text);
+                        var post = postArray.First();
                         return new Tuple<Int32, Int32>(200, post.PostId);
                     }
                     else
@@ -230,10 +234,11 @@ namespace Entities.Models
             }
             else
             {
-                Post resDB = await _db.Posts.FirstOrDefaultAsync(id => id.PostId == model.PostId);
+                var resDBArray = _db.postRepository.FindByCondition(id => id.PostId == model.PostId);
+                var resDB = resDBArray.First();
                 resDB.Copy(model);
                 resDB.SaveUpdateDateTime = DateTime.UtcNow;
-                if (await _db.SaveChangesAsync() > 0)
+                if (_db.Save() > 0)
                 {
                     return new Tuple<Int32, Int32>(200, model.PostId.Value);
                 }
@@ -252,13 +257,13 @@ namespace Entities.Models
                 postDB.SaveCreateDateTime = DateTime.UtcNow;
                 try
                 {
-                    var res = _db.Posts.Add(postDB);
+                    _db.postRepository.Create(postDB);
 
-                    if (await _db.SaveChangesAsync() > 0)
+                    if (_db.Save() > 0)
                     {
                         //переделать не нравится
-                        Post post = await _db.Posts.FirstOrDefaultAsync(e => e.Text == postDB.Text);
-
+                        var postArray = _db.postRepository.FindByCondition(e => e.Text == postDB.Text);
+                        var post = postArray.First();
                         return new Tuple<Int32, Int32>(200, post.PostId);
                     }
                     else
@@ -274,10 +279,11 @@ namespace Entities.Models
             }
             else
             {
-                Post resDB = await _db.Posts.FirstOrDefaultAsync(id => id.PostId == model.PostId);
+                var resDBArray = _db.postRepository.FindByCondition(id => id.PostId == model.PostId);
+                var resDB = resDBArray.First();
                 resDB.Copy(model);
                 resDB.SaveUpdateDateTime = DateTime.UtcNow;
-                if (await _db.SaveChangesAsync() > 0)
+                if (_db.Save() > 0)
                 {
                     return new Tuple<Int32, Int32>(200, model.PostId.Value);
                 }
@@ -321,7 +327,7 @@ namespace Entities.Models
                 return new JsonResult(new { status = "error", error_message = "Полученный id не существует!" });
             }
 
-            List<Post> res = _db.Posts.Where(e => e.UserId == userId).ToListAsync().Result.OrderByDescending(e => e.PostId).ToList();
+            List<Post> res = _db.postRepository.FindByCondition(e => e.UserId == userId).ToListAsync().Result.OrderByDescending(e => e.PostId).ToList();
 
             List<PostViewModelGetPost> list = new List<PostViewModelGetPost>();
             for (int i = 0; i < res.Count(); i++)
@@ -356,9 +362,10 @@ namespace Entities.Models
             }
             else
             {
-                _post = await _db.Posts.FirstOrDefaultAsync(id => id.PostId == post.PostId);
+                var array = _db.postRepository.FindByCondition(id => id.PostId == post.PostId);
+                _post = array.First();
                 _post.Copy(post);
-                await _db.SaveChangesAsync();
+                _db.Save();
             }
 
             Tuple<Int32, String> result;
@@ -370,11 +377,12 @@ namespace Entities.Models
 
                 if (result.Item1 == 200)
                 {
-                    _post = _db.Posts.FirstOrDefaultAsync(id => id.PostId == post.PostId).Result;
+                    var array = _db.postRepository.FindByCondition(id => id.PostId == post.PostId);
+                    _post = array.First();
                     _post.CreateDateTime = DateTime.UtcNow;
                     _post.FacebookPostId = result.Item2;
                     _post.status = Status.Published;
-                    await _db.SaveChangesAsync();
+                    _db.Save();
                     return new JsonResult(new { status = "OK", post_id = result.Item2 });
                 }
                 return new JsonResult(new { status = "error", error_message = result.Item2 });
@@ -411,9 +419,10 @@ namespace Entities.Models
             }
             else
             {
-                _post = await _db.Posts.FirstOrDefaultAsync(id => id.PostId == post.PostId);
+                var array = _db.postRepository.FindByCondition(id => id.PostId == post.PostId);
+                _post = array.First();
                 _post.Copy(post);
-                await _db.SaveChangesAsync();
+                _db.Save();
             }
 
             Tuple<Int32, String> result;
@@ -425,11 +434,12 @@ namespace Entities.Models
 
                 if (result.Item1 == 200)
                 {
-                    _post = _db.Posts.FirstOrDefaultAsync(id => id.PostId == post.PostId).Result;
+                    var array = _db.postRepository.FindByCondition(id => id.PostId == post.PostId);
+                    _post = array.First();
                     _post.CreateDateTime = DateTime.UtcNow;
                     _post.FacebookPostId = result.Item2;
                     _post.status = Status.Published;
-                    await _db.SaveChangesAsync();
+                    _db.Save();
                     return new JsonResult(new { status = "OK", post_id = result.Item2 });
                 }
                 return new JsonResult(new { status = "error", error_message = result.Item2 });
@@ -474,7 +484,9 @@ namespace Entities.Models
 
             if (result.Item1 == 200)
             {
-                var model = await _db.Posts.FirstOrDefaultAsync(post => post.FacebookPostId == editPost.FacebookPostId);
+                var resArray =
+                    _db.postRepository.FindByCondition(post => post.FacebookPostId == editPost.FacebookPostId);
+                var model = resArray.First();
 
                 if (editPost.FacebookPostId != null)
                 {
@@ -484,7 +496,7 @@ namespace Entities.Models
 
                 model.UpdateDateTime = DateTime.UtcNow;
 
-                if (await _db.SaveChangesAsync() > 0)
+                if (_db.Save() > 0)
                 {
                     return new JsonResult(new { status = "OK", PostId = model.PostId });
                 }
@@ -524,13 +536,13 @@ namespace Entities.Models
 
             if (result.Item1 == 200)
             {
-
-                var model = await _db.Posts.FirstOrDefaultAsync(post => post.FacebookPostId == deletePost.FacebookPostId);
+                var resArray = _db.postRepository.FindByCondition(post => post.FacebookPostId == deletePost.FacebookPostId);
+                var model = resArray.First();
 
                 model.IsDelete = true;
                 model.DeleteDateTime = DateTime.UtcNow;
 
-                if (await _db.SaveChangesAsync() > 0)
+                if (_db.Save() > 0)
                 {
                     return new JsonResult(new { status = "OK" });
                 }
@@ -559,8 +571,8 @@ namespace Entities.Models
                 return new JsonResult(new { status = "error", error_message = "Полученный id не существует!" });
             }
 
-
-            var model = await _db.Posts.FirstOrDefaultAsync(post => post.PostId == deletePost.PostId);
+            var resArray = _db.postRepository.FindByCondition(post => post.PostId == deletePost.PostId);
+            var model = resArray.First();
             if (model == null)
             {
                 return new JsonResult(new { status = "error", error_message = "Данный пост не найден в DB" });
@@ -568,7 +580,7 @@ namespace Entities.Models
             model.IsDelete = true;
             model.SaveDeleteDateTime = DateTime.UtcNow;
 
-            if (await _db.SaveChangesAsync() > 0)
+            if (_db.Save() > 0)
             {
                 return new JsonResult(new { status = "OK" });
             }
@@ -584,7 +596,7 @@ namespace Entities.Models
         private static Dictionary<string, string> TempUsersDb = new Dictionary<string, string>() {
             { "100559284835939","EAAHD5fytWZAABADfTdcE8ZCp2d323x0YYgcaNMAfVGbNjtnCtKN9Ay9yBDBfnM2MkhzT5UQZBC0eDZBizgJEZCBgXZAxNXDFgAK1TN2ZCwPD6iLMpP6X8gSkQoN6YcFG39oZBgHz6U6OeOcOB41oLGNXQYVXJVeh4nfjhRCnuEde8CwQF83UYFee" },
             { "895127244222164","EAAjnVI1sCkwBADWHQOeCunZCMMezGDc2Xit0rb4ZCM86gnOe78qMUtjwqkDel73hJPwilAZANenNKPufhXRFEbydLEplhSwIuRORFe4HICwflMQqVEyFR49c9VsgZCVsYFivZCmNYEOdCuXJ7auyVFZCN4eVBwqP2hFi8EvkfI7QZDZD" } /*,
-            {"2404663569642984","EAAiLB13fdegBAKZBZCO29uWX9R6kYlKRCIS2bxxgsEcibfj1jV7HP8X86Ew5QIVZBrro2UolBjgeiug6z6rhDoiEZAvC5G1f2R5F6EX3ZCgiPk4GAGFk4ElaC7uRoaktbjowceVQfHuWixZAC3DF0z9EMqNipj4B04rGiyBDrLnWae4909mKbFeZCOcPwMYz8MfeSLEItqkPAZDZD" }*/
+            {"2404663569642984","EAAiLB13fdegBAC2ZCbeDNjHIhJeTWsZANAEuqyRwu2VSFMFl4ZAWjQQ8Pxrb408lDzmZB9zT7ZAh51WYzhticUq7REV4XmXZAwN8vIhs6cYrTP2wN34WoU3h2ZBHTOXuQ4ERVTaJ2R5znKLFSZBhHPaOEZBcdevHRk0JiT6SSnwejzsXSRyKU8UlooFhn9kkgMtoOtDMBLpp4vwZDZD" }*/
         };
 
     }

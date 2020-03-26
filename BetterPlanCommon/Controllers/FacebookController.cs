@@ -19,10 +19,10 @@ namespace BetterPlan.Controllers
     {
         private readonly ILoggerManager _logger;
         private BetterPlanAPI _bpApi;
-        private BetterPlanContext _db;
+        private IRepositoryWrapper _db;
         private IRepositoryWrapper _repositoryWrapper;
 
-        public FacebookController(IConfiguration Configuration, BetterPlanContext context, ILoggerManager logger)
+        public FacebookController(IConfiguration Configuration, IRepositoryWrapper context, ILoggerManager logger)
         {
             _db = context;
             _logger = logger;
