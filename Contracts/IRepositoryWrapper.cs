@@ -8,6 +8,6 @@ namespace Contracts
     public interface IRepositoryWrapper
     {
         IPostRepository postRepository { get; }
-        Int32 Save();
+        Task<Int32> Save();
     }
 }

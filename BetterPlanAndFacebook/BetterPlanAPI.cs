@@ -121,10 +121,29 @@ namespace Entities.Models
                 {
                     _db.postRepository.Create(postDB);
 
-                    if (_db.Save() > 0)
+                    if (await _db.Save() > 0)
                     {
                         //переделать не нравится
-                        var post = _db.postRepository.FindByCondition(e => e.Text == postDB.Text);
+                        var post = _db.postRepository.FindByCondition(
+                            e => (
+                                e.PostId == postDB.PostId &&
+                                e.Text == postDB.Text &&
+                                e.IsDelete == postDB.IsDelete &&
+                                e.isPosting == postDB.isPosting &&
+                                e.isWaiting == postDB.isWaiting &&
+                                e.SaveUpdateDateTime == postDB.SaveUpdateDateTime &&
+                                e.SaveCreateDateTime == postDB.SaveCreateDateTime &&
+                                e.SaveDeleteDateTime == postDB.SaveDeleteDateTime &&
+                                e.CreateDateTime == postDB.CreateDateTime &&
+                                e.UpdateDateTime == postDB.UpdateDateTime &&
+                                e.DeleteDateTime == postDB.DeleteDateTime &&
+                                e.WhenCreateDateTime == postDB.WhenCreateDateTime &&
+                                e.UserId == postDB.UserId &&
+                                e.ImagesListJSON == postDB.ImagesListJSON &&
+                                e.FacebookPostId == postDB.FacebookPostId &&
+                                e.status == postDB.status
+                            )
+                                 );
 
                         return new Tuple<Int32, Int32>(200, ((Post)post.First()).PostId);
                     }
@@ -145,7 +164,7 @@ namespace Entities.Models
                 var resDB = arrayresDB.First();
                 resDB.Copy(model);
                 resDB.SaveUpdateDateTime = DateTime.UtcNow;
-                if (_db.Save() > 0)
+                if (await _db.Save() > 0)
                 {
                     return new Tuple<Int32, Int32>(200, model.PostId.Value);
                 }
@@ -166,10 +185,29 @@ namespace Entities.Models
                 {
                     _db.postRepository.Create(postDB);
 
-                    if (_db.Save() > 0)
+                    if (await _db.Save() > 0)
                     {
                         //переделать не нравится
-                        var postArray = _db.postRepository.FindByCondition(e => e.Text == postDB.Text);
+                        var postArray = _db.postRepository.FindByCondition(
+                            e => (
+                                e.PostId == postDB.PostId &&
+                                e.Text == postDB.Text &&
+                                e.IsDelete == postDB.IsDelete &&
+                                e.isPosting == postDB.isPosting &&
+                                e.isWaiting == postDB.isWaiting &&
+                                e.SaveUpdateDateTime == postDB.SaveUpdateDateTime &&
+                                e.SaveCreateDateTime == postDB.SaveCreateDateTime &&
+                                e.SaveDeleteDateTime == postDB.SaveDeleteDateTime &&
+                                e.CreateDateTime == postDB.CreateDateTime &&
+                                e.UpdateDateTime == postDB.UpdateDateTime &&
+                                e.DeleteDateTime == postDB.DeleteDateTime &&
+                                e.WhenCreateDateTime == postDB.WhenCreateDateTime &&
+                                e.UserId == postDB.UserId &&
+                                e.ImagesListJSON == postDB.ImagesListJSON &&
+                                e.FacebookPostId == postDB.FacebookPostId &&
+                                e.status == postDB.status
+                            )
+                        );
                         var post = postArray.First();
 
 
@@ -193,7 +231,7 @@ namespace Entities.Models
                 var resDB = resDBArray.First();
                 resDB.Copy(model);
                 resDB.SaveUpdateDateTime = DateTime.UtcNow;
-                if (_db.Save() > 0)
+                if (await _db.Save() > 0)
                 {
                     return new Tuple<Int32, Int32>(200, model.PostId.Value);
                 }
@@ -214,10 +252,29 @@ namespace Entities.Models
                 {
                     _db.postRepository.Create(postDB);
 
-                    if (_db.Save() > 0)
+                    if (await _db.Save() > 0)
                     {
                         //переделать не нравится
-                        var postArray = _db.postRepository.FindByCondition(e => e.Text == postDB.Text);
+                        var postArray = _db.postRepository.FindByCondition(
+                            e => (
+                                e.PostId == postDB.PostId &&
+                                e.Text == postDB.Text &&
+                                e.IsDelete == postDB.IsDelete &&
+                                e.isPosting == postDB.isPosting &&
+                                e.isWaiting == postDB.isWaiting &&
+                                e.SaveUpdateDateTime == postDB.SaveUpdateDateTime &&
+                                e.SaveCreateDateTime == postDB.SaveCreateDateTime &&
+                                e.SaveDeleteDateTime == postDB.SaveDeleteDateTime &&
+                                e.CreateDateTime == postDB.CreateDateTime &&
+                                e.UpdateDateTime == postDB.UpdateDateTime &&
+                                e.DeleteDateTime == postDB.DeleteDateTime &&
+                                e.WhenCreateDateTime == postDB.WhenCreateDateTime &&
+                                e.UserId == postDB.UserId &&
+                                e.ImagesListJSON == postDB.ImagesListJSON &&
+                                e.FacebookPostId == postDB.FacebookPostId &&
+                                e.status == postDB.status
+                            )
+                        );
                         var post = postArray.First();
                         return new Tuple<Int32, Int32>(200, post.PostId);
                     }
@@ -238,7 +295,7 @@ namespace Entities.Models
                 var resDB = resDBArray.First();
                 resDB.Copy(model);
                 resDB.SaveUpdateDateTime = DateTime.UtcNow;
-                if (_db.Save() > 0)
+                if (await _db.Save() > 0)
                 {
                     return new Tuple<Int32, Int32>(200, model.PostId.Value);
                 }
@@ -259,10 +316,29 @@ namespace Entities.Models
                 {
                     _db.postRepository.Create(postDB);
 
-                    if (_db.Save() > 0)
+                    if (await _db.Save() > 0)
                     {
                         //переделать не нравится
-                        var postArray = _db.postRepository.FindByCondition(e => e.Text == postDB.Text);
+                        var postArray = _db.postRepository.FindByCondition(
+                            e => (
+                                e.PostId == postDB.PostId &&
+                                e.Text == postDB.Text &&
+                                e.IsDelete == postDB.IsDelete &&
+                                e.isPosting == postDB.isPosting &&
+                                e.isWaiting == postDB.isWaiting &&
+                                e.SaveUpdateDateTime == postDB.SaveUpdateDateTime &&
+                                e.SaveCreateDateTime == postDB.SaveCreateDateTime &&
+                                e.SaveDeleteDateTime == postDB.SaveDeleteDateTime &&
+                                e.CreateDateTime == postDB.CreateDateTime &&
+                                e.UpdateDateTime == postDB.UpdateDateTime &&
+                                e.DeleteDateTime == postDB.DeleteDateTime &&
+                                e.WhenCreateDateTime == postDB.WhenCreateDateTime &&
+                                e.UserId == postDB.UserId &&
+                                e.ImagesListJSON == postDB.ImagesListJSON &&
+                                e.FacebookPostId == postDB.FacebookPostId &&
+                                e.status == postDB.status
+                            )
+                        );
                         var post = postArray.First();
                         return new Tuple<Int32, Int32>(200, post.PostId);
                     }
@@ -283,7 +359,7 @@ namespace Entities.Models
                 var resDB = resDBArray.First();
                 resDB.Copy(model);
                 resDB.SaveUpdateDateTime = DateTime.UtcNow;
-                if (_db.Save() > 0)
+                if (await _db.Save() > 0)
                 {
                     return new Tuple<Int32, Int32>(200, model.PostId.Value);
                 }
@@ -365,7 +441,7 @@ namespace Entities.Models
                 var array = _db.postRepository.FindByCondition(id => id.PostId == post.PostId);
                 _post = array.First();
                 _post.Copy(post);
-                _db.Save();
+                await _db.Save();
             }
 
             Tuple<Int32, String> result;
@@ -382,7 +458,7 @@ namespace Entities.Models
                     _post.CreateDateTime = DateTime.UtcNow;
                     _post.FacebookPostId = result.Item2;
                     _post.status = Status.Published;
-                    _db.Save();
+                    await _db.Save();
                     return new JsonResult(new { status = "OK", post_id = result.Item2 });
                 }
                 return new JsonResult(new { status = "error", error_message = result.Item2 });
@@ -422,7 +498,7 @@ namespace Entities.Models
                 var array = _db.postRepository.FindByCondition(id => id.PostId == post.PostId);
                 _post = array.First();
                 _post.Copy(post);
-                _db.Save();
+                await _db.Save();
             }
 
             Tuple<Int32, String> result;
@@ -439,7 +515,7 @@ namespace Entities.Models
                     _post.CreateDateTime = DateTime.UtcNow;
                     _post.FacebookPostId = result.Item2;
                     _post.status = Status.Published;
-                    _db.Save();
+                    await _db.Save();
                     return new JsonResult(new { status = "OK", post_id = result.Item2 });
                 }
                 return new JsonResult(new { status = "error", error_message = result.Item2 });
@@ -496,7 +572,7 @@ namespace Entities.Models
 
                 model.UpdateDateTime = DateTime.UtcNow;
 
-                if (_db.Save() > 0)
+                if (await _db.Save() > 0)
                 {
                     return new JsonResult(new { status = "OK", PostId = model.PostId });
                 }
@@ -542,7 +618,7 @@ namespace Entities.Models
                 model.IsDelete = true;
                 model.DeleteDateTime = DateTime.UtcNow;
 
-                if (_db.Save() > 0)
+                if (await _db.Save() > 0)
                 {
                     return new JsonResult(new { status = "OK" });
                 }
@@ -580,7 +656,7 @@ namespace Entities.Models
             model.IsDelete = true;
             model.SaveDeleteDateTime = DateTime.UtcNow;
 
-            if (_db.Save() > 0)
+            if (await _db.Save() > 0)
             {
                 return new JsonResult(new { status = "OK" });
             }
@@ -595,8 +671,8 @@ namespace Entities.Models
 
         private static Dictionary<string, string> TempUsersDb = new Dictionary<string, string>() {
             { "100559284835939","EAAHD5fytWZAABADfTdcE8ZCp2d323x0YYgcaNMAfVGbNjtnCtKN9Ay9yBDBfnM2MkhzT5UQZBC0eDZBizgJEZCBgXZAxNXDFgAK1TN2ZCwPD6iLMpP6X8gSkQoN6YcFG39oZBgHz6U6OeOcOB41oLGNXQYVXJVeh4nfjhRCnuEde8CwQF83UYFee" },
-            { "895127244222164","EAAjnVI1sCkwBADWHQOeCunZCMMezGDc2Xit0rb4ZCM86gnOe78qMUtjwqkDel73hJPwilAZANenNKPufhXRFEbydLEplhSwIuRORFe4HICwflMQqVEyFR49c9VsgZCVsYFivZCmNYEOdCuXJ7auyVFZCN4eVBwqP2hFi8EvkfI7QZDZD" } /*,
-            {"2404663569642984","EAAiLB13fdegBAC2ZCbeDNjHIhJeTWsZANAEuqyRwu2VSFMFl4ZAWjQQ8Pxrb408lDzmZB9zT7ZAh51WYzhticUq7REV4XmXZAwN8vIhs6cYrTP2wN34WoU3h2ZBHTOXuQ4ERVTaJ2R5znKLFSZBhHPaOEZBcdevHRk0JiT6SSnwejzsXSRyKU8UlooFhn9kkgMtoOtDMBLpp4vwZDZD" }*/
+            { "895127244222164","EAAjnVI1sCkwBADWHQOeCunZCMMezGDc2Xit0rb4ZCM86gnOe78qMUtjwqkDel73hJPwilAZANenNKPufhXRFEbydLEplhSwIuRORFe4HICwflMQqVEyFR49c9VsgZCVsYFivZCmNYEOdCuXJ7auyVFZCN4eVBwqP2hFi8EvkfI7QZDZD" } ,
+            {"2404663569642984","EAAiLB13fdegBAJyu4NcrtJTqFRMxnZCLzMsOK7Ri530kkTecVlM0ZCFXOWJgHTM7z7g9tooMOnq3FdYXflwCkYBrUB9IanT7lpxApZBFGhiZCTxPj0ejWmZB55ti01H7kyQ6A8OrQtwgav2kZA0FZAvJQ3zEDnGwzPcJBacQ8y7ZCvXAWHYK5n5Nr9lNg3MURPSqAzk6xUpvfAZDZD" }
         };
 
     }

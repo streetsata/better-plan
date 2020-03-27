@@ -29,9 +29,9 @@ namespace Repository
             }
         }
 
-        public Int32 Save()
+        public Task<Int32> Save()
         {
-           return _repositoryContext.SaveChanges();
+           return _repositoryContext.SaveChangesAsync();
         }
     }
 }
