@@ -1,6 +1,7 @@
 * {
     background: #f8f8f8;
 }
+
 .other {
     text-decoration: none;
     font-family: 'Lato', sans-serif;
@@ -8,7 +9,7 @@
     font-weight: 300;
     font-size: 14px;
     line-height: 20px;
-    color: #2C473E;
+    color: #2C473E !important;
     text-transform: capitalize;
     text-align: center;
     border-width: 10px;
@@ -47,6 +48,7 @@
 }
 .enter {
     text-decoration: none;
+    color: #F4896F !important;
     font-family: 'Lato', sans-serif;
     font-style: normal;
     font-weight: 300;
@@ -60,8 +62,8 @@
 
 .enter:hover {
     text-decoration: none;
-    background-color: #F4896F;
-    color: #fff;
+    background-color: #F4896F !important;
+    color: #fff !important;
     border-radius: 14px;
 }
 .carousel-inner {
@@ -154,7 +156,6 @@ color: #2C473E;
 .start-work>a:hover {
     text-decoration: none;
 }
-
 
 
 
