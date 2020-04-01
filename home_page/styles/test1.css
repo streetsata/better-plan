@@ -1,9 +1,6 @@
 * {
     background: #f8f8f8;
 }
-ul {
-    align-self: flex-end;
-}
 .other {
     text-decoration: none;
     font-family: 'Lato', sans-serif;
@@ -83,7 +80,7 @@ ul {
 }
 .girl-img-1 {
     width: 50%;
-    background-image: url(/images/girl-image-1.jpg);
+    background-image: url(../images/girl-image-1.jpg);
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: 100% 56%;
@@ -108,7 +105,7 @@ ul {
 
 .girl-img-2 {
     width: 50%;
-    background-image: url(/images/girl-image-2.png);
+    background-image: url(../images/girl-image-2.png);
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: 0% 51%;
@@ -127,7 +124,7 @@ ul {
     height: 80%;
     width: 80%;
     align-self: center;
-    background-image: url(/images/girl-image-3.png);
+    background-image: url(../images/girl-image-3.png);
     background-repeat: no-repeat;
     background-size: contain;
     background-position: 50% 50%;
@@ -141,7 +138,7 @@ ul {
 .page-4-text {
     color: #F4896F;
     width: auto;
-    background: url(/images/Heart-like.png) no-repeat 100% 0%;
+    background: url(../images/Heart-like.png) no-repeat 100% 0%;
     padding-top: 10%;
     padding-bottom: 5%;
     
