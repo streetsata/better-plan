@@ -1,110 +1,3 @@
-<template>
-  <transition name="modal">
-    <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div id="id02" class="form-modal login">
-        <form class="modal-contenttt" @submit.prevent="login" action="/action_page.html">
-            <div class="form-container cont-log">
-                
-                <div class="close">
-                    <a href="#" class="close-cross" @click="$emit('close')">+</a>
-                </div>
-
-                <div class="register">
-                    <div class="registration-heading">
-                        <p>Войти <span class="green-text">или <a  @click.prevent="$emit('open')">Зарегистрироваться</a></span></p>
-                    </div>
-                    <div class="input-container">
-                        <input 
-                          type="text" 
-                          v-model="email"
-                          class="input-field"
-                          placeholder="E-mail или login" 
-                          name="email" required>
-                        <div>
-                            <label for="psw">Password</label>
-                            <div class="psw-container">
-                                <img src="../../assets/img/ion_eye.png" id="eye" alt="hide password"
-                                    onclick="showPassword(); changeImage();">
-                                <input 
-                                  type="password" 
-                                  v-model="password"
-                                  class="input-field"
-                                  id="psw" 
-                                  placeholder="Password" 
-                                  name="psw" required>
-                            </div>
-                        </div>
-
-                        <input type="checkbox" class="checkbox" id="checkbox" />
-                        <label for="checkbox"  class="checkbox-lable">Не выходить из аккаунта</label>
-
-                        <button type="submit" class="arrow-link submit">Далее<div class="arrow"></div></button>
-                    </div>
-
-                    <div class="modal-social soc-log">
-                        <p>Вход через соцсети</p>
-                        <div class="social-icons">
-                            <a href="#" class="fb btn">
-                                <img src="../../assets/img/facebook.png">
-                            </a>
-                            <a href="#" class="google btn">
-                                <img src="../../assets/img/google.png">
-                            </a>
-                            <a href="#" class="inst btn">
-                                <img src="../../assets/img/instagram.png">
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="forgot-password">
-                        <a  @click ="logout" >Забыли пароль?</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="imgcontainer">
-                <img src="../../assets/img/login-img.png" alt="login image" class="login-img">
-            </div>
-        </form>
-    </div>
-      </div>
-    </div>
-  </transition>
-</template>
-
-<script>
-import { AUTH_REQUEST } from "../../store/actions/auth";
-import { AUTH_LOGOUT } from "../../store/actions/auth";
-
-export default {
-  name: "logIn",
-  data() {
-    return{
-      email: '',
-      password: ''
-    }
-  },
-  methods: {
-    login: function (){
-      let name = this.email;
-      let password = this.password;
-      this.$store.dispatch(AUTH_REQUEST, { name, password }).then(() => {
-      this.$router.push("/mainPage")
-      .catch(err => console.log(err));
-      });
-    },
-    logout: function () {
-      this.$store.dispatch(AUTH_LOGOUT)
-      .then(() => {
-        this.$router.push('/login')
-      })
-    }
-  }
-};
-</script>
-
-<style >
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -151,9 +44,6 @@ export default {
     border-radius: 0 37px 37px 0;
 }
 
-.cont-log { /*for login.html*/
-    border-radius: 37px 0 0 37px;
-}
 .register {
     position: relative;
     display: flex;
@@ -229,7 +119,6 @@ export default {
 }
 
 input {
-    /* position: relative; */
     width: 100%;
     height: 33px;
     padding: 12px;
@@ -391,9 +280,6 @@ label {
     font-size: 12px;
 }
 
-.soc-log { /*for login.html*/
-    justify-content: space-evenly;
-}
 .btn img {
     width: 20px;
     height: 20px;
@@ -409,12 +295,7 @@ label {
     align-items: center;
 }
 
-.login-img{
-    height: 100%;
-}
-
 .forgot-password a {
     text-decoration: none;
     color: #2C473E;
 }
-</style>

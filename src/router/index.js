@@ -3,9 +3,6 @@ import VueRouter from 'vue-router';
 // import Login from '../components/Identification/Login.vue';
 import Modal from '../components/Identification/Modal';
 import ModalLogIn from '../components/Identification/ModalLogIn'
-// import Posibilities from '../components/Posibilities.vue';
-// import Help from '../components/Help.vue';
-// import Learning from '../components/Learning.vue';
 // import store from '../store';
 
 Vue.use(VueRouter)
