@@ -103,10 +103,7 @@
                     v-model="checked"
                     @click.prevent="toggleCheckbox"
                   />
-                  <label
-                    for="checkbox"
-                    @click.prevent="toggleCheckbox"
-                  >Не выходить из аккаунта</label>
+                  <label for="checkbox" @click.prevent="toggleCheckbox">Не выходить из аккаунта</label>
 
                   <button
                     type="submit"
@@ -287,6 +284,8 @@ input.error {
 .modal-contenttt {
   height: 100%;
   display: flex;
+  border-radius: 37px;
+  background: #b7cdc1;
 }
 
 .imgcontainer {
@@ -353,6 +352,8 @@ input.error {
 
 .registration-heading a:hover {
   color: #2c473e;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .input-container {
@@ -363,6 +364,10 @@ input.error {
   height: 75%;
   padding: 0;
   max-height: 300px;
+}
+
+.input-container label {
+    margin-bottom: 0;
 }
 
 input {
@@ -451,34 +456,34 @@ label {
 }
 
 .icono {
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    color: #2C473E;
-    box-sizing: border-box;
-    width: 0;
-    height: 0;
-    border-width: 6px;
-    border-style: solid;
-    border-bottom-color: transparent;
-    border-left-color: transparent;
-    margin-left: 20px;
-    transform: rotate(45deg);
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  color: #2c473e;
+  box-sizing: border-box;
+  width: 0;
+  height: 0;
+  border-width: 6px;
+  border-style: solid;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  margin-left: 20px;
+  transform: rotate(45deg);
 }
 
 .icono:before {
-    content: "";
-    box-sizing: border-box;
-    right: 0;
-    top: -3px;
-    position: absolute;
-    height: 4px;
-    box-shadow: inset 0 0 0 32px;
-    /* -webkit-transform: rotate(-45deg); */
-    transform: rotate(-45deg);
-    width: 15px;
-    /* -webkit-transform-origin: right top; */
-    transform-origin: right top;
+  content: "";
+  box-sizing: border-box;
+  right: 0;
+  top: -3px;
+  position: absolute;
+  height: 4px;
+  box-shadow: inset 0 0 0 32px;
+  /* -webkit-transform: rotate(-45deg); */
+  transform: rotate(-45deg);
+  width: 15px;
+  /* -webkit-transform-origin: right top; */
+  transform-origin: right top;
 }
 
 /*delete later .arrow styles*/
@@ -530,12 +535,14 @@ label {
   margin-bottom: 1em;
 }
 
-.fb, .google, .inst {
-    width: 20px;
-    height: 20px;
-    padding: 0;
-    font-size: 1em;
-    border: none;
+.fb,
+.google,
+.inst {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  font-size: 1em;
+  border: none;
 }
 
 .btn img {
