@@ -13,13 +13,16 @@
               <img src="../../assets/img/modal-img.png" alt="modal image" class="modal-img" />
             </div>
             <div class="form-container">
-              <div class="close">
-                <a href="#" class="close-cross" @click="$emit('close')">+</a>
-              </div>
+              <a href="#" class="close-modal" @click="$emit('close')">
+                <img src="../../assets/img/close_modal.png" alt="close modal" />
+              </a>
               <div class="register">
                 <div class="registration-heading">
-                  <p>Зарегистрироваться <span class="green-text">или
-                      <a @click.prevent="$emit('open')">Войти</a>
+                  <p>
+                    Зарегистрироваться
+                    <span class="green-text">
+                      или
+                      <a href="#" @click.prevent="$emit('open')">Войти</a>
                     </span>
                   </p>
                 </div>
@@ -37,70 +40,103 @@
                     <p class="error" v-if="!$v.email.required">This field is required.</p>
                     <p class="error" v-if="!$v.email.email">Needs to be a valid email.</p>
                   </div>
-                  <label for="email">Email</label>
 
-                  <div class="psw-container form-item" :class="{ 'errorInput': $v.password.$error }">
-                    <img src="../../assets/img/ion_eye.png" id="eye" alt="hide password" @click.prevent="toggleShowPassword" />
-                    <input
-                      class="input-field"
-                      type="password"
-                      id="psw"
-                      v-model="password"
-                      @change="$v.password.$touch()"
-                      :class="{ error: $v.password.$error }"
-                      placeholder="Password"
-                      name="psw"
-                    />
-                    <p class="error" v-if="!$v.password.required">This field is required.</p>
-                    <p class="error" v-else-if="!$v.password.strongPassword">Password must have at least 6 characters, contain number and letters.</p>
-                  </div>
-                  <label for="psw">Password</label>
+                  <div class="form-item" :class="{ 'errorInput': $v.password.$error }">
+                    <label for="psw">Password</label>
+                    <div class="psw-container">
+                      <img
+                        src="../../assets/img/ion_eye.png"
+                        id="eye"
+                        alt="hide password"
+                        @click.prevent="toggleShowPassword"
+                      />
+                      <input
+                        class="input-field"
+                        type="password"
+                        id="psw"
+                        v-model="password"
+                        @change="$v.password.$touch()"
+                        :class="{ error: $v.password.$error }"
+                        placeholder="Password"
+                        name="psw"
+                      />
 
-                  <div class="psw-container form-item" :class="{ 'errorInput': $v.confirmedPassword.$error }">
-                    <img src="../../assets/img/ion_eye.png" id="eye" alt="hide password" @click.prevent="toggleConfPassword"/>
-                    <input
-                      class="input-field"
-                      type="password"
-                      id="confpsw"
-                      v-model="confirmedPassword"
-                      @change="$v.confirmedPassword.$touch()"
-                      :class="{ error: $v.confirmedPassword.$error }"
-                      placeholder="Repeat password"
-                      name="psw-repeat"
-                    />
-                    <p class="error" v-if="!$v.confirmedPassword.required">This field is required.</p>
-                    <p class="error" v-else-if="!$v.confirmedPassword.sameAsPassword">Passwords must be identical.</p>
+                      <p class="error" v-if="!$v.password.required">This field is required.</p>
+                      <p
+                        class="error"
+                        v-else-if="!$v.password.strongPassword"
+                      >Password must have at least 6 characters, contain number and letters.</p>
+                    </div>
                   </div>
-                  <label for="psw-repeat">Password again</label>
-                  <input type="checkbox" class="checkbox" v-model="checked" @click.prevent="toggleCheckbox" />
-                  <label for="checkbox" class="checkbox-lable" @click.prevent="toggleCheckbox">Не выходить из аккаунта</label>
+
+                  <div class="form-item" :class="{ 'errorInput': $v.confirmedPassword.$error }">
+                    <label for="psw-repeat">Password again</label>
+                    <div class="psw-container">
+                      <img
+                        src="../../assets/img/ion_eye.png"
+                        id="eye"
+                        alt="hide password"
+                        @click.prevent="toggleConfPassword"
+                      />
+                      <input
+                        class="input-field"
+                        type="password"
+                        id="confpsw"
+                        v-model="confirmedPassword"
+                        @change="$v.confirmedPassword.$touch()"
+                        :class="{ error: $v.confirmedPassword.$error }"
+                        placeholder="Repeat password"
+                        name="psw-repeat"
+                      />
+
+                      <p class="error" v-if="!$v.confirmedPassword.required">This field is required.</p>
+                      <p
+                        class="error"
+                        v-else-if="!$v.confirmedPassword.sameAsPassword"
+                      >Passwords must be identical.</p>
+                    </div>
+                  </div>
+
+                  <input
+                    type="checkbox"
+                    class="checkbox"
+                    v-model="checked"
+                    @click.prevent="toggleCheckbox"
+                  />
+                  <label
+                    for="checkbox"
+                    @click.prevent="toggleCheckbox"
+                  >Не выходить из аккаунта</label>
+
+                  <button
+                    type="submit"
+                    class="arrow-link submit"
+                    :disabled="submitStatus === 'PENDING'"
+                  >
+                    Далее
+                    <i class="icono"></i>
+                  </button>
                 </div>
-                <button 
-                  type="submit" 
-                  class="arrow-link submit"
-                  :disabled="submitStatus === 'PENDING'">
-                  Далее
-                  <div class="arrow"></div>
-                </button>
+
+                <div class="modal-social">
+                  <p>Регистрация через соцсети</p>
+                  <div class="social-icons">
+                    <a href="#" class="fb btn">
+                      <img src="../../assets/img/facebook.png" />
+                    </a>
+                    <a href="#" class="google btn">
+                      <img src="../../assets/img/google.png" />
+                    </a>
+                    <a href="#" class="inst btn">
+                      <img src="../../assets/img/instagram.png" />
+                    </a>
+                  </div>
+                </div>
+
                 <div class="buttons-list buttons-list--info">
-                    <p class="typo__p" v-if="submitStatus === 'OK'">Thanks for your submission!</p>
-                    <p class="error" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
-                    <p class="typo__p" v-if="submitStatus === 'PENDING'">Sending...</p>
-                </div>
-              </div>
-
-              <div class="modal-social">
-                <p>Регистрация через соцсети</p>
-                <div class="social-icons">
-                  <a href="#" class="fb btn">
-                    <img src="../../assets/img/facebook.png" />
-                  </a>
-                  <a href="#" class="google btn">
-                    <img src="../../assets/img/google.png" />
-                  </a>
-                  <a href="#" class="inst btn">
-                    <img src="../../assets/img/instagram.png" />
-                  </a>
+                  <p class="typo__p" v-if="submitStatus === 'OK'">Thanks for your submission!</p>
+                  <p class="error" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
+                  <p class="typo__p" v-if="submitStatus === 'PENDING'">Sending...</p>
                 </div>
               </div>
             </div>
@@ -123,7 +159,7 @@ export default {
       email: null,
       password: null,
       confirmedPassword: null,
-      
+
       checked: false,
       showPassword: false,
       submitStatus: null
@@ -151,21 +187,22 @@ export default {
   },
   methods: {
     register: function() {
-      this.$v.$touch()
+      this.$v.$touch();
       if (this.$v.$invalid) {
-        this.submitStatus = 'ERROR'
-      } else {  
-      let data = {
-        email: this.email,
-        password: this.password
-      };
-      this.submitStatus = 'PENDING'
-      this.$store
-        .dispatch(AUTH_REGISTER, data)
-        .then(()=> this.submitStatus = 'OK')
-        .then(() => this.$router.push("/learning"))
-        .catch(err => console.log(err));
-    }},
+        this.submitStatus = "ERROR";
+      } else {
+        let data = {
+          email: this.email,
+          password: this.password
+        };
+        this.submitStatus = "PENDING";
+        this.$store
+          .dispatch(AUTH_REGISTER, data)
+          .then(() => (this.submitStatus = "OK"))
+          .then(() => this.$router.push("/learning"))
+          .catch(err => console.log(err));
+      }
+    },
 
     toggleShowPassword: function() {
       const show = document.getElementById("psw");
@@ -188,13 +225,20 @@ export default {
       }
     },
     toggleCheckbox: function() {
-        this.checked= this.checked ? false:true
+      this.checked = this.checked ? false : true;
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  font-family: "Lato", sans-serif;
+}
+
 p.error {
   color: red;
   font-size: 8px;
@@ -236,7 +280,6 @@ input.error {
   height: 400px;
   margin: 0 auto 0;
   box-sizing: border-box;
-  font-family: "Lato", sans-serif;
   font-size: 14px;
   color: #2b2b2b;
 }
@@ -268,34 +311,20 @@ input.error {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 80%;
-  padding-bottom: 10px;
+  height: 100%;
+  padding-bottom: 0;
 }
 
-.close {
-  position: relative;
+.close-modal {
   width: 32px;
   height: 32px;
-  background: #ffae9a;
-  opacity: 0.35;
-  border-radius: 0px 21px 21px 21px;
   align-self: flex-end;
+  text-decoration: none;
+  opacity: 0.7;
   margin: 14px 14px 0 0;
 }
 
-.close-cross {
-  position: absolute;
-  font-size: 40px;
-  font-weight: 900;
-  text-decoration: none;
-  top: -9px;
-  left: 3px;
-  color: red;
-  opacity: 0.5;
-  transform: rotate(-45deg);
-}
-
-.close-cross:hover {
+.close-modal:hover {
   opacity: 1;
 }
 
@@ -304,17 +333,25 @@ input.error {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 30px;
+  height: 10%;
   font-size: 20px;
   color: #f4896f;
 }
 
 .registration-heading p {
-  margin: 0;
+  margin: 0 auto;
 }
 
 .registration-heading a,
 .green-text {
+  color: #2c473e;
+}
+
+.registration-heading a {
+  text-decoration: underline;
+}
+
+.registration-heading a:hover {
   color: #2c473e;
 }
 
@@ -323,17 +360,9 @@ input.error {
   flex-direction: column;
   justify-content: space-evenly;
   width: 70%;
-  height: 70%;
-  max-height: 240px;
-  padding: 25px 0;
-}
-
-.input-field {
-  border: 1px solid #86a296;
-  box-sizing: border-box;
-  border-radius: 8px;
-  height: 33px;
-  padding: 12px;
+  height: 75%;
+  padding: 0;
+  max-height: 300px;
 }
 
 input {
@@ -360,9 +389,10 @@ input {
 }
 
 label {
-  width: 70%;
   text-align: start;
   font-size: 12px;
+  margin-bottom: 0;
+  width: 100%;
 }
 
 /*CHECKBOX*/
@@ -379,13 +409,10 @@ label {
   cursor: pointer;
 }
 
-.checkbox-lable {
-  margin-top: 20px;
-}
 .checkbox + label:before {
   content: "";
   position: absolute;
-  top: -4px;
+  top: -1px;
   left: 0;
   width: 20px;
   height: 20px;
@@ -407,10 +434,10 @@ label {
   content: "";
   position: absolute;
   display: none;
-  left: 8px;
-  top: 0;
-  width: 5px;
-  height: 10px;
+  left: 7px;
+  top: 2px;
+  width: 7px;
+  height: 12px;
   border: solid #2c473e;
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(45deg);
@@ -423,59 +450,59 @@ label {
   display: block;
 }
 
+.icono {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    color: #2C473E;
+    box-sizing: border-box;
+    width: 0;
+    height: 0;
+    border-width: 6px;
+    border-style: solid;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    margin-left: 20px;
+    transform: rotate(45deg);
+}
+
+.icono:before {
+    content: "";
+    box-sizing: border-box;
+    right: 0;
+    top: -3px;
+    position: absolute;
+    height: 4px;
+    box-shadow: inset 0 0 0 32px;
+    /* -webkit-transform: rotate(-45deg); */
+    transform: rotate(-45deg);
+    width: 15px;
+    /* -webkit-transform-origin: right top; */
+    transform-origin: right top;
+}
+
 /*delete later .arrow styles*/
 .arrow-link {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  align-items: baseline;
   font-size: 16px;
   font-weight: 600;
-  line-height: 22px;
   background-color: inherit;
-}
-
-.arrow-link a {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: #f4896f;
-}
-
-.arrow {
-  position: relative;
-  margin-top: 3px;
-  margin-left: 20px;
-  width: 15px;
-  height: 4px;
-  background: #f4896f;
-}
-
-.arrow:after {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 0;
-  height: 0;
-  border: 5px solid transparent;
-  top: -3px;
-  right: -10px;
-  border-left-color: #f4896f;
-  border-width: 5px 0 5px 10px;
+  line-height: 1.5;
 }
 
 .submit {
   color: #2c473e;
-  /* padding: 14px 20px;
-    margin: 8px 0; */
-  border: 1px solid transparent;
+  border: 5px solid transparent;
   cursor: pointer;
   align-self: flex-end;
-  margin-right: 45px;
-  /* margin-right: -15px; */
+  margin-right: -15px;
 }
 
 .submit:hover {
-  border: 1px solid #dfdfdf;
+  border: 5px solid #dfdfdf;
   border-radius: 5px;
   background: #dfdfdf;
 }
@@ -489,13 +516,26 @@ label {
 }
 
 .modal-social {
-  height: 20%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 70%;
+  height: 15%;
   margin: 0 auto;
   font-size: 12px;
+}
+
+.modal-social p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.fb, .google, .inst {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    font-size: 1em;
+    border: none;
 }
 
 .btn img {
