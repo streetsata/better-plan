@@ -1,0 +1,316 @@
+$bgcolor: #F8F8F8;
+$content: 512px;
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+}
+
+.create__container {
+    margin: 0 auto;
+    width: 704px;
+    height: 535px;
+    display: flex;
+    background: #B7CDC1;
+    border-radius: 37px;
+
+    & > div {
+        align-self: flex-end;
+    }
+}
+
+.create__container-form {
+    width: 620px;
+    height: 100%;
+    background: #F8F8F8;
+    border-radius: 0px 37px 37px 37px;
+}
+
+.div__for__scroll {
+    overflow-y: scroll;
+    height: 444px;
+}
+
+.close__modal {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    height: 32px;
+    padding-top: 14px;
+    padding-right: 14px;
+
+    & > a {
+        height: 100%;
+    }
+
+    &:hover {
+        opacity: .8;
+    }
+}
+
+.create__title {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+    text-align: center;
+    color: #F4896F;
+}
+
+.project__name {
+    width: 226px;
+    height: 33px;
+    margin-top: 25px;
+    margin-left: 39px;
+
+    & > input {
+        width: 100%;
+        height: 100%;
+        padding-left: 13px;
+        padding-right: 13px;
+        font-family: 'Lato', sans-serif;
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 20px;
+        color: #2B2B2B;
+        border: 1px solid #86A296;
+        border-radius: 8px;
+
+        &:focus {
+            box-shadow: 0 0 3px rgba(43, 43, 43, .5);
+        }
+    }
+}
+
+.project__description {
+    width: $content;
+    height: 154px;
+    margin-top: 15px;
+    margin-left: 39px;
+    padding: 5px;
+    border: 1px solid #86A296;
+    border-radius: 8px;
+}
+
+.description__toolbar {
+    width: 193px;
+    height: 19px;
+    display: flex;
+    // border: 1px solid transparent;
+
+    & button {
+        padding: 0;
+        border: 1px dotted transparent;
+        border-left: none;
+        border-right: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+        height: 100%;
+        background-color: $bgcolor;
+
+        &:hover {
+            border-color: #678679;
+        }
+    }
+}
+
+.description__text {
+    width: 100%;
+    height: 102px;
+
+    & textarea {
+        font-family: 'Lato', sans-serif;
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 20px;
+        color: #2B2B2B;
+        width: 100%;
+        height: 100%;
+        padding: 5px;
+        background-color: $bgcolor;
+        border: 1px solid transparent;
+        border-radius: 3px;
+
+        &:focus {
+            border-color: #678679;
+            box-shadow: 0 0 3px rgba(43, 43, 43, .5);
+        }
+    }
+}
+
+.description__bottom {
+    margin-top: 2px;
+    display: flex;
+    justify-content: space-between;
+
+    & button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $bgcolor;
+        border: none;
+        padding: 0;
+        margin-right: 2px;
+        height: 100%;
+        cursor: pointer;
+    }
+}
+
+.description__bottom-attach {
+    width: 300px;
+    height: 19px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    color: rgba(103, 134, 121, .5);
+
+    & a {
+        margin: 2px;
+        text-decoration: none;
+        border-bottom: 1px dashed rgba(103, 134, 121, .5);
+        color: rgba(103, 134, 121, .5);
+    }
+}
+
+.description__bottom-dropup {
+    display: flex;
+}
+
+.project__functionality {
+    margin-top: 25px;
+    margin-left: 65px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #2B2B2B;
+}
+
+.toggle {
+    width: $content;
+    margin-top: 15px;
+    margin-left: 39px;
+    display: grid;
+    justify-content: space-between;
+    grid-template-columns: 160px 160px 160px;
+    grid-template-rows: 30px 30px 30px;
+}
+
+.toggle__wrapper {
+    display: flex;
+    align-items: center;
+    width: 160px;
+    max-width: 170px;
+}
+
+.toggle__button {
+    position: relative;
+    width: 42px;
+    height: 22px;
+    border-radius: 18.5px;
+    overflow: hidden;
+
+    & .checkbox {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 3;
+    }
+
+    & .knobs, .layer {
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+
+    & .layer {
+        width: 100%;
+        height: 100%;
+        background-color: #E9E9E9;
+        z-index: 1;
+    }
+
+    & .knobs:before {
+        content: 'on';
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        width: 20px;
+        height: 20px;
+        color: $bgcolor;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.4;
+        text-align: center;
+        background-color: #86A296;
+        border-radius: 50%;
+        transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+    }
+
+    & .checkbox:checked + .knobs:before {
+        content: 'off';
+        left: 21px;
+        color: #86A296;
+        background-color: #F2F2F2;
+    }
+}
+
+.toggle__text {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0 5px;
+    color: #999999;
+}
+
+.project__team {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: $content;
+    margin-top: 23px;
+    margin-left: 39px;
+
+    & input {
+        width: 226px;
+        height: 33px;
+        padding-left: 13px;
+        padding-right: 13px;
+        font-family: 'Lato', sans-serif;
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 20px;
+        color: #2B2B2B;
+        border: 1px solid #86A296;
+        border-radius: 8px;
+
+        &:focus {
+            box-shadow: 0 0 3px rgba(43, 43, 43, .5);
+        }
+    }
+
+    & button {
+        // display: flex;
+        // justify-content: center;
+        // align-items: center;
+        background-color: $bgcolor;
+        border: none;
+        padding: 0;
+        // margin-right: 2px;
+        // height: 100%;
+        cursor: pointer;
+    }
+}
+
