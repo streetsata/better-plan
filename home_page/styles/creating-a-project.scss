@@ -1,5 +1,9 @@
 $bgcolor: #F8F8F8;
 $content: 512px;
+$inputwidth: 226px;
+$inputheight: 33px;
+$inputtextcolor: #2B2B2B;
+$marginleft: 39px;
 
 * {
     box-sizing: border-box;
@@ -26,7 +30,7 @@ body {
 .create__container-form {
     width: 620px;
     height: 100%;
-    background: #F8F8F8;
+    background: $bgcolor;
     border-radius: 0px 37px 37px 37px;
 }
 
@@ -61,27 +65,28 @@ body {
 }
 
 .project__name {
-    width: 226px;
-    height: 33px;
+    width: $inputwidth;
+    height: $inputheight;
     margin-top: 25px;
-    margin-left: 39px;
+    margin-left: $marginleft;
+}
 
-    & > input {
-        width: 100%;
-        height: 100%;
-        padding-left: 13px;
-        padding-right: 13px;
-        font-family: 'Lato', sans-serif;
-        font-weight: 300;
-        font-size: 14px;
-        line-height: 20px;
-        color: #2B2B2B;
-        border: 1px solid #86A296;
-        border-radius: 8px;
+input {
+    width: $inputwidth;
+    height: $inputheight;
+    padding-left: 13px;
+    padding-right: 13px;
+    background-color: $bgcolor;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: $inputtextcolor;
+    border: 1px solid #86A296;
+    border-radius: 8px;
 
-        &:focus {
-            box-shadow: 0 0 3px rgba(43, 43, 43, .5);
-        }
+    &:focus {
+        box-shadow: 0 0 3px rgba(43, 43, 43, .5);
     }
 }
 
@@ -89,7 +94,7 @@ body {
     width: $content;
     height: 154px;
     margin-top: 15px;
-    margin-left: 39px;
+    margin-left: $marginleft;
     padding: 5px;
     border: 1px solid #86A296;
     border-radius: 8px;
@@ -125,10 +130,10 @@ body {
 
     & textarea {
         font-family: 'Lato', sans-serif;
-        font-weight: 300;
+        font-weight: 400;
         font-size: 14px;
         line-height: 20px;
-        color: #2B2B2B;
+        color: $inputtextcolor;
         width: 100%;
         height: 100%;
         padding: 5px;
@@ -183,18 +188,18 @@ body {
 
 .project__functionality {
     margin-top: 25px;
-    margin-left: 65px;
-    font-family: 'Lato', sans-serif;
+    margin-left: $marginleft;
+    padding-left: 26px;
     font-weight: 400;
     font-size: 14px;
     line-height: 20px;
-    color: #2B2B2B;
+    color: $inputtextcolor;
 }
 
 .toggle {
     width: $content;
     margin-top: 15px;
-    margin-left: 39px;
+    margin-left: $marginleft;
     display: grid;
     justify-content: space-between;
     grid-template-columns: 160px 160px 160px;
@@ -267,7 +272,6 @@ body {
 }
 
 .toggle__text {
-    font-family: 'Lato', sans-serif;
     font-weight: 400;
     font-size: 14px;
     line-height: 1.4;
@@ -281,36 +285,187 @@ body {
     align-items: center;
     width: $content;
     margin-top: 23px;
-    margin-left: 39px;
-
-    & input {
-        width: 226px;
-        height: 33px;
-        padding-left: 13px;
-        padding-right: 13px;
-        font-family: 'Lato', sans-serif;
-        font-weight: 300;
-        font-size: 14px;
-        line-height: 20px;
-        color: #2B2B2B;
-        border: 1px solid #86A296;
-        border-radius: 8px;
-
-        &:focus {
-            box-shadow: 0 0 3px rgba(43, 43, 43, .5);
-        }
-    }
+    margin-left: $marginleft;
 
     & button {
-        // display: flex;
-        // justify-content: center;
-        // align-items: center;
         background-color: $bgcolor;
         border: none;
         padding: 0;
-        // margin-right: 2px;
-        // height: 100%;
         cursor: pointer;
     }
 }
 
+.dropbtn {
+    width: $inputwidth;
+    height: $inputheight;
+    padding-left: 13px;
+    padding-right: 13px;
+    background-color: $bgcolor;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #999999;
+    font-size: 14px;
+    border: 1px solid #86A296;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:focus {
+        box-shadow: 0 0 3px rgba(43, 43, 43, .5);
+    }
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    width: 100%;
+    min-width: $inputwidth;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 27px;
+    padding-left: 13px;
+    padding-right: 13px;
+    margin-top: 2px;
+    color: #999999;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: $bgcolor;
+    border-radius: 8px;
+}
+
+.show {display:block;}
+
+.checkbox__grid {
+    margin-left: $marginleft;
+    margin-top: 15px;
+    width: $content;
+    display: grid;
+    grid-template-columns: $inputwidth $inputwidth;
+    column-gap: 25px;
+}
+
+.checkbox__wrapper {
+    display: block;
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 20px;
+    font-weight: 300;
+    user-select: none;
+}
+
+.checkbox__wrapper input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    border: 1px solid #86A296;
+    border-radius: 6px;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox__wrapper input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkbox__wrapper .checkmark:after {
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid #86A296;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+.additional {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: $inputtextcolor;
+    margin-left: $marginleft;
+    margin-top: 10px;
+    padding-left: 26px;
+}
+
+.sms-remind {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+
+    & label {
+        margin-right: 5px;
+        margin-bottom: 0;
+        margin-left: $marginleft;
+    }
+}
+
+.additional__section-input {
+    display: flex;
+    margin-top: 15px;
+    margin-left: $marginleft;
+    width: $content;
+    justify-content: space-between;
+}
+
+.additional-section {
+    opacity: 0;
+
+    & button {
+        padding: 0;
+        border: 0;
+    }
+}
+
+.last__input {
+    margin-top: 15px;
+    margin-left: $marginleft;
+}
+
+.create__button {
+    display: flex;
+    justify-content: center;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    color: #FFFFFF;
+    background: #FFAE9A;
+    border-radius: 98px;
+    padding: 5px 15px;
+    border: 0;
+    margin: 25px auto 0 auto;
+    cursor: pointer;
+}

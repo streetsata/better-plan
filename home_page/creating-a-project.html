@@ -8,6 +8,7 @@
     <link href="./styles/creating-a-project.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap&subset=latin-ext"
         rel="stylesheet">
+    <script src="./script/creating-a-project.js"></script>
 </head>
 
 <body>
@@ -150,15 +151,171 @@
 
                 <div class="project__team">
                     <div class="project__team__input">
-                        <input type="text" placeholder="@ или email учасника">
+                        <input type="email" placeholder="@ или email участника">
                     </div>
-                    <div class="project__team__input">
-                        <input type="text" placeholder="Роль в проекте">
+                    <div class="dropdown">
+                        <div onclick="myFunction1()" class="dropbtn" tabindex="0">
+                            <div class="dropbtn-title">Настроить...</div>
+                            <img class="dropbtn-img" src="./images/selector_arrow.png" alt="selector">
+                        </div>
+                        <div id="myDropdown1" class="dropdown-content">
+                            <a href="#">Копирайтер</a>
+                            <a href="#">Клиент</a>
+                            <a href="#">Дизайнер/Фотограф</a>
+                            <a href="#">Таргетолог/Тех.спецалист</a>
+                            <a href="#">Менеджер</a>
+                        </div>
                     </div>
                     <div class="edit__team">
                         <button type="button"><img src="./images/edit.png"></button>
                     </div>
                 </div>
+
+                <div class="project__team">
+                    <div class="project__team__input">
+                        <input type="email" placeholder="@ или email участника">
+                    </div>
+                    <div class="dropdown">
+                        <div onclick="myFunction2()" class="dropbtn" tabindex="0">
+                            <div class="dropbtn-title">Настроить...</div>
+                            <img class="dropbtn-img" src="./images/selector_arrow.png" alt="selector">
+                        </div>
+                        <div id="myDropdown2" class="dropdown-content">
+                            <a href="#">Копирайтер</a>
+                            <a href="#">Клиент</a>
+                            <a href="#">Дизайнер/Фотограф</a>
+                            <a href="#">Таргетолог/Тех.спецалист</a>
+                            <a href="#">Менеджер</a>
+                        </div>
+                    </div>
+                    <div class="edit__team">
+                        <button type="button"><img src="./images/edit.png"></button>
+                    </div>
+                </div>
+
+                <div class="project__team">
+                    <div class="project__team__input">
+                        <input type="email" placeholder="@ или email участника">
+                    </div>
+                    <div class="dropdown">
+                        <div onclick="myFunction3()" class="dropbtn" tabindex="0">
+                            <div class="dropbtn-title">Настроить...</div>
+                            <img class="dropbtn-img" src="./images/selector_arrow.png" alt="selector">
+                        </div>
+                        <div id="myDropdown3" class="dropdown-content">
+                            <a href="#">Копирайтер</a>
+                            <a href="#">Клиент</a>
+                            <a href="#">Дизайнер/Фотограф</a>
+                            <a href="#">Таргетолог/Тех.спецалист</a>
+                            <a href="#">Менеджер</a>
+                        </div>
+                    </div>
+                    <div class="edit__team">
+                        <button type="button"><img src="./images/edit.png"></button>
+                    </div>
+                </div>
+
+                <div class="project__team">
+                    <div class="project__team__input">
+                        <input type="email" placeholder="@ или email участника">
+                    </div>
+                    <div class="dropdown">
+                        <div onclick="myFunction4()" class="dropbtn" tabindex="0">
+                            <div class="dropbtn-title">Настроить...</div>
+                            <img class="dropbtn-img" src="./images/selector_arrow.png" alt="selector">
+                        </div>
+                        <div id="myDropdown4" class="dropdown-content">
+                            <a href="#">Копирайтер</a>
+                            <a href="#">Клиент</a>
+                            <a href="#">Дизайнер/Фотограф</a>
+                            <a href="#">Таргетолог/Тех.спецалист</a>
+                            <a href="#">Менеджер</a>
+                        </div>
+                    </div>
+                    <div class="edit__team">
+                        <button type="button"><img src="./images/edit.png"></button>
+                    </div>
+                </div>
+
+                <div class="checkbox__grid">
+                    <label class="checkbox__wrapper">Редактирование ленты Instagram
+                        <input type="checkbox" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox__wrapper">Редактирование ленты Instagram
+                        <input type="checkbox" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox__wrapper">Редактирование ленты Facebook
+                        <input type="checkbox" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox__wrapper">Редактирование ленты Facebook
+                        <input type="checkbox" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox__wrapper">Постинг
+                        <input type="checkbox" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox__wrapper">Постинг
+                        <input type="checkbox" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox__wrapper">Редактирование текстов в РК
+                        <input type="checkbox" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox__wrapper">Редактирование текстов в РК
+                        <input type="checkbox" />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+
+                <div class="additional">Дополнительно</div>
+
+                <div class="sms-remind">
+                    <label class="checkbox__wrapper">Напоминать клиенту об оплате по SMS
+                        <input type="checkbox" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="toggle__icon"><img src="./images/question_mark.png" alt="question mark"></div>
+                </div>
+
+                <div class="additional__section-input">
+                    <div class="project__team__input">
+                        <input type="tel" placeholder="+3 8(">
+                    </div>
+                    <div class="project__team__input">
+                        <input type="text" placeholder="Текст сообщения">
+                    </div>
+                    <div class="edit__team additional-section">
+                        <button type="button"><img src="./images/edit.png"></button>
+                    </div>
+                </div>
+
+                <div class="sms-remind">
+                    <label class="checkbox__wrapper">Напоминать мне об оплате по этому проекту
+                        <input type="checkbox" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="toggle__icon"><img src="./images/question_mark.png" alt="question mark"></div>
+                </div>
+
+                <div class="sms-remind">
+                    <label class="checkbox__wrapper">Присылать уведомления по этому проекту в Telegram
+                        <input type="checkbox" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="toggle__icon"><img src="./images/question_mark.png" alt="question mark"></div>
+                </div>
+
+                <div class="last__input">
+                    <input type="tel" placeholder="+3 8(">
+                </div>
+
+                <button class="create__button">Создать проект</button>
+
             </div>
         </div>
     </div>
