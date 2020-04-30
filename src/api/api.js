@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "https://localhost:44364/api/v1/";
+const baseUrl = "https://localhost:5001/api/";
 
 const api = {
   get(url, data, options) {

@@ -21,8 +21,9 @@ const getters = {
 const actions = {
   [AUTH_REQUEST]: ({ commit }, user) => {  //login
     return new Promise((resolve, reject) => {
+      // setTimeout(()=>{},750)
       commit(AUTH_REQUEST);
-      axios.post('https://localhost:44364/api/Authentication/token', user, {
+      axios.post('https://localhost:5001/api/Authentication/token', user, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -47,7 +48,8 @@ const actions = {
 [AUTH_REGISTER]: ({ commit }, user) => {
   return new Promise((resolve, reject) => {
     commit(AUTH_REGISTER)
-    axios({url: 'https://localhost:44364/api/Authentication/registration', data: user, method: 'POST' })
+    // this.$api.post('Authentication/registration', user)
+    axios({url: 'https://localhost:5001/api/Authentication/registration', data: user, method: 'POST' })
     .then(resp => {
       console.log(resp)
       const token = resp.data.token

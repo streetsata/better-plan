@@ -196,8 +196,10 @@ export default {
         this.$store
           .dispatch(AUTH_REGISTER, data)
           .then(() => (this.submitStatus = "OK"))
-          .then(() => this.$router.push("/learning"))
-          .catch(err => console.log(err));
+          // .then(() => location.replace("http://google.com/"))
+          .then(() => {
+          this.$router.push("/mainPage")          .catch(err => console.log(err));
+      });
       }
     },
 
@@ -273,7 +275,7 @@ input.error {
   vertical-align: middle;
 }
 .form-modal {
-  width: 700px;
+  max-width: 700px;
   height: 400px;
   margin: 0 auto 0;
   box-sizing: border-box;
@@ -301,6 +303,23 @@ input.error {
   background: #f8f8f8;
   border: 0px solid #f8f8f8;
   border-radius: 0 37px 37px 0;
+}
+
+@media (max-width: 750px){
+  .form-modal {
+    max-width: 400px;
+  }
+  .modal-contenttt {
+    margin: 0 10px 0;
+    box-sizing: border-box;
+  }
+  .form-container {
+    width: 100%;
+    border-radius: 37px 0 37px 37px
+  }
+  .imgcontainer {
+    display: none;
+  }
 }
 
 .register {

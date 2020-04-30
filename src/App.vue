@@ -1,9 +1,7 @@
 <template>
   <div id="app">
   <button id="show-modal" @click="showModal = true">Войти</button>
-  <Modal v-if="showModal" @close="closeModal" @open='openModalLogin'>
-    <h3 slot="header">custom header</h3>
-  </Modal>
+  <Modal v-if="showModal" @close="closeModal" @open='openModalLogin'></Modal>
   <ModalLogIn  v-if="showModalLogIn" @close="closeModalLogIn" @open='openModal'></ModalLogIn>
   <router-view/>
   </div>
@@ -45,8 +43,4 @@ export default {
 </script>
 
 <style>
-
-h1 {
-  color:blueviolet;
-}
 </style>
