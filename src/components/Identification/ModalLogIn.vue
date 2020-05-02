@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="forgot-password">
-                  <a @click="logout">Забыли пароль?</a>
+                  <a @click="$emit('forgotPsw')">Забыли пароль?</a>
                 </div>
               </div>
             </div>
