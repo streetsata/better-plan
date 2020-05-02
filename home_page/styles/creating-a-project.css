@@ -33,6 +33,8 @@ body {
 
 .div__for__scroll {
   overflow-y: scroll;
+  scrollbar-color: #86A296 #B7CDC1;
+  scrollbar-width: thin;
   height: 444px;
   margin-right: 25px;
 }
