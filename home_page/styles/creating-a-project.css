@@ -34,6 +34,7 @@ body {
 .div__for__scroll {
   overflow-y: scroll;
   height: 444px;
+  margin-right: 25px;
 }
 
 .close__modal {
@@ -90,6 +91,7 @@ input {
 input:focus {
   -webkit-box-shadow: 0 0 3px rgba(43, 43, 43, 0.5);
           box-shadow: 0 0 3px rgba(43, 43, 43, 0.5);
+  outline: none;
 }
 
 .project__description {
@@ -158,6 +160,7 @@ input:focus {
   border-color: #678679;
   -webkit-box-shadow: 0 0 3px rgba(43, 43, 43, 0.5);
           box-shadow: 0 0 3px rgba(43, 43, 43, 0.5);
+  outline: none;
 }
 
 .description__bottom {
@@ -364,6 +367,7 @@ input:focus {
 .dropbtn:focus {
   -webkit-box-shadow: 0 0 3px rgba(43, 43, 43, 0.5);
           box-shadow: 0 0 3px rgba(43, 43, 43, 0.5);
+  outline: none;
 }
 
 .dropdown {
@@ -378,6 +382,7 @@ input:focus {
   min-width: 226px;
   -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
           box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  outline: none;
   border-radius: 8px;
   z-index: 1;
 }
@@ -541,5 +546,74 @@ input:focus {
   border: 0;
   margin: 25px auto 0 auto;
   cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  right: 25px;
+}
+
+::-webkit-scrollbar-track {
+  background: #B7CDC1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #86A296;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #62716C;
+}
+
+.tooltip__icon {
+  position: relative;
+}
+
+.tooltip__icon:hover .tooltip__text {
+  visibility: visible;
+}
+
+.tooltip__text {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 20px;
+  z-index: 1;
+  width: 155px;
+  padding: 5px;
+  border: 1px solid #999999;
+  border-radius: 10px;
+  font-weight: 300;
+  font-size: 10px;
+  line-height: 14px;
+  text-indent: 10px;
+  color: #2B2B2B;
+}
+
+.tooltip__text:after, .tooltip__text:before {
+  content: " ";
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 17%;
+  right: 100%;
+  border: solid transparent;
+  pointer-events: none;
+}
+
+.tooltip__text:after {
+  border-color: rgba(248, 248, 248, 0);
+  border-right-color: #F8F8F8;
+  border-width: 5px;
+  margin-top: -5px;
+}
+
+.tooltip__text:before {
+  border-color: rgba(43, 43, 43, 0);
+  border-right-color: #2B2B2B;
+  border-width: 6px;
+  margin-top: -6px;
 }
 /*# sourceMappingURL=creating-a-project.css.map */
