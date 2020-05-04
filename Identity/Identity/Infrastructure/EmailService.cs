@@ -14,7 +14,7 @@ namespace Identity.Infrastructure
         {
             var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress("Administrations", "daryan15646@gmail.com"));
+            emailMessage.From.Add(new MailboxAddress("Administrations", "caprikanec@gmail.com"));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
@@ -24,8 +24,8 @@ namespace Identity.Infrastructure
 
             using (var client = new SmtpClient())
             {
-                await client.ConnectAsync("smtp.gmail.com", 587, false);
-                await client.AuthenticateAsync("daryan15646@gmail.com", "pass");
+                await client.ConnectAsync("smtp.gmail.com", 465, false);
+                await client.AuthenticateAsync("caprikanec@gmail.com", "stavrus19051979");
                 await client.SendAsync(emailMessage);
 
                 await client.DisconnectAsync(true);

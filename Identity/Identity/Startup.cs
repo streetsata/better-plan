@@ -32,19 +32,19 @@ namespace Identity
         {
             services.AddControllers();
             services.AddDbContext<UserContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>(opt =>
+            {
+                opt.SignIn.RequireConfirmedEmail = true;
+                opt.Password.RequiredLength = 4;
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+            })
                 .AddEntityFrameworkStores<UserContext>()
                 .AddDefaultTokenProviders()
                 .AddTokenProvider(AuthOptions.ISSUER, typeof(DataProtectorTokenProvider<IdentityUser>));
-
-            services.AddIdentityCore<IdentityUser>(o =>
-            {
-                o.Password.RequireDigit = false;
-                o.Password.RequireLowercase = false;
-                o.Password.RequireUppercase = false;
-                o.Password.RequireNonAlphanumeric = false;
-                o.Password.RequiredLength = 4;
-            });
+            
             services.AddSingleton<ILoggerManager, LoggerManager>();
 
             const string jwtSchemeName = "JwtBearer";

@@ -18,17 +18,18 @@ namespace Identity.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly UserContext _context;
+        private readonly UserContext context;
         private readonly UserManager<IdentityUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<IdentityUser> signInManager;
+        private EmailService emailService;
         private IdentityResult identityRez;
         private IdentityUser user;
         private ILoggerManager log;
 
         public AuthenticationController(UserContext context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager, ILoggerManager log)
         {
-            this._context = context;
+            this.context = context;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
@@ -36,8 +37,8 @@ namespace Identity.Controllers
         }
 
         // Registration users
-        [HttpPost]
-        [Route("registration")]
+        [HttpPost("registration")]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> PostRegistration([FromBody] RegisterBindingRequest userData)
         {
             try
@@ -54,7 +55,6 @@ namespace Identity.Controllers
                             Email = userData.Email
                         };
                         identityRez = await userManager.CreateAsync(user, userData.Password);
-                        log.LogInfo($"New user {user.UserName} registration.");
                     }
                     catch (Exception ex)
                     {
@@ -63,7 +63,10 @@ namespace Identity.Controllers
 
                     if (identityRez.Succeeded)
                     {
-                        await userManager.AddToRoleAsync(user, "RegisteredUser");
+                        //SendConfirmation(new ForgotPasswordRequest { Email = user.Email });
+                        log.LogInfo($"New user {user.UserName} registration.");
+                        //await roleManager.CreateAsync(new IdentityRole { Name = "Admins" });
+                        await userManager.AddToRoleAsync(user, "Admins");
                         return new JsonResult(new { answer = true });
                     }
                     log.LogError(identityRez.Errors.ToString());
@@ -73,8 +76,44 @@ namespace Identity.Controllers
             catch (Exception ex)
             {
                 log.LogError($"{ ex.Message } - { ex.StackTrace }");
+                return new JsonResult(new { mes = $"{ ex.Message } - { ex.StackTrace }" });
             }
-            return new JsonResult(new { mes = "Error" });
+            return new JsonResult(new { mes = "ErrorConf" });
+        }
+
+        //[HttpPost]
+        //public async void SendConfirmation(ForgotPasswordRequest fpr)
+        //{
+        //    var user = await userManager.FindByEmailAsync(fpr.Email);
+        //    var confirmCode = await userManager.GenerateEmailConfirmationTokenAsync(user);
+        //    var callbackUrl = Url.Action(
+        //        "ConfirmEmail",
+        //        "Authentication",
+        //        new { userId = user.Id, code = confirmCode },
+        //        protocol: Request.Scheme);
+        //    emailService = new EmailService();
+        //    await emailService.SendEmailAsync(user.Email, "Подтверждение электронной почты",
+        //   "Для завершения регистрации перейдите по ссылке:: <a href=\""
+        //                                   + callbackUrl + "\">завершить регистрацию</a>");
+        //}
+
+        [HttpGet]
+        public async Task<JsonResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return new JsonResult(new { answer = false });
+            }
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return new JsonResult(new { answer = false });
+            }
+            var result = await userManager.ConfirmEmailAsync(user, code);
+            if (result.Succeeded)
+                return new JsonResult(new { answer = true });
+            else
+                return new JsonResult(new { answer = false });
         }
 
         //Login users and geting tokens
@@ -127,43 +166,42 @@ namespace Identity.Controllers
             return new JsonResult(new {result = "Invalid Data" });
         }
 
-        [HttpPost]
-        [Route("signin-google")]
-        [ValidateAntiForgeryToken]
-        public IActionResult ExternalLogin(string provider, string returnUrl = null)
-        {
-            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
-            var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-            return new JsonResult(new { message = "LOG" });
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        //{
+        //    var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
+        //    var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+        //    return new JsonResult(new { message = "LOG" });
+        //}
 
-        [HttpGet]
-        public async Task<JsonResult> ExternalLoginCallback(string returnUrl = null)
-        {
-            var info = await signInManager.GetExternalLoginInfoAsync();
-            if (info == null)
-            {
-                return new JsonResult(new { message = "User not fount" });
-            }
+        //[HttpGet]
+        //public async Task<JsonResult> ExternalLoginCallback(string returnUrl = null)
+        //{
+        //    var info = await signInManager.GetExternalLoginInfoAsync();
+        //    if (info == null)
+        //    {
+        //        return new JsonResult(new { message = "User not fount" });
+        //    }
 
-            var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
-            if (signInResult.Succeeded)
-            {
-                return new JsonResult(new { message = "User login with google" });
-            }
-            if (signInResult.IsLockedOut)
-            {
-                return new JsonResult(new { message = "User data not valid" });
-            }
-            else
-            {
-                //ViewData["ReturnUrl"] = returnUrl;
-                //ViewData["Provider"] = info.LoginProvider;
-                //var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-                //return View("ExternalLogin", new ExternalLoginModel { Email = email });
-                return new JsonResult(new { info });
-            }
-        }
+        //    var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+        //    if (signInResult.Succeeded)
+        //    {
+        //        return new JsonResult(new { message = "User login with google" });
+        //    }
+        //    if (signInResult.IsLockedOut)
+        //    {
+        //        return new JsonResult(new { message = "User data not valid" });
+        //    }
+        //    else
+        //    {
+        //        //ViewData["ReturnUrl"] = returnUrl;
+        //        //ViewData["Provider"] = info.LoginProvider;
+        //        //var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+        //        //return View("ExternalLogin", new ExternalLoginModel { Email = email });
+        //        return new JsonResult(new { info });
+        //    }
+        //}
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
@@ -242,7 +280,7 @@ namespace Identity.Controllers
         {
             try
             {
-                var token = await _context.UserTokens.FirstOrDefaultAsync(refT => refT.Value == RefreshToken);// проверка есть ли токен в базе
+                var token = await context.UserTokens.FirstOrDefaultAsync(refT => refT.Value == RefreshToken);// проверка есть ли токен в базе
 
                 if (token != null)
                 {
@@ -306,7 +344,7 @@ namespace Identity.Controllers
 
                     var code = await userManager.GeneratePasswordResetTokenAsync(user);
                     var url = Url.Action("ResetPassword", "Authentication", new { userId = user.Id, token = code }, protocol: HttpContext.Request.Scheme);
-                    EmailService emailService = new EmailService();
+                    emailService = new EmailService();
                     await emailService.SendEmailAsync(model.Email, "Reset Password",
                         $"Follow the link: <a href='{url}'>link</a>");
                     return new JsonResult(new { result = url });

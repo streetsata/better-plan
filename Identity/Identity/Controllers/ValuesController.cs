@@ -11,7 +11,7 @@ namespace Identity.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
-    [ClaimRequirement("Permission", "Posting")]// custom attribute
+    //[ClaimRequirement("Permission", "Posting")]// custom attribute
     public class ValuesController : ControllerBase
     {
         private readonly UserContext userContext;

@@ -10,6 +10,7 @@ namespace Identity.Models
         public UserContext(DbContextOptions<UserContext> options)
             : base(options)
         {
+            Database.EnsureCreated();
         }
     }
 }
