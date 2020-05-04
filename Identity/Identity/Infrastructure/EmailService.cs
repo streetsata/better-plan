@@ -1,9 +1,5 @@
 ﻿using MailKit.Net.Smtp;
-using Microsoft.AspNet.Identity;
 using MimeKit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Identity.Infrastructure
@@ -25,7 +21,7 @@ namespace Identity.Infrastructure
             using (var client = new SmtpClient())
             {
                 await client.ConnectAsync("smtp.gmail.com", 465, false);
-                await client.AuthenticateAsync("caprikanec@gmail.com", "stavrus19051979");
+                await client.AuthenticateAsync("caprikanec@gmail.com", "********");
                 await client.SendAsync(emailMessage);
 
                 await client.DisconnectAsync(true);
