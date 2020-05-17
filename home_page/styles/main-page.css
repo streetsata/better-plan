@@ -4,7 +4,7 @@
 
 .draft-tab {
   position: relative;
-  width: 70%;
+  width: 68%;
   max-width: 1733px;
   margin: 0 auto;
   background: #FFFFFF;
@@ -45,7 +45,7 @@
 }
 
 .draft__links-wrapper {
-  width: 90%;
+  width: 95%;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (200px)[auto-fit];
@@ -102,7 +102,7 @@
 }
 
 .draft-tab :checked ~ .tab-content {
-  width: 90%;
+  width: 95%;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (200px)[auto-fit];
@@ -292,6 +292,185 @@
   background-color: #fff;
 }
 
+.notifications {
+  background-color: #fff;
+  position: fixed;
+  top: 85px;
+  right: -300px;
+  z-index: 0;
+  padding: 20px 0;
+  width: 300px;
+  height: calc(100% - 85px);
+  -webkit-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+  font-size: 12px;
+  line-height: 17px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.notifications__main {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.notifications__new {
+  width: 68px;
+  height: 21px;
+  background: #F4896F;
+  border-radius: 80px;
+  text-align: center;
+  font-weight: bold;
+  color: #FFFFFF;
+  line-height: 19px;
+}
+
+.read {
+  width: 120px;
+  background: #B7CDC1;
+}
+
+.grid {
+  margin-top: 15px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 21px 50px 1fr;
+      grid-template-columns: 21px 50px 1fr;
+  gap: 0;
+  padding-right: 15px;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: start;
+}
+
+.with-photo {
+  -ms-grid-columns: 21px 50px 1fr 40px;
+      grid-template-columns: 21px 50px 1fr 40px;
+}
+
+.grid p {
+  margin: 0;
+}
+
+.mark {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 21px;
+  height: 21px;
+  background: transparent;
+  position: relative;
+}
+
+.mark div {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 5px;
+  height: 5px;
+  background: #F4896F;
+  border-radius: 50%;
+}
+
+.time {
+  color: #999999;
+}
+
+.time-date {
+  font-size: 10px;
+}
+
+.comment p:first-child {
+  color: #86A296;
+}
+
+.comment-photo {
+  width: 40px;
+  height: 40px;
+  background: #C4C4C4;
+}
+
+.notification__bottom {
+  margin-top: 200px;
+}
+
+/*CHECKBOX*/
+.checkbox {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+  margin: 65% 0 0 0;
+}
+
+.checkbox-in-learning {
+  margin: 0;
+}
+
+.checkbox + label {
+  position: relative;
+  padding: 0 0 0 26px;
+  cursor: pointer;
+}
+
+.checkbox + label:before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #86A296;
+  border-radius: 6px;
+}
+
+.checkbox + label:hover:before {
+  background-color: #dfdfdf;
+}
+
+.checkbox:checked + label:before {
+  background: #dfdfdf;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkbox + label:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 7px;
+  top: -2px;
+  width: 7px;
+  height: 12px;
+  border: solid #2C473E;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* Show the checkmark when checked */
+.checkbox:checked + label:after {
+  display: block;
+}
+
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -342,5 +521,18 @@ header {
   background: url(../images/social.png);
   border: 3px solid #84a295;
   border-radius: 50%;
+}
+
+#menu-toggle {
+  display: none;
+}
+
+.menu-icon {
+  -webkit-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+}
+
+#menu-toggle:checked ~ .notifications {
+  right: 0px;
 }
 /*# sourceMappingURL=main-page.css.map */

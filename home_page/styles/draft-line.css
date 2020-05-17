@@ -4,7 +4,7 @@
 
 .draft-tab {
   position: relative;
-  width: 70%;
+  width: 68%;
   max-width: 1733px;
   margin: 0 auto;
   background: #FFFFFF;
@@ -45,7 +45,7 @@
 }
 
 .draft__links-wrapper {
-  width: 90%;
+  width: 95%;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (200px)[auto-fit];
@@ -102,7 +102,7 @@
 }
 
 .draft-tab :checked ~ .tab-content {
-  width: 90%;
+  width: 95%;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (200px)[auto-fit];

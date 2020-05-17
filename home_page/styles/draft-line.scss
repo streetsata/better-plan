@@ -6,7 +6,7 @@ $color1: #86A296;
 
 .draft-tab {
     position: relative;
-    width: 70%;
+    width: 68%;
     max-width: 1733px;
     margin: 0 auto;
     background: #FFFFFF;
@@ -40,7 +40,7 @@ $color1: #86A296;
 }
 
 .draft__links-wrapper {
-    width: 90%;
+    width: 95%;
     display: grid;
     grid-template-columns: repeat(auto-fit, 200px);
     grid-template-rows: 42px;
@@ -88,7 +88,7 @@ $color1: #86A296;
 }
 
 .draft-tab :checked ~ .tab-content {
-    width: 90%;
+    width: 95%;
     display: grid;
     grid-template-columns: repeat(auto-fit, 200px);
     grid-template-rows: 42px;

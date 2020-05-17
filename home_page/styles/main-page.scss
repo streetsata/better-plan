@@ -1,5 +1,7 @@
 @import "./draft-line";
 @import "./sidebar";
+@import "./notifications";
+@import "./checkbox";
 
 $bgcolor: #F8F8F8;
 
@@ -42,4 +44,21 @@ header {
         border: 3px solid rgb(132, 162, 149);
         border-radius: 50%;
     }
+}
+
+#menu-toggle {
+	display: none;
+}
+
+.menu-icon {
+	// position: absolute;
+	// top: 18px;
+	// left: 30px;
+	// font-size: 24px;
+	// z-index: 1;
+	transition: all 300ms ease-in-out;
+}
+
+#menu-toggle:checked ~ .notifications {
+    right: 0px;
 }

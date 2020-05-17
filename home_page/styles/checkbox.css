@@ -1,0 +1,57 @@
+/*CHECKBOX*/
+.checkbox {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+  margin: 65% 0 0 0;
+}
+
+.checkbox-in-learning {
+  margin: 0;
+}
+
+.checkbox + label {
+  position: relative;
+  padding: 0 0 0 26px;
+  cursor: pointer;
+}
+
+.checkbox + label:before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #86A296;
+  border-radius: 6px;
+}
+
+.checkbox + label:hover:before {
+  background-color: #dfdfdf;
+}
+
+.checkbox:checked + label:before {
+  background: #dfdfdf;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkbox + label:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 7px;
+  top: -2px;
+  width: 7px;
+  height: 12px;
+  border: solid #2C473E;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* Show the checkmark when checked */
+.checkbox:checked + label:after {
+  display: block;
+}
+/*# sourceMappingURL=checkbox.css.map */
