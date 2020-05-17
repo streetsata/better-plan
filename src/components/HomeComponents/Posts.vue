@@ -4,17 +4,19 @@
     </div>
     <div v-else class="posts-container">
         <Post @delete="deletePost" @edit="editPost" v-for="(post,index) in posts" :key="index" :text="post.post_text" :name="user.name" :avatar="user.picture" :imgs="post.imagesURLList" :postId="post.facebookPostId" />
+
     </div>
 </template>
 
 <script>
-import Post from './Post'
+// import Post from './Post'
+import PostNew from './PostNew'
 import Loader from '../Loader'
 
 export default {
     props:['user','posts'],
     components:{
-        Post,
+        Post:PostNew,
         Loader
     },
     mounted(){
@@ -35,28 +37,28 @@ export default {
 <style scoped>
 .posts-container{
     overflow-y: scroll;
-    margin-left: 30px;
-    width: 590px;
+    margin-left: 20px;
+    width: 665px;
     height: 100%;
     /* background: blue; */
 }
 .posts-container::-webkit-scrollbar {
-    background: #E0E0E0;
-    width: 10px;
+    /* background: #E0E0E0; */
+    width: 6px;
     border-radius: 21px;
+    
 }
  
 .posts-container::-webkit-scrollbar-track {
-  /* box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
-    background: #E0E0E0;
-
-    border-radius: 21px;
+    /* background: #E0E0E0; */
+    /* border-radius: 21px; */
+    background-image: url(/images/track.png);
+    background-position: center;
+    background-repeat: repeat-y;
 
 }
  
 .posts-container::-webkit-scrollbar-thumb {
-    /* background-color: darkgrey;
-    outline: 1px solid slategrey; */
     background: #84A295;
     opacity: 0.5;
     border-radius: 21px;

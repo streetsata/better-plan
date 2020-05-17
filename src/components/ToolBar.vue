@@ -1,7 +1,7 @@
 <template>
   <v-app-bar app flat="true">
     <v-toolbar-title>
-      <logo-betterplan id="logo"></logo-betterplan>
+      <router-link to="/"><logo-betterplan id="logo"></logo-betterplan> </router-link>
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-list-item-avatar class="user_ava">

@@ -12,8 +12,9 @@
         <div v-else class="content-wrapper">
             <UserTabs :users="users" :active="active" @select="select" />
             <div class="content">
-              <ProfileInfo :user="users[active]" />
               <Posts :user="users[active]" :posts="posts" @deletePost="deletePost" @editPost="showEditModalFunc" />
+              <Moodboard />
+              <Photos :posts="posts" />
               <CreatePost @create="createPost" />
             </div>
         </div>
@@ -21,16 +22,16 @@
 </template>
 
 <script>
-import SideMenu from "../components/SideMenu.vue";
-import Loader from "../components/Loader.vue";
-import ToolBar from "../components/ToolBar.vue";
+import SideMenu from "../components/SideMenu"
+import Loader from "../components/Loader"
+import ToolBar from "../components/ToolBar"
 import UserTabs from "../components/HomeComponents/UserTabs"
 import Posts from "../components/HomeComponents/Posts"
-import ProfileInfo from "../components/HomeComponents/ProfileInfo"
 import CreatePost from "../components/HomeComponents/CreatePost"
 import Modal from "../components/HomeComponents/Modal"
 import EditModal from "../components/HomeComponents/EditModal"
-// import axios from "axios";
+import Moodboard from "../components/HomeComponents/Moodboard"
+import Photos from "../components/HomeComponents/Photos"
 
 export default {
   components: {
@@ -38,11 +39,13 @@ export default {
     ToolBar,
     UserTabs,
     Posts,
-    ProfileInfo,
+    // ProfileInfo,
+    Moodboard,
     CreatePost,
     Modal,
     Loader,
-    EditModal
+    EditModal,
+    Photos
   },
   data: () => {
     return {
@@ -70,24 +73,19 @@ export default {
   },
   methods: {
     select(index){
-      // console.log("XUI 2")
       this.active = index;
       this.posts = null
       this.$api
         .get(`USER/${this.users[index].id}/POSTS`)
         .then(res => {
-          // this.posts = res.data;
           this.posts = res.data
-          console.log(res)
+          console.log(res.data)
         })
         .catch(error => {
           console.log(error.res)
         });
-      // console.log(this.posts)
     },
     createPost(){
-      // console.log('показать')
-      // console.log(this.showModal)
       this.showModal = true;
     },
     showEditModalFunc(postId,postText){
@@ -105,8 +103,8 @@ export default {
       this.$api
         .get(`USER/${this.users[index].id}/POSTS`)
         .then(res => {
+          console.log(res.data)
           this.posts = res.data;
-          console.log(res);
         })
         .catch(error => {
           console.log(error.res);
@@ -117,7 +115,6 @@ export default {
       this.closeModal(edit)
       console.log(text)
       this.posts = null
-      // console.log(this.postText)
       let obj = JSON.stringify({ post_text: text, "isPosting": true, "isWaiting": false });
       this.$api
         .post(`USER/${this.users[this.active].id}/POST`, obj, {
@@ -125,8 +122,7 @@ export default {
             "Content-Type": "application/json"
           }
         })
-        .then(res => {
-          console.log(res);
+        .then(() => {
           this.select(this.active);
         })
         .catch(error => {
@@ -135,12 +131,9 @@ export default {
     },
 
     editPost(postText) {
-      console.log(this.postEditId, postText);
-      // this.showEditModal = true
       this.closeModal(true)
       this.posts = null
 
-      // this.dialog = false;
       let obj = JSON.stringify({ FacebookPostId: this.postEditId, edit_text: postText });
       this.$api
         .put(`USER/${this.users[this.active].id}/EDIT`, obj, {
@@ -148,8 +141,7 @@ export default {
             "Content-Type": "application/json"
           }
         })
-        .then(res => {
-          console.log(res);
+        .then(() => {
           this.select(this.active)
         })
         .catch(error => {
@@ -158,8 +150,6 @@ export default {
     },
 
     deletePost(postId) {
-      // this.dialog = false;
-      console.log('delete',postId)
       let obj = JSON.stringify({ FacebookPostId: postId });
       this.$api
         .delete(`USER/${this.users[this.active].id}/DELETE`, obj, {
@@ -174,14 +164,6 @@ export default {
         .catch(error => {
           console.log(error);
         });
-      // axios
-      //   .delete(`https://localhost:5001/api/v1/USER/${this.users[this.active].id}/DELETE`, obj, {
-      //     headers: {
-      //       "Content-Type": "application/json"
-      //     }
-      //   })
-      //   .then(response => console.log(response))
-      //   .catch(error => console.log(error));
     }
   },
   watch: {
@@ -195,8 +177,8 @@ export default {
       .get("USERS")
       .then(response => {
         this.users = response.data
+        console.log('users',response.data)
         this.select(0)
-
       })
       .catch(error => console.log(error));
   }
@@ -208,7 +190,7 @@ export default {
 html,body,#app{
     width: 100%;
     height: 100%;
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+    font-family: 'Lato', sans-serif;
     /* overflow: hidden; */
 }
 
@@ -222,6 +204,7 @@ html,body,#app{
     width: 100%;
     padding-top: 64px;
     padding-left: 56px;
+    background: #f2f2f2;
 }
 
 .content{

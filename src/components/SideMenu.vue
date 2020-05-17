@@ -19,7 +19,7 @@
         <v-list-item-icon>
           <v-icon>dashboard</v-icon>
         </v-list-item-icon>
-        <v-list-item-title>Moodboard</v-list-item-title>
+        <v-list-item-title> <router-link to="/moodboard">Moodboard</router-link></v-list-item-title>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>

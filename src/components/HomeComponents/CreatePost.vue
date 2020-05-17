@@ -1,16 +1,14 @@
 <template>
     <div class="actions-container">
-        <div class="add-post-container">
-            <div v-on:click="$emit('create')" class="create-post">
-                <span>Добавить пост</span><img src="/images/plus.svg" alt="plus">
+        <div class="control-container">
+            <div v-on:click="$emit('create')" class="create-post"></div>
+            <div class="edit">
+                
             </div>
-            <div class="controls">
-                <div class="date-picker"><img src="/images/calendar.svg" alt="calendar"></div>
-                <div class="posts-view">
-                    <img class="block" src="/images/block.svg" alt="block">
-                    <img class="list" src="/images/list.svg" alt="list">
-                </div>
-            </div>
+            <div class="show"></div>
+            <div class="delete"></div>
+            <div class="play"></div>
+            
         </div>
     </div>
 </template>
@@ -21,41 +19,43 @@
     display: flex;
     flex-direction: column;
 }
-.add-post-container{
-    width: 280px;
-    height: 115px;
-    background-color: white;
+.control-container{
+    width: 47px;
+    height: 264px;
     border-radius: 30px;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     flex-direction: column;
+    border: #86A296 solid 1px;
 }
 
-.add-post-container .create-post{
+.control-container div{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
     cursor: pointer;
-    color: #F3A592;
+}
+.control-container div svg{
+    background-color: black;
+}
+
+.control-container .create-post{
     border: #F3A592 1px dashed;
-    border-radius: 98px;
-    padding: 6px 50px;
+    background: url('/images/plus.svg') no-repeat center center;
 }
-.add-post-container .create-post img{
-    margin-left: 12px;
-}
-.controls{
-    width: 100%;
-    padding-left: 31px;
-    padding-right: 31px;
-    padding-top: 17px;
 
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.edit{
+    background: url('/images/edit.svg') no-repeat center center;
+
 }
-.controls .block{
-    padding-right: 24px;
+.show{
+    background: url('/images/show.svg') no-repeat center center;
 }
-.controls img{
-    cursor: pointer;
+.delete{
+    background: url('/images/delete.svg') no-repeat center center;
+}
+.play{
+    background: url('/images/play.svg') no-repeat center center;
 }
 </style>
