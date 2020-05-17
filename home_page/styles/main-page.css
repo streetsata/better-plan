@@ -4,7 +4,7 @@
 
 .draft-tab {
   position: relative;
-  width: 68%;
+  width: 100%;
   max-width: 1733px;
   margin: 0 auto;
   background: #FFFFFF;
@@ -113,10 +113,7 @@
 
 .main__menu {
   background: #F8F8F8;
-  position: absolute;
-  top: 85px;
-  bottom: 0;
-  height: calc(100% - 85px);
+  height: 100%;
   left: 0;
   width: 100px;
   overflow: hidden;
@@ -140,9 +137,20 @@
 }
 
 .main__menu ul {
+  height: 100%;
   outline: 0;
   padding: 0;
   margin: 7px 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .main__menu li {
@@ -471,6 +479,10 @@
   display: block;
 }
 
+html {
+  height: 100%;
+}
+
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -481,7 +493,8 @@
 body {
   font-family: 'Lato', sans-serif;
   width: 100%;
-  height: 100%;
+  max-width: 1920px;
+  min-height: 100%;
   background: #F2F2F2;
 }
 
@@ -534,5 +547,18 @@ header {
 
 #menu-toggle:checked ~ .notifications {
   right: 0px;
+}
+
+.content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: calc(100vh - 85px);
+}
+
+main {
+  width: 100%;
+  padding-left: 44px;
+  padding-right: 10px;
 }
 /*# sourceMappingURL=main-page.css.map */
