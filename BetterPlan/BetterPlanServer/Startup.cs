@@ -25,6 +25,9 @@ namespace BetterPlanServer
         {
             services.ConfigureCors();
             services.ConfigureLoggerService();
+            services.ConfigureMySqlContext(Configuration);
+            services.ConfigureRepositoryWrapper();
+
             services.AddControllers();
         }
 
