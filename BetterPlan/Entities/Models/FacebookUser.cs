@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Models
 {
-    [Table("facebook_user")]
+    [Table("facebook_users")]
     public class FacebookUser
     {
         public Guid FacebookUserId { get; set; }

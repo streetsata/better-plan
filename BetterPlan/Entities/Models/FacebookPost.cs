@@ -32,26 +32,26 @@ namespace Entities.Models
         /// <summary>
         /// Id User
         /// </summary>
-        [Required(ErrorMessage = "Property is required")]
+        [Required(ErrorMessage = "User Id is required")]
         public string UserId { get; set; }
 
         /// <summary>
         /// Id поста в facebook
         /// </summary>
-        [Required(ErrorMessage = "Property is required")]
+        [Required(ErrorMessage = "Facebook Post Id is required")]
         public string FacebookPostId { get; set; }
 
         /// <summary>
         /// Текст поста
         /// </summary>
         [Required(ErrorMessage = "Property is required")]
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         /// <summary>
         /// Время сохранения поста в БД
         /// </summary>
         [Required(ErrorMessage = "Property is required")]
-        public DateTime? SaveCreateDateTime { get; set; }
+        public DateTime SaveCreateDateTime { get; set; }
 
         /// <summary>
         /// Время изменения поста в БД
@@ -67,7 +67,7 @@ namespace Entities.Models
         /// Время создания поста на Facebook
         /// </summary>
         [Required(ErrorMessage = "Property is required")]
-        public DateTime? CreateDateTime { get; set; }
+        public DateTime CreateDateTime { get; set; }
 
         /// <summary>
         /// Время обновления(изменения) поста на Facebook
@@ -88,7 +88,7 @@ namespace Entities.Models
         /// <summary>
         /// Путь к изображению
         /// </summary>
-        public string ImagesListJSON { get; set; }
+        //public string ImagesListJSON { get; set; }
 
         /// <summary>
         /// Время отложенного постинга
@@ -96,21 +96,22 @@ namespace Entities.Models
         public DateTime? WhenCreateDateTime { get; set; }
 
         /// <summary>
-        /// Публиковать пост
+        /// Публиковать ли пост
         /// </summary>
         [Required(ErrorMessage = "Property is required")]
-        public bool isPosting { get; set; }
+        public bool IsPosting { get; set; }
 
         /// <summary>
         /// Признак отложенного поста
         /// </summary>
         [Required(ErrorMessage = "Property is required")]
-        public bool isWaiting { get; set; }
+        public bool IsWaiting { get; set; }
 
         /// <summary>
         /// Статус публикации
         /// </summary>
-        public Status status { get; set; }
+        [Required(ErrorMessage = "Property is required")]
+        public Status Status { get; set; }
 
         // Nav
         [ForeignKey(nameof(FacebookUser))]

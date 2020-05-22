@@ -1,6 +1,8 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Repository
 {
@@ -9,6 +11,13 @@ namespace Repository
         public ProjectRepository(RepositoryContext repositoryContext)
             : base(repositoryContext)
         {
+        }
+
+        public IEnumerable<Project> GetAllProjects()
+        {
+            return FindAll()
+                .OrderBy(p => p.Name)
+                .ToList();
         }
     }
 }
