@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Contracts;
+using LoggerService;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BetterPlanServer.Extensions
 {
@@ -13,6 +15,11 @@ namespace BetterPlanServer.Extensions
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             });
+        }
+
+        public static void ConfigureLoggerService(this IServiceCollection services)
+        {
+            services.AddSingleton<ILoggerManager, LoggerManager>();
         }
     }
 }
