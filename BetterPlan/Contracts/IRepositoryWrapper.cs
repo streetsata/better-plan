@@ -10,5 +10,6 @@ namespace Contracts
         IProjectRepository Project { get; }
         IFacebookUserRepository FacebookUser { get; }
         IFacebookPostRepository FacebookPost { get; }
+        void Save();
     }
 }

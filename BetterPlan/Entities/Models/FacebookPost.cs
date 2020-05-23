@@ -33,7 +33,7 @@ namespace Entities.Models
         /// Id User
         /// </summary>
         [Required(ErrorMessage = "User Id is required")]
-        public string UserId { get; set; }
+        public string UserFacebookId { get; set; }
 
         /// <summary>
         /// Id поста в facebook
@@ -86,11 +86,6 @@ namespace Entities.Models
         public bool IsDelete { get; set; }
 
         /// <summary>
-        /// Путь к изображению
-        /// </summary>
-        //public string ImagesListJSON { get; set; }
-
-        /// <summary>
         /// Время отложенного постинга
         /// </summary>
         public DateTime? WhenCreateDateTime { get; set; }
@@ -114,6 +109,12 @@ namespace Entities.Models
         public Status Status { get; set; }
 
         // Nav
+
+        /// <summary>
+        /// Путь к изображению
+        /// </summary>
+        public ICollection<ImagePath> ImagePaths { get; set; }
+
         [ForeignKey(nameof(FacebookUser))]
         public Guid FacebookUserId { get; set; }
         public FacebookUser FacebookUser { get; set; }
