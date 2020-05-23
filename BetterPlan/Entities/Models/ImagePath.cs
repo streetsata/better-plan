@@ -5,9 +5,12 @@ using System.Text;
 
 namespace Entities.Models
 {
+    [Table("image_path")]
     public class ImagePath
     {
         public Guid ImagePathID { get; set; }
+
+        [Required(ErrorMessage = "Property is required")]
         public string Path { get; set; }
 
         // Nav

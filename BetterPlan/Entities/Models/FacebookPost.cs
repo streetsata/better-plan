@@ -30,12 +30,6 @@ namespace Entities.Models
         public Guid PostId { get; set; }
 
         /// <summary>
-        /// Id User
-        /// </summary>
-        [Required(ErrorMessage = "User Id is required")]
-        public string UserFacebookId { get; set; }
-
-        /// <summary>
         /// Id поста в facebook
         /// </summary>
         [Required(ErrorMessage = "Facebook Post Id is required")]
@@ -44,7 +38,6 @@ namespace Entities.Models
         /// <summary>
         /// Текст поста
         /// </summary>
-        [Required(ErrorMessage = "Property is required")]
         public string? Text { get; set; }
 
         /// <summary>
@@ -66,8 +59,8 @@ namespace Entities.Models
         /// <summary>
         /// Время создания поста на Facebook
         /// </summary>
-        [Required(ErrorMessage = "Property is required")]
-        public DateTime CreateDateTime { get; set; }
+ 
+        public DateTime? CreateDateTime { get; set; } 
 
         /// <summary>
         /// Время обновления(изменения) поста на Facebook
