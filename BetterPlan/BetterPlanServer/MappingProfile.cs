@@ -13,6 +13,7 @@ namespace BetterPlanServer
         public MappingProfile()
         {
             CreateMap<Project, ProjectDto>();
+            CreateMap<FacebookUser, UserDto>();
         }
     }
 }

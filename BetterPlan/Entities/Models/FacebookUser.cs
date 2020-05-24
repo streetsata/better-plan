@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Models
@@ -9,6 +10,8 @@ namespace Entities.Models
     {
         public Guid FacebookUserId { get; set; }
 
+        [Required(ErrorMessage = "Property is required")]
+        public string Name { get; set; }
         // Nav
         [ForeignKey(nameof(Project))]
         public Guid ProjectId { get; set; }

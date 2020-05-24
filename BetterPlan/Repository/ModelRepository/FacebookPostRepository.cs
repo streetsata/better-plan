@@ -9,6 +9,7 @@ namespace Repository
         public FacebookPostRepository(RepositoryContext repositoryContext)
             : base(repositoryContext)
         {
+            
         }
     }
 }
