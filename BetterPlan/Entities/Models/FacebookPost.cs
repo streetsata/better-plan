@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Entities.Models
 {
@@ -110,6 +109,6 @@ namespace Entities.Models
 
         [ForeignKey(nameof(FacebookUser))]
         public Guid FacebookUserId { get; set; }
-        public FacebookUser FacebookUser { get; set; }
+        public FacebookUser FacebookOwnerUser { get; set; }
     }
 }

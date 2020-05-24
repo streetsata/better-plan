@@ -14,6 +14,9 @@ namespace Entities.Models
         [StringLength(60, ErrorMessage = "Name can't be longer than 60 characters")]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "Name is required")]
+        public DateTime DateTimeCreation { get; set; }
+
         // Nav
         public ICollection<FacebookUser> FacebookUsers { get; set; }
     }
