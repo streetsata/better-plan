@@ -14,6 +14,8 @@ namespace BetterPlanServer
         {
             CreateMap<Project, ProjectDto>();
             CreateMap<FacebookUser, UserDto>();
+            CreateMap<FacebookPost, PostsGetAllDto>();
+            CreateMap<FacebookPost, PostByIDDto>();
         }
     }
 }

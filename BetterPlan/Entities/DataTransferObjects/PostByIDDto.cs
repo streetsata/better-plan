@@ -1,27 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
+using Entities.Models;
 
-namespace Entities.Models
+namespace Entities.DataTransferObjects
 {
-    /// <summary>
-    /// Status поста
-    ///     0 - Save,
-    ///     1 - Published,
-    ///     2 - Waiting,
-    ///     3 - Error
-    /// </summary>
-    public enum Status
-    {
-        Save,
-        Published,
-        Waiting,
-        Error
-    }
-
-    [Table("facebook_posts")]
-    public class FacebookPost
+    public class PostByIDDto
     {
         /// <summary>
         /// ID поста в БД
@@ -50,15 +35,10 @@ namespace Entities.Models
         public DateTime? SaveUpdateDateTime { get; set; }
 
         /// <summary>
-        /// Время удаления поста в БД
-        /// </summary>
-        public DateTime? SaveDeleteDateTime { get; set; }
-
-        /// <summary>
         /// Время создания поста на Facebook
         /// </summary>
- 
-        public DateTime? CreateDateTime { get; set; } 
+
+        public DateTime? CreateDateTime { get; set; }
 
         /// <summary>
         /// Время обновления(изменения) поста на Facebook
@@ -69,12 +49,6 @@ namespace Entities.Models
         /// Время удаления поста на Facebook
         /// </summary>
         public DateTime? DeleteDateTime { get; set; }
-
-        /// <summary>
-        /// Удален ли пост в БД
-        /// </summary>
-        [Required(ErrorMessage = "Property is required")]
-        public bool IsDelete { get; set; }
 
         /// <summary>
         /// Время отложенного постинга
@@ -98,16 +72,5 @@ namespace Entities.Models
         /// </summary>
         [Required(ErrorMessage = "Property is required")]
         public Status Status { get; set; }
-
-        // Nav
-
-        /// <summary>
-        /// Путь к изображению
-        /// </summary>
-        public ICollection<ImagePath> ImagePaths { get; set; }
-
-        [ForeignKey(nameof(FacebookUser))]
-        public Guid FacebookUserId { get; set; }
-        public FacebookUser FacebookOwnerUser { get; set; }
     }
 }
