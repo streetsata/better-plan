@@ -1,35 +1,44 @@
 <template>
   <div class="home-container">
-    <ToolBar />
+    <ToolBarL @show="showNotification" />
     <div class="content-wrapper">
-      <SideMenu />
-      <div class="testwrap">
+      <div class="toolswrap">
+        <Learning @show="showNotification" :notifyVisibilitie="notifyVisibilitie" />
+        <SideMenuL />
         <div class="tabs-container">
-            <div class="tabs-wrapper">
-                <div v-for="(user,index) in users" :key="user.id" class="tab" :class="index == active ? ' selected': ''" @click="$emit('select',index)">{{ user.name }}</div>
-            </div>
-            <img class="add-button" src="../assets/img/addProject.svg" alt="add" />
+            <UserTabsL />
         </div>
-        <Notifications />
-        <!-- <div class="content">
-        </div>-->
+        <div class="center"></div>
+        <Notifications v-if="notifyVisibilitie" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import SideMenu from "../components/SideMenu";
-import ToolBar from "../components/ToolBar";
-// import UserTabs from "../components/HomeComponents/UserTabs";
+import SideMenuL from "../components/LearningComponents/SideMenuL";
+import UserTabsL from "../components/LearningComponents/UserTabsL";
+import ToolBarL from "../components/LearningComponents/ToolBarL"
 import Notifications from "../components/LearningComponents/Notifications";
+import Learning from "../components/LearningComponents/Learning";
 
 export default {
   components: {
-    SideMenu,
-    ToolBar,
-    // UserTabs,
-    Notifications
+    SideMenuL,
+    ToolBarL,
+    UserTabsL,
+    Notifications,
+    Learning
+  },
+    data: () => {
+    return {
+      notifyVisibilitie: false
+    };
+  },
+  methods: {
+    showNotification: function(){
+      this.notifyVisibilitie = !this.notifyVisibilitie;
+    }
   }
 };
 </script>
@@ -41,11 +50,27 @@ body,
   width: 100%;
   height: 100%;
   font-family: "Lato", sans-serif;
-  /* overflow: hidden; */
 }
 
-.testwrap{
+.content-wrapper{
+  padding-left: 0 !important;
+}
+.toolswrap{
+  height: 100%;
   display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.center{
+  top: 50%;
+  left: 50%;
+  justify-content: center;
+  width: 15px;
+  height: 10px;
+  z-index: 76;
+  opacity: 0;
+  position: absolute;
 }
 
 .home-container {
@@ -56,7 +81,7 @@ body,
 .content-wrapper {
   height: 100%;
   width: 100%;
-  padding-top: 64px;
+  padding-top: 0 !important;
   padding-left: 56px;
 }
 
@@ -86,15 +111,8 @@ body,
 }
 
 .tabs-container{
-  min-width: 75vw;
-}
-.tabs {
-  display: flex;
-  flex-direction: row;
-}
-.fixed-tab {
-  position: absolute;
-  right: 1px;
-  top: 3px;
+  min-width: 70vw;
+  flex: 1 2 auto;
+  margin-left: 120px;
 }
 </style>    

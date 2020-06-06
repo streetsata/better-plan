@@ -1,4 +1,5 @@
 <template>
+  <transition name="fade">
     <div class="notifications">
       <div class="notifications__main">
         <div class="notifications__new">Новые</div>
@@ -105,25 +106,22 @@
           </div>
           <div class="comment-photo"></div>
         </div>
-      </div>
-
-      <div class="notifications__bottom">
-        <input type="checkbox" class="checkbox checkbox-in-learning" id="checkbox" />
-        <label for="checkbox">Уведомления только по этому проекту</label>
+        <div class="notifications__bottom">
+          <input type="checkbox" class="checkbox checkbox-in-learning" id="checkbox" />
+          <label for="checkbox">Уведомления только по этому проекту</label>
+        </div>
       </div>
     </div>
+  </transition>
 </template>
 
 <style scoped>
 .notifications {
   background-color: #fff;
-  position: absolute;
-  /* top: 85px; */
-  right: 0;
-  /* z-index: 0; */
+  flex: 2 1 auto;
+  width: 165px;
   padding: 20px 0;
-  width: 300px;
-  height: calc(100% - 85px);
+  height: 100%;
   transition: all 300ms ease-in-out;
   font-size: 12px;
   line-height: 17px;
@@ -209,7 +207,7 @@
   background: #c4c4c4;
 }
 
-.notification__bottom {
-  margin-top: 200px;
+.notifications__bottom {
+  margin-top: 20px;
 }
 </style>
