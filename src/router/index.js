@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import FacebookWorkspace from '../views/FacebookWorkspace';
 import Moodboard from '../views/Moodboard';
 import StartLearning from '../views/StartLearning';
+import NotFound from '../components/error-pages/NotFound';
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes = [
     path: '/learning',
     name: 'StartLearning',
     component: StartLearning
+  },
+  {
+    path: '*',
+    name: 'NotFound',
+    component: NotFound
   }
 ]
 
