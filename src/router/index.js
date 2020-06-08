@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import FacebookWorkspace from '../views/FacebookWorkspace';
 import Moodboard from '../views/Moodboard';
 import StartLearning from '../views/StartLearning';
+import StartPage from '../views/StartPage';
 
 Vue.use(VueRouter)
 
@@ -21,7 +22,13 @@ const routes = [
     path: '/learning',
     name: 'StartLearning',
     component: StartLearning
+  },
+  {
+    path: '/slider',
+    name: 'StartPage',
+    component: StartPage
   }
+  
 ]
 
 const router = new VueRouter({
