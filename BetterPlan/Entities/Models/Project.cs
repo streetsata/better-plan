@@ -17,6 +17,16 @@ namespace Entities.Models
         [Required(ErrorMessage = "Name is required")]
         public DateTime DateTimeCreation { get; set; }
 
+        /// <summary>
+        /// Описание проекта
+        /// </summary>
+        private string Descreption { get; set; }
+
+        /// <summary>
+        /// Функционал проекта (Facebook включен по умолчанию)
+        /// </summary>
+        private bool IsFacebook { get; set; } = true;
+
         // Nav
         public ICollection<FacebookUser> FacebookUsers { get; set; }
     }
